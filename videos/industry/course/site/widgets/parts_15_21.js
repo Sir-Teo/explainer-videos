@@ -274,6 +274,66 @@
     });
   };
 
+  // Part 21: sell the robot, or place it (the Works' Market in explainer/industry/works/medtech.py)
+  W.placement = function (el) {
+    var N = 101, LO = 50, HI = 550, KI = 550, M = 0.9e6, S = 160e3, SC = 60e3, LIFE = 7, RATE = 0.08;
+    var A = (1 - Math.pow(1 + RATE, -LIFE)) / RATE;
+    function vols() { var v = [], i; for (i = 0; i < N; i++) v.push(LO + (HI - LO) * i / (N - 1)); return v; }
+    function sell(v) {
+      var out = { per: [], buyers: 0, value: 0, ops: 0 }, vs = vols(), i;
+      for (i = 0; i < N; i++) {
+        var n = vs[i], buys = A * (n * (v.value - v.inst) - S) >= v.price * 1e6;
+        var val = buys ? v.price * 1e6 - M + A * (n * (v.inst - KI) + S - SC) : 0;
+        out.per.push(val / 1e6); if (buys) { out.buyers++; out.ops += n; } out.value += val;
+      }
+      out.threshold = (v.price * 1e6 / A + S) / (v.value - v.inst);
+      return out;
+    }
+    function place(v) {
+      var out = { per: [], takers: 0, value: 0, ops: 0, losers: 0 }, vs = vols(), takes = v.value - v.inst - v.fee >= 0, i;
+      for (i = 0; i < N; i++) {
+        var n = vs[i], val = takes ? -M + A * (n * (v.inst + v.fee - KI) - SC) : 0;
+        out.per.push(val / 1e6); if (takes) { out.takers++; out.ops += n; if (val < 0) out.losers++; } out.value += val;
+      }
+      out.breakeven = (M / A + SC) / (v.inst + v.fee - KI);
+      return out;
+    }
+    QB.widget(el, {
+      title: "Sell or place",
+      sub: "You make a surgical robot. 101 hospitals could use one, doing from 50 to 550 robotic operations a year. Each operation gains a hospital some amount over the alternative and uses your instruments. Sell each robot with a service contract ($160,000 a year), or place it free, service included, and charge a fee per operation on top of the instruments. A robot costs you $0.9m to build, instruments $550 an operation and service $60,000 a year; seven years at 8%.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "price", label: "Price of a robot, $m", min: 0.5, max: 3.5, step: 0.1, value: 2.0, fmt: function (x) { return "$" + x.toFixed(1) + "m"; } },
+        { k: "fee", label: "Fee per operation if placed, $", min: 0, max: 2500, step: 50, value: 1000, fmt: function (x) { return "$" + Math.round(x).toLocaleString(); } },
+        { k: "value", label: "A hospital's gain per operation, $", min: 2500, max: 6000, step: 100, value: 4000, fmt: function (x) { return "$" + Math.round(x).toLocaleString(); } },
+        { k: "inst", label: "Instruments per operation, $", min: 900, max: 3700, step: 50, value: 1800, fmt: function (x) { return "$" + Math.round(x).toLocaleString(); } },
+      ],
+      draw: function (g, v, s) {
+        var a = sell(v), b = place(v), xs = vols();
+        var all = a.per.concat(b.per), lo = Math.min(Math.min.apply(null, all), -0.5), hi = Math.max(Math.max.apply(null, all), 1);
+        var ax = g[0].axes({ x: [LO, HI], y: [lo * 1.1, hi * 1.1], title: "Your value per hospital, $m, by its operations a year",
+                             xticks: [50, 150, 250, 350, 450, 550], yfmt: function (y) { return y.toFixed(1); } });
+        ax.hline(0, { color: C.muted });
+        ax.line(xs, a.per, { color: C.p, width: 2.4 });
+        ax.line(xs, b.per, { color: C.spot, width: 2.4 });
+        var vals = [a.value / 1e6, b.value / 1e6], top = Math.max(Math.max.apply(null, vals.map(Math.abs)), 1) * 1.2;
+        var bx = g[1].axes({ x: [-0.7, 1.7], y: [Math.min(0, Math.min.apply(null, vals) * 1.2), top], title: "Your robots are worth, $m",
+                             xticks: [0, 1], xfmt: function (x) { return ["sell", "place"][x]; }, yfmt: function (y) { return Math.round(y); } });
+        bx.bars([0], [vals[0]], 0.6, { color: vals[0] < 0 ? C.loss : C.p });
+        bx.bars([1], [vals[1]], 0.6, { color: vals[1] < 0 ? C.loss : C.spot });
+        s.r = { a: a, b: b };
+      },
+      readout: function (v, s) {
+        var a = s.r.a, b = s.r.b;
+        return [["sell: hospitals that buy / operations a year", a.buyers + " / " + Math.round(a.ops).toLocaleString() + " (buy at " + Math.ceil(a.threshold) + "+ a year)"],
+                ["place: hospitals that take one / operations a year", b.takers + " / " + Math.round(b.ops).toLocaleString()],
+                ["placed robots that lose money", b.takers ? b.losers + " (below " + Math.round(b.breakeven) + " operations a year)" : "none placed"],
+                ["your value: sell / place", "$" + Math.round(a.value / 1e6) + "m / $" + Math.round(b.value / 1e6) + "m"]];
+      },
+      note: "The Works' market, as in the film: selling at $2m brings 61 buyers, those doing 247 operations a year or more, and $258m of value; placing at $1,000 an operation brings all 101 hospitals and 30,300 operations a year, and $232m, with eleven small hospitals below the 104-operation break-even; at about $1,160 an operation placing pays as well as selling. The ranges are Intuitive's (a robot $0.7m to $3.1m; $900 to $3,700 of instruments an operation); the hospitals and costs are illustrations. Intuitive had 1,810 robots on usage-based leases at the end of 2025.",
+    });
+  };
+
   // Part 20: the pipeline (the Works' drug company in explainer/industry/works/pharma.py)
   W.pipeline = function (el) {
     var YEARS = [2.3, 3.6, 3.3, 1.3], CLIFF = [0.40, 0.12, 0.06, 0.04, 0.03], RAMP = 6, MARGIN = 0.6, LIFE = 20;

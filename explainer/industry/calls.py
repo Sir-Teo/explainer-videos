@@ -346,6 +346,22 @@ CALLS = [
          rule="Eli Lilly and Company, Form 8-K with its fourth-quarter 2026 results or Form 10-K 2026: total revenue for 2026 "
               "as first reported; true if $92.0 billion or more",
          due="2027-02", ours=True),
+    Call(21, "Intuitive Surgical", "2025-01-23",
+         "\"The Company expects worldwide da Vinci procedures to increase approximately 13% to 16% in 2025\"",
+         "Intuitive Surgical, Inc., Form 8-K of 23 January 2025 (Exhibit 99.1, fourth-quarter 2024 results)",
+         outcome="Approximately 18% growth, 3,153,000 procedures (Form 10-K 2025): above the top of the range"),
+    Call(21, "Intuitive Surgical", "2026-01-22",
+         "\"Worldwide da Vinci procedure growth of approximately 13% to 15% in 2026\"",
+         "Intuitive Surgical, Inc., Form 8-K of 22 January 2026 (Exhibit 99.1, fourth-quarter 2025 results)",
+         outcome="Pending; narrowed to 14% to 15% on 20 October 2026, 'closer to the midpoint', after nine months at about "
+                 "15% and a third quarter at about 14%"),
+    Call(21, "Industry, Built", "2026-11-27",
+         "Intuitive will report worldwide da Vinci procedure growth of 15% or more for 2026. Probability: 45%.",
+         "This series, Part 21, chapter 11; reasoning: nine months grew about 15% and Intuitive beat its 2025 range, but the "
+         "third quarter slowed to 14% and the company points to the middle of a 14-15% range",
+         rule="Intuitive Surgical, Form 8-K with its fourth-quarter 2026 results (January 2027): worldwide da Vinci procedure "
+              "growth for 2026 as it reports it; true if 15% or more",
+         due="2027-01", ours=True),
 ]
 
 

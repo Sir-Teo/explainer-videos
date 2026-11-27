@@ -1,0 +1,23 @@
+# source: https://api.fda.gov/device/510k.json (510(k) clearances decided in 2025, by advisory committee)
+# retrieved: 2026-11-27
+panel,count
+Radiology,478
+Orthopedic,404
+"General, Plastic Surgery",378
+Cardiovascular,346
+"Gastroenterology, Urology",251
+Dental,228
+Neurology,217
+General Hospital,188
+Microbiology,120
+Physical Medicine,111
+Anesthesiology,99
+Obstetrics/Gynecology,93
+Unknown,63
+Clinical Chemistry,53
+"Ear, Nose, Throat",44
+Ophthalmic,38
+Hematology,22
+Clinical Toxicology,21
+Immunology,19
+Pathology,13

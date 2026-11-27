@@ -34,6 +34,9 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * machinery: :func:`excavator` (``.boom`` turns about ``.pivot``), :func:`elevator` (a shaft whose ``.car`` stops at
   ``.floor_y(k)``), :func:`gear`;
 * medicines: :func:`capsule` (``.halves``), :func:`tablet`, :func:`flask` (``.liquid``, ``.bubbles``), :func:`vial`;
+* medical technology: :func:`surgical_robot` (``.arms``, ``.table``), :func:`scanner` (``.ring``, ``.bed``),
+  :func:`pacemaker` (``.lead``), :func:`test_tubes` (``.tubes``), :func:`glucose_sensor` (``.ring``), :func:`hospital`
+  (``.windows``);
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -50,7 +53,7 @@ from __future__ import annotations
 import math
 
 import numpy as np
-from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UL, UP, UR, Arc, Circle, DecimalNumber, Dot, Ellipse, Line, MathTex,
+from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UL, UP, UR, Arc, Circle, CubicBezier, DecimalNumber, Dot, Ellipse, Line, MathTex,
                    Polygon,
                    Rectangle, RoundedRectangle, Square, Triangle, ValueTracker, VGroup, VMobject, always_redraw,
                    interpolate_color, ManimColor)
@@ -2241,4 +2244,102 @@ def vial(h: float = 1.0, color: str = "#7EC8F5") -> VGroup:
     liq = Rectangle(width=w * 0.86, height=0.45 * h, stroke_width=0, fill_color=color, fill_opacity=0.55).move_to([0, -0.25 * h, 0])
     g = VGroup(body, liq, cap)
     g.liquid = liq
+    return g
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Medical technology (Part 21)
+# ----------------------------------------------------------------------------------------------------------------------
+
+def surgical_robot(h: float = 2.0, color: str = "#C9D3E0", accent: str = "#7EC8F5") -> VGroup:
+    """A patient-side surgical robot: a cart on a column with a boom and four arms that reach down to the table
+    (``g.arms``, each with ``.tip``), beside an operating table (``g.table``)."""
+    cart = RoundedRectangle(corner_radius=0.04 * h, width=0.5 * h, height=0.18 * h, stroke_width=0, fill_color="#3A4152",
+                            fill_opacity=1).move_to([-0.55 * h, 0.09 * h, 0])
+    col = Rectangle(width=0.1 * h, height=0.75 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([-0.55 * h, 0.55 * h, 0])
+    boom = Rectangle(width=0.95 * h, height=0.07 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([-0.1 * h, 0.93 * h, 0])
+    arms = VGroup()
+    for k, x in enumerate((-0.45, -0.2, 0.05, 0.3)):
+        top = np.array([x * h, 0.9 * h, 0])
+        knee = top + np.array([0.06 * h, -0.22 * h, 0])
+        tip = np.array([(0.02 + 0.06 * (k - 1.5)) * h, 0.38 * h, 0])
+        arm = VGroup(Line(top, knee, stroke_color=color, stroke_width=7 * h / 2),
+                     Line(knee, tip, stroke_color=accent if k == 1 else color, stroke_width=5 * h / 2),
+                     Dot(knee, radius=0.025 * h, color="#5C6472"))
+        arm.tip = tip
+        arms.add(arm)
+    table = VGroup(Rectangle(width=0.9 * h, height=0.05 * h, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0.05 * h, 0.32 * h, 0]),
+                   Line([0.05 * h, 0.3 * h, 0], [0.05 * h, 0.0, 0], stroke_color="#5C6472", stroke_width=6))
+    g = VGroup(table, cart, col, boom, arms)
+    g.arms, g.table = arms, table
+    return g
+
+
+def scanner(w: float = 2.0, color: str = "#E8EAED", accent: str = "#7EC8F5") -> VGroup:
+    """A CT or MRI scanner: a ring (``g.ring``) with a patient bed (``g.bed``) sliding through it."""
+    ring = VGroup(Circle(radius=0.38 * w, stroke_width=0, fill_color=color, fill_opacity=1),
+                  Circle(radius=0.2 * w, stroke_width=0, fill_color="#0E1117", fill_opacity=1),
+                  Arc(radius=0.29 * w, start_angle=PI * 0.15, angle=PI * 0.7, stroke_color=accent, stroke_width=4)
+                  ).move_to([0, 0.42 * w, 0])
+    base = Rectangle(width=0.5 * w, height=0.08 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0, 0.04 * w, 0])
+    bed = VGroup(RoundedRectangle(corner_radius=0.02 * w, width=0.9 * w, height=0.06 * w, stroke_width=0, fill_color="#9AA3B2",
+                                  fill_opacity=1).move_to([0.55 * w, 0.4 * w, 0]),
+                 Rectangle(width=0.06 * w, height=0.36 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0.8 * w, 0.2 * w, 0]))
+    g = VGroup(bed, base, ring)
+    g.ring, g.bed = ring, bed
+    return g
+
+
+def pacemaker(s: float = 0.8, color: str = "#C9D3E0", lead: str = "#F2A65A") -> VGroup:
+    """An implanted pacemaker: a rounded titanium can with a header and a lead (``g.lead``)."""
+    can = RoundedRectangle(corner_radius=0.3 * s, width=0.9 * s, height=0.75 * s, stroke_color="#9AA3B2", stroke_width=2,
+                           fill_color=color, fill_opacity=1)
+    header = RoundedRectangle(corner_radius=0.06 * s, width=0.5 * s, height=0.16 * s, stroke_width=0, fill_color="#7EC8F5",
+                              fill_opacity=0.8).next_to(can, UP, buff=0)
+    wire = CubicBezier(header.get_top(), header.get_top() + np.array([0.1, 0.5, 0]) * s,
+                       header.get_top() + np.array([0.7, 0.3, 0]) * s, header.get_top() + np.array([0.9, 0.7, 0]) * s,
+                       stroke_color=lead, stroke_width=3)
+    g = VGroup(wire, can, header)
+    g.lead = wire
+    return g
+
+
+def test_tubes(n: int = 5, h: float = 0.9, colors=("#E8554E", "#F6C453", "#7EC8F5", "#7BD88F", "#B58CFF")) -> VGroup:
+    """A rack of blood-sample tubes with coloured caps (``g.tubes``)."""
+    tubes = VGroup()
+    for i in range(n):
+        x = (i - (n - 1) / 2) * 0.28 * h
+        body = RoundedRectangle(corner_radius=0.06 * h, width=0.16 * h, height=0.8 * h, stroke_color="#C9D3E0", stroke_width=2,
+                                fill_color="#141A24", fill_opacity=1).move_to([x, 0.4 * h, 0])
+        blood = Rectangle(width=0.13 * h, height=0.45 * h, stroke_width=0, fill_color="#B03A3A", fill_opacity=0.9).move_to([x, 0.27 * h, 0])
+        cap = Rectangle(width=0.19 * h, height=0.12 * h, stroke_width=0, fill_color=colors[i % len(colors)], fill_opacity=1).move_to([x, 0.84 * h, 0])
+        tubes.add(VGroup(body, blood, cap))
+    rack = Rectangle(width=0.28 * h * n, height=0.1 * h, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0, 0.3 * h, 0])
+    g = VGroup(tubes, rack)
+    g.tubes = tubes
+    return g
+
+
+def glucose_sensor(r: float = 0.4, color: str = "#E8EAED", ring: str = "#7BD88F") -> VGroup:
+    """A wearable glucose sensor: a round patch with a coloured ring and a reading (``g.ring``)."""
+    patch = Circle(radius=r, stroke_color="#9AA3B2", stroke_width=2, fill_color=color, fill_opacity=1)
+    rg = Circle(radius=0.68 * r, stroke_color=ring, stroke_width=5)
+    dot = Dot(radius=0.12 * r, color="#3A4152")
+    g = VGroup(patch, rg, dot)
+    g.ring = rg
+    return g
+
+
+def hospital(w: float = 1.8, color: str = "#C9D3E0", cross: str = "#E8554E") -> VGroup:
+    """A hospital building with rows of windows (``g.windows``) and a red cross on its front."""
+    body = Rectangle(width=w, height=0.7 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.35 * w, 0])
+    wing = Rectangle(width=0.45 * w, height=0.45 * w, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to([0.72 * w, 0.225 * w, 0])
+    windows = VGroup(*[Square(0.07 * w, stroke_width=0, fill_color="#2A3446", fill_opacity=1).move_to([(-0.38 + 0.13 * i) * w,
+                                                                                                         (0.22 + 0.15 * j) * w, 0])
+                       for i in range(7) for j in range(3) if not (i == 3 and j == 2)])
+    door = Rectangle(width=0.16 * w, height=0.16 * w, stroke_width=0, fill_color="#2A3446", fill_opacity=1).move_to([0, 0.08 * w, 0])
+    cr = VGroup(Rectangle(width=0.16 * w, height=0.05 * w, stroke_width=0, fill_color=cross, fill_opacity=1),
+                Rectangle(width=0.05 * w, height=0.16 * w, stroke_width=0, fill_color=cross, fill_opacity=1)).move_to([0, 0.6 * w, 0])
+    g = VGroup(wing, body, windows, door, cr)
+    g.windows = windows
     return g

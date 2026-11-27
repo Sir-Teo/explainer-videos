@@ -2552,6 +2552,7 @@ scored in Part 64 and at each refresh.
 | 18 · Aerospace and Defence | done 2026-11-27 (about 110 Register rows; the 10-Ks of Boeing (2005, 2011, 2013, 2025), GE Aerospace, RTX, Lockheed Martin and TransDigm, Boeing's 10-Q for the third quarter of 2026 and AerCap's 20-F; Airbus's Annual Report 2025 (ESEF); the WTO's DS316 and DS353; the SEC extract of fifteen aerospace and defence companies; FRED's aircraft orders and shipments and US defence spending; SIPRI's military expenditure) | `works/aircraft.py` | 16 scenes, with a turbofan cutaway, a fan face, a fighter, airliners assembled from their sections and the `beats.py` charts | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 19 · Machinery | done 2026-11-27 (about 90 Register rows; the 10-Ks of Otis, Caterpillar, United Rentals, Honeywell and 3M (2025) and Deere (fiscal 2025), the third-quarter 2026 10-Qs of Caterpillar and Honeywell; the SEC extract of twenty-three machinery companies; FRED's machinery orders, shipments, output, capacity, jobs and prices and the BEA's equipment investment; the IFR's press releases of 2022, 2024 and 2026 and its installations via the AI Index and Our World in Data; UN Comtrade's excavator and robot exports) | `works/machine.py` | 14 scenes, with an excavator whose arm digs, an elevator whose car rides, gears and robot arms | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 20 · Pharmaceuticals | done 2026-11-27 (about 60 Register rows; Pfizer's 10-K 2012 (Exhibit 13), the 10-Ks of Eli Lilly and Merck (2025) and Lilly's 8-Ks of February 2025, February 2026 and October 2026; BIO, Informa and QLS's success rates 2011-2020; the FDA's study of generic prices, its generic approvals and novel drug lists; CMS's fact sheet on the first negotiated prices; the SEC extract of sixteen drug, biotech and generics companies; FRED's drug producer prices and medicine output) | `works/pharma.py` | 15 scenes, with capsules, tablets, flasks and vials, a hundred candidates through the funnel and a drug's life to its cliff | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 21 · Medical Technology | done 2026-11-27 (about 100 Register rows; the 10-Ks 2025 of Intuitive Surgical, Abbott, Boston Scientific, Stryker, Quest, GE HealthCare and Edwards, Medtronic's for fiscal 2026 and Abbott's for 2022, Intuitive's 10-Q and 8-Ks of 2025-2026; the SEC extract of twenty-three companies; openFDA's 510(k), De Novo, PMA and recall counts; FRED's instrument prices and output) | `works/medtech.py` | 14 scenes, with a surgical robot whose arms move, a scanner, a pacemaker, test tubes on a belt, glucose sensors and a hospital | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2795,3 +2796,18 @@ to $91-92bn), with the series' call that 2026 will reach $92.0bn. The CBO's stud
 Novo Nordisk, Roche, Novartis, Sanofi, GSK, Takeda, Daiichi Sankyo, Hengrui, BeiGene, Sandoz, Sun, Dr. Reddy's, Cipla,
 Lonza, Samsung Biologics and WuXi appear on the map by name only. Written as code only and checked from snapshots; not
 rendered.
+
+Part 21 departs from its draft's story: Earl Bakken's pacemaker of 1957-58 is not used, since no primary source for it was
+read (Medtronic's report gives only its founding in 1949); the hook is Intuitive's robot instead, whose 10-K gives the
+whole razor-and-blade model in ranges (a robot $0.7m to $3.1m, $900 to $3,700 of instruments an operation, service
+$95,000 to $225,000 a year). Run it is the draft's game, sell the machine or place it, on the Works' market of 101
+hospitals (`works/medtech.py`), set beside Intuitive's usage-based leases. The approval chapter counts openFDA's records
+(about 3,140 510(k)s, 35 De Novo grants and 29 original PMAs a year); Europe's rules are left out. Group purchasing and
+bundled payment are told through Intuitive's own words on budgets and consolidation; CMS's payment rates were not read, so
+the payer is Quest's payer mix. Life-science tools and contract research are one chapter; India's stent price caps and
+China's coronary-stent tender were not read in primary sources, so the China chapter quotes Stryker's, Abbott's and GE
+HealthCare's reports and Intuitive's robot quota. The drug-eluting stent forecasts of 2003 were not read, so *Called it?*
+scores Intuitive's procedure guidance, with the series' call on 2026. Added: pulsed field ablation as the new procedure,
+Abbott's COVID-19 tests, and the device dollar beside Part 20's drug dollar. J&J MedTech, Siemens Healthineers, Philips,
+United Imaging, Roche Diagnostics, Olympus, Terumo and Mindray appear on the map by name only. Written as code only and
+checked from snapshots; not rendered.

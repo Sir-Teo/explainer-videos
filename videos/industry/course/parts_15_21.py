@@ -299,4 +299,52 @@ PARTS = [
               ("The pipeline, the drug and the option to stop", "explainer/industry/works/pharma.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=21, level="U", widget="placement", prereq=(4, 5, 19, 20),
+        question="Who is the customer when the one who uses it, the one who chooses it and the one who pays are three "
+                 "different people?",
+        story="The part opens on Intuitive's da Vinci robots: about 3.15 million operations in 2025 on 11,106 robots, a robot "
+              "selling for $0.7m to $3.1m and each operation bringing $900 to $3,700 of instruments; and on the surgeon who "
+              "chooses, the hospital that buys, the insurer that pays and the patient. The viewer sells a robot for $2m or "
+              "places it free for $1,000 an operation: selling brings 61 of 101 hospitals and $258m, placing all 101, 30,300 "
+              "operations a year and $232m, with eleven placements losing money; at about $1,160 an operation placing pays "
+              "as well; Intuitive had 1,810 robots paid by use at the end of 2025. Medtronic sold $36.4bn in fiscal 2026; GE "
+              "HealthCare $7.0bn of its $20.6bn was service; Dexcom grew from $100m to $4.7bn; Quest earned about $44 on each "
+              "of 244 million requisitions. The FDA cleared about 3,140 devices a year by comparison (510(k)) against 29 new "
+              "premarket approvals and 35 De Novo grants. Insurers pay 39% of Quest's revenue and patients 12%; benign "
+              "operations rise when deductibles are met. 84% of Intuitive's revenue recurs; GE HealthCare keeps 51 cents of a "
+              "service dollar and 35 of a product dollar; a hospital's five years with one robot cost about $5.3m, half of it "
+              "instruments; hospitals' antitrust case over instrument repair cost Intuitive a $450m settlement charge. "
+              "Quest's price per requisition barely moved while its volume grew 12%; Abbott's COVID-19 tests fell from $8.4bn "
+              "to $0.3bn. Instrument producer prices halved against consumer prices since 1986. Pulsed field ablation took "
+              "Boston Scientific's electrophysiology sales from $0.8bn to $3.3bn in two years. Thermo Fisher, Danaher, IQVIA, "
+              "Agilent and Illumina sell to the laboratories and drug makers; China buys devices in volume and rations "
+              "surgical robots. A device dollar goes 39 cents to making, 8 to research, 40 to everything else and 12 to "
+              "profit. Intuitive beat its 2025 procedure guidance; the series gives 2026 growth of 15% or more 45%.",
+        handoff="Part 22, consumer goods, turns to brands, where the customer is one person and the rival is the shop.",
+        outside="Percentages and present value; Part 5's moats; Part 19's installed base; Part 20's medicines; Economics, "
+                "Built's two-part tariffs and the agent who is not the payer.",
+        objectives={
+            "U": ["Explain who chooses, buys, pays for and uses a medical device, and what each wants.",
+                  "Explain why most devices reach the market by comparison and what that does to competition.",
+                  "Explain why an installed base earns more than the sale of the machine."],
+            "M": ["Solve the sell-or-place decision and find the buying threshold and the break-even volume.",
+                  "Compute recurring revenue, gross margins by products and services, and a hospital's cost per operation.",
+                  "Separate a laboratory's revenue growth into price, volume and acquisitions."],
+            "D": ["Score a device maker's procedure guidance against outcomes.",
+                  "Make and state a dated, scorable forecast against a company's narrowed guidance."],
+            "I": ["Read a device maker's revenue by kind, installed base and leases.",
+                  "Read openFDA's clearances, approvals and recalls."],
+        },
+        results=[
+            ("A hospital buys a robot if", r"A\,\big(N (v - c) - s\big) \ge P"),
+            ("A placed robot breaks even at", r"N^* = \frac{M / A + s_c}{c + f - k}"),
+            ("Annuity factor", r"A = \frac{1 - (1+r)^{-T}}{r}"),
+            ("Recurring share", r"\frac{\text{instruments} + \text{service} + \text{leases}}{\text{revenue}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9), I=(10,), D=(11,),
+        also=(("The Register's rows for Part 21", "explainer/industry/data/rows_p21.py"),
+              ("Selling or placing a robot; a hospital's five years", "explainer/industry/works/medtech.py"),
+              ("The SEC, FRED and openFDA extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
