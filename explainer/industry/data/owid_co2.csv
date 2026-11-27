@@ -1,0 +1,959 @@
+# source: https://ourworldindata.org/grapher/annual-co2-cement
+# source: https://ourworldindata.org/grapher/annual-co2-emissions-per-country
+# source: Global Carbon Budget (2025), Friedlingstein et al.; cement: Andrew (2019)
+# retrieved: 2026-11-27
+series,entity,year,value
+annual-co2-cement,China,1928,39782.0
+annual-co2-cement,China,1929,76511.0
+annual-co2-cement,China,1930,73451.0
+annual-co2-cement,China,1931,97934.0
+annual-co2-cement,China,1932,79572.0
+annual-co2-cement,China,1933,113227.0
+annual-co2-cement,China,1934,97934.0
+annual-co2-cement,China,1935,156093.0
+annual-co2-cement,China,1936,428463.0
+annual-co2-cement,China,1937,437671.0
+annual-co2-cement,China,1938,9181.0
+annual-co2-cement,China,1939,223413.0
+annual-co2-cement,China,1940,272368.0
+annual-co2-cement,China,1941,495793.0
+annual-co2-cement,China,1942,654936.0
+annual-co2-cement,China,1943,639634.0
+annual-co2-cement,China,1944,489690.0
+annual-co2-cement,China,1945,18361.0
+annual-co2-cement,China,1946,85693.0
+annual-co2-cement,China,1947,174427.0
+annual-co2-cement,China,1948,82645.0
+annual-co2-cement,China,1949,274720.0
+annual-co2-cement,China,1950,586903.0
+annual-co2-cement,China,1951,1036445.0
+annual-co2-cement,China,1952,1202942.0
+annual-co2-cement,China,1953,1615023.0
+annual-co2-cement,China,1954,1914718.0
+annual-co2-cement,China,1955,1873093.0
+annual-co2-cement,China,1956,2659792.0
+annual-co2-cement,China,1957,2855427.0
+annual-co2-cement,China,1958,3871059.0
+annual-co2-cement,China,1959,5107301.0
+annual-co2-cement,China,1960,6514202.0
+annual-co2-cement,China,1961,2584869.0
+annual-co2-cement,China,1962,2497458.0
+annual-co2-cement,China,1963,3354918.0
+annual-co2-cement,China,1964,5032377.0
+annual-co2-cement,China,1965,6801410.0
+annual-co2-cement,China,1966,8387295.0
+annual-co2-cement,China,1967,6085472.0
+annual-co2-cement,China,1968,5252986.0
+annual-co2-cement,China,1969,7613083.0
+annual-co2-cement,China,1970,10718256.0
+annual-co2-cement,China,1971,13113163.0
+annual-co2-cement,China,1972,14692727.0
+annual-co2-cement,China,1973,15417353.0
+annual-co2-cement,China,1974,15289108.0
+annual-co2-cement,China,1975,19022568.0
+annual-co2-cement,China,1976,19156490.0
+annual-co2-cement,China,1977,22771790.0
+annual-co2-cement,China,1978,26630314.0
+annual-co2-cement,China,1979,30090848.0
+annual-co2-cement,China,1980,32437272.0
+annual-co2-cement,China,1981,33588600.0
+annual-co2-cement,China,1982,38476364.0
+annual-co2-cement,China,1983,43641730.0
+annual-co2-cement,China,1984,49472524.0
+annual-co2-cement,China,1985,58546908.0
+annual-co2-cement,China,1986,66446748.0
+annual-co2-cement,China,1987,74338024.0
+annual-co2-cement,China,1988,83657740.0
+annual-co2-cement,China,1989,83509760.0
+annual-co2-cement,China,1990,83068330.0
+annual-co2-cement,China,1991,99573240.0
+annual-co2-cement,China,1992,120351920.0
+annual-co2-cement,China,1993,140333060.0
+annual-co2-cement,China,1994,161566700.0
+annual-co2-cement,China,1995,181480500.0
+annual-co2-cement,China,1996,189556300.0
+annual-co2-cement,China,1997,199405580.0
+annual-co2-cement,China,1998,207755330.0
+annual-co2-cement,China,1999,224418780.0
+annual-co2-cement,China,2000,240210340.0
+annual-co2-cement,China,2001,266198300.0
+annual-co2-cement,China,2002,277855600.0
+annual-co2-cement,China,2003,347633020.0
+annual-co2-cement,China,2004,362098560.0
+annual-co2-cement,China,2005,411643400.0
+annual-co2-cement,China,2006,462050400.0
+annual-co2-cement,China,2007,506177150.0
+annual-co2-cement,China,2008,516933730.0
+annual-co2-cement,China,2009,573584200.0
+annual-co2-cement,China,2010,628658000.0
+annual-co2-cement,China,2011,696451260.0
+annual-co2-cement,China,2012,702562300.0
+annual-co2-cement,China,2013,735530400.0
+annual-co2-cement,China,2014,757115460.0
+annual-co2-cement,China,2015,706275100.0
+annual-co2-cement,China,2016,728112450.0
+annual-co2-cement,China,2017,740558600.0
+annual-co2-cement,China,2018,752743400.0
+annual-co2-cement,China,2019,805947970.0
+annual-co2-cement,China,2020,828710000.0
+annual-co2-cement,China,2021,802485000.0
+annual-co2-cement,China,2022,735445760.0
+annual-co2-cement,China,2023,698408960.0
+annual-co2-cement,China,2024,634917200.0
+annual-co2-cement,China,2025,587298400.0
+annual-co2-cement,India,1900,0.0
+annual-co2-cement,India,1901,0.0
+annual-co2-cement,India,1902,0.0
+annual-co2-cement,India,1903,0.0
+annual-co2-cement,India,1923,121926.0
+annual-co2-cement,India,1924,136720.0
+annual-co2-cement,India,1925,186715.0
+annual-co2-cement,India,1926,194877.0
+annual-co2-cement,India,1927,247423.0
+annual-co2-cement,India,1928,289255.0
+annual-co2-cement,India,1929,290786.0
+annual-co2-cement,India,1930,292316.0
+annual-co2-cement,India,1931,299968.0
+annual-co2-cement,India,1932,307110.0
+annual-co2-cement,India,1933,333128.0
+annual-co2-cement,India,1934,404549.0
+annual-co2-cement,India,1935,461686.0
+annual-co2-cement,India,1936,516782.0
+annual-co2-cement,India,1937,582591.0
+annual-co2-cement,India,1938,727984.0
+annual-co2-cement,India,1939,891742.0
+annual-co2-cement,India,1940,887661.0
+annual-co2-cement,India,1941,1057031.0
+annual-co2-cement,India,1942,1128962.0
+annual-co2-cement,India,1943,1097843.0
+annual-co2-cement,India,1944,1061622.0
+annual-co2-cement,India,1945,1144266.0
+annual-co2-cement,India,1946,1058561.0
+annual-co2-cement,India,1947,899905.0
+annual-co2-cement,India,1948,798895.0
+annual-co2-cement,India,1949,1087763.0
+annual-co2-cement,India,1950,1354077.0
+annual-co2-cement,India,1951,1657901.0
+annual-co2-cement,India,1952,1834102.0
+annual-co2-cement,India,1953,1957973.0
+annual-co2-cement,India,1954,2280551.0
+annual-co2-cement,India,1955,2325562.0
+annual-co2-cement,India,1956,2554367.0
+annual-co2-cement,India,1957,2903202.0
+annual-co2-cement,India,1958,3154401.0
+annual-co2-cement,India,1959,3537223.0
+annual-co2-cement,India,1960,4002216.8
+annual-co2-cement,India,1961,4204885.0
+annual-co2-cement,India,1962,4380947.0
+annual-co2-cement,India,1963,4771153.0
+annual-co2-cement,India,1964,4943815.0
+annual-co2-cement,India,1965,5397674.0
+annual-co2-cement,India,1966,5569961.0
+annual-co2-cement,India,1967,5820807.0
+annual-co2-cement,India,1968,5872180.0
+annual-co2-cement,India,1969,6438390.0
+annual-co2-cement,India,1970,6494620.0
+annual-co2-cement,India,1971,7052059.0
+annual-co2-cement,India,1972,7363109.0
+annual-co2-cement,India,1973,6920663.0
+annual-co2-cement,India,1974,6500907.0
+annual-co2-cement,India,1975,7288268.0
+annual-co2-cement,India,1976,8279465.5
+annual-co2-cement,India,1977,8322332.5
+annual-co2-cement,India,1978,8420936.0
+annual-co2-cement,India,1979,7751954.0
+annual-co2-cement,India,1980,7544839.0
+annual-co2-cement,India,1981,8887727.0
+annual-co2-cement,India,1982,9676066.0
+annual-co2-cement,India,1983,10950501.0
+annual-co2-cement,India,1984,12592760.0
+annual-co2-cement,India,1985,14389872.0
+annual-co2-cement,India,1986,16005568.0
+annual-co2-cement,India,1987,16411638.0
+annual-co2-cement,India,1988,18228972.0
+annual-co2-cement,India,1989,20790914.0
+annual-co2-cement,India,1990,22347914.0
+annual-co2-cement,India,1991,24503036.0
+annual-co2-cement,India,1992,25156198.0
+annual-co2-cement,India,1993,26602354.0
+annual-co2-cement,India,1994,28540080.0
+annual-co2-cement,India,1995,31103788.0
+annual-co2-cement,India,1996,34079364.0
+annual-co2-cement,India,1997,37418160.0
+annual-co2-cement,India,1998,39026470.0
+annual-co2-cement,India,1999,44592480.0
+annual-co2-cement,India,2000,45957012.0
+annual-co2-cement,India,2001,46739660.0
+annual-co2-cement,India,2002,49111236.0
+annual-co2-cement,India,2003,50880076.0
+annual-co2-cement,India,2004,55544668.0
+annual-co2-cement,India,2005,59686570.0
+annual-co2-cement,India,2006,64905404.0
+annual-co2-cement,India,2007,68333260.0
+annual-co2-cement,India,2008,73244730.0
+annual-co2-cement,India,2009,81267960.0
+annual-co2-cement,India,2010,86029240.0
+annual-co2-cement,India,2011,91314500.0
+annual-co2-cement,India,2012,100237160.0
+annual-co2-cement,India,2013,107819840.0
+annual-co2-cement,India,2014,115824900.0
+annual-co2-cement,India,2015,117507910.0
+annual-co2-cement,India,2016,123281310.0
+annual-co2-cement,India,2017,121047240.0
+annual-co2-cement,India,2018,138964900.0
+annual-co2-cement,India,2019,143664140.0
+annual-co2-cement,India,2020,122908200.0
+annual-co2-cement,India,2021,149033460.0
+annual-co2-cement,India,2022,164304300.0
+annual-co2-cement,India,2023,176664350.0
+annual-co2-cement,India,2024,185538370.0
+annual-co2-cement,India,2025,204437520.0
+annual-co2-cement,United States,1900,1394622.0
+annual-co2-cement,United States,1901,1666220.0
+annual-co2-cement,United States,1902,2158012.0
+annual-co2-cement,United States,1903,2548447.0
+annual-co2-cement,United States,1904,2748608.0
+annual-co2-cement,United States,1905,3512206.0
+annual-co2-cement,United States,1906,4497297.0
+annual-co2-cement,United States,1907,4629558.0
+annual-co2-cement,United States,1908,4713431.0
+annual-co2-cement,United States,1909,5950713.0
+annual-co2-cement,United States,1910,6954379.0
+annual-co2-cement,United States,1911,7116714.0
+annual-co2-cement,United States,1912,7459594.0
+annual-co2-cement,United States,1913,8321737.5
+annual-co2-cement,United States,1914,7972093.0
+annual-co2-cement,United States,1915,7762411.0
+annual-co2-cement,United States,1916,8267625.0
+annual-co2-cement,United States,1917,8369085.5
+annual-co2-cement,United States,1918,6405459.0
+annual-co2-cement,United States,1919,7281650.0
+annual-co2-cement,United States,1920,8929972.0
+annual-co2-cement,United States,1921,8819147.0
+annual-co2-cement,United States,1922,10265071.0
+annual-co2-cement,United States,1923,12310905.0
+annual-co2-cement,United States,1924,13379609.0
+annual-co2-cement,United States,1925,14206371.0
+annual-co2-cement,United States,1926,14505546.0
+annual-co2-cement,United States,1927,15066433.0
+annual-co2-cement,United States,1928,15417118.0
+annual-co2-cement,United States,1929,14995672.0
+annual-co2-cement,United States,1930,14285978.0
+annual-co2-cement,United States,1931,10809309.0
+annual-co2-cement,United States,1932,6655725.0
+annual-co2-cement,United States,1933,5587021.0
+annual-co2-cement,United States,1934,6899747.0
+annual-co2-cement,United States,1935,6684341.0
+annual-co2-cement,United States,1936,9949767.0
+annual-co2-cement,United States,1937,10368091.0
+annual-co2-cement,United States,1938,9239152.0
+annual-co2-cement,United States,1939,10792336.0
+annual-co2-cement,United States,1940,11548563.0
+annual-co2-cement,United States,1941,14520138.0
+annual-co2-cement,United States,1942,16085342.0
+annual-co2-cement,United States,1943,12041096.0
+annual-co2-cement,United States,1944,8031585.5
+annual-co2-cement,United States,1945,9113674.0
+annual-co2-cement,United States,1946,14653015.0
+annual-co2-cement,United States,1947,16647495.0
+annual-co2-cement,United States,1948,18417082.0
+annual-co2-cement,United States,1949,18787668.0
+annual-co2-cement,United States,1950,20124554.0
+annual-co2-cement,United States,1951,22040594.0
+annual-co2-cement,United States,1952,22255512.0
+annual-co2-cement,United States,1953,23520854.0
+annual-co2-cement,United States,1954,24130538.0
+annual-co2-cement,United States,1955,26583754.0
+annual-co2-cement,United States,1956,28390270.0
+annual-co2-cement,United States,1957,27005510.0
+annual-co2-cement,United States,1958,27757922.0
+annual-co2-cement,United States,1959,30233982.0
+annual-co2-cement,United States,1960,28798110.0
+annual-co2-cement,United States,1961,28698812.0
+annual-co2-cement,United States,1962,29878496.0
+annual-co2-cement,United States,1963,31435142.0
+annual-co2-cement,United States,1964,33025684.0
+annual-co2-cement,United States,1965,33294738.0
+annual-co2-cement,United States,1966,34572616.0
+annual-co2-cement,United States,1967,33593924.0
+annual-co2-cement,United States,1968,35319776.0
+annual-co2-cement,United States,1969,35696996.0
+annual-co2-cement,United States,1970,34924148.0
+annual-co2-cement,United States,1971,35509772.0
+annual-co2-cement,United States,1972,36523492.0
+annual-co2-cement,United States,1973,36917056.0
+annual-co2-cement,United States,1974,36806316.0
+annual-co2-cement,United States,1975,30463224.0
+annual-co2-cement,United States,1976,32370022.0
+annual-co2-cement,United States,1977,33978904.0
+annual-co2-cement,United States,1978,35615820.0
+annual-co2-cement,United States,1979,35940400.0
+annual-co2-cement,United States,1980,32921692.0
+annual-co2-cement,United States,1981,31962156.0
+annual-co2-cement,United States,1982,28440770.0
+annual-co2-cement,United States,1983,30439504.0
+annual-co2-cement,United States,1984,32914974.0
+annual-co2-cement,United States,1985,31708006.0
+annual-co2-cement,United States,1986,32853614.0
+annual-co2-cement,United States,1987,32975762.0
+annual-co2-cement,United States,1988,33248028.0
+annual-co2-cement,United States,1989,33264206.0
+annual-co2-cement,United States,1990,33484142.0
+annual-co2-cement,United States,1991,32736466.0
+annual-co2-cement,United States,1992,32992978.0
+annual-co2-cement,United States,1993,34837976.0
+annual-co2-cement,United States,1994,36310430.0
+annual-co2-cement,United States,1995,37075280.0
+annual-co2-cement,United States,1996,37308896.0
+annual-co2-cement,United States,1997,38560744.0
+annual-co2-cement,United States,1998,39460870.0
+annual-co2-cement,United States,1999,40238724.0
+annual-co2-cement,United States,2000,41445308.0
+annual-co2-cement,United States,2001,41613364.0
+annual-co2-cement,United States,2002,43163870.0
+annual-co2-cement,United States,2003,43349104.0
+annual-co2-cement,United States,2004,45885580.0
+annual-co2-cement,United States,2005,46194124.0
+annual-co2-cement,United States,2006,46850744.0
+annual-co2-cement,United States,2007,45508880.0
+annual-co2-cement,United States,2008,41415652.0
+annual-co2-cement,United States,2009,29614644.0
+annual-co2-cement,United States,2010,31449236.0
+annual-co2-cement,United States,2011,32208358.0
+annual-co2-cement,United States,2012,35270344.0
+annual-co2-cement,United States,2013,36369228.0
+annual-co2-cement,United States,2014,39439020.0
+annual-co2-cement,United States,2015,39907292.0
+annual-co2-cement,United States,2016,39439020.0
+annual-co2-cement,United States,2017,40323536.0
+annual-co2-cement,United States,2018,38970744.0
+annual-co2-cement,United States,2019,40895870.0
+annual-co2-cement,United States,2020,40687748.0
+annual-co2-cement,United States,2021,41312110.0
+annual-co2-cement,United States,2022,41884444.0
+annual-co2-cement,United States,2023,40635716.0
+annual-co2-cement,United States,2024,37215052.0
+annual-co2-cement,United States,2025,36147690.0
+annual-co2-cement,World,1900,5235434.0
+annual-co2-cement,World,1901,5757073.0
+annual-co2-cement,World,1902,6210297.0
+annual-co2-cement,World,1903,6641448.0
+annual-co2-cement,World,1904,6866539.0
+annual-co2-cement,World,1905,7947272.0
+annual-co2-cement,World,1906,9397258.0
+annual-co2-cement,World,1907,9833975.0
+annual-co2-cement,World,1908,10366939.0
+annual-co2-cement,World,1909,11973782.0
+annual-co2-cement,World,1910,13536605.0
+annual-co2-cement,World,1911,13803394.0
+annual-co2-cement,World,1912,14733454.0
+annual-co2-cement,World,1913,16110149.0
+annual-co2-cement,World,1914,13631583.0
+annual-co2-cement,World,1915,11837542.0
+annual-co2-cement,World,1916,12602236.0
+annual-co2-cement,World,1917,10589042.0
+annual-co2-cement,World,1918,9405683.0
+annual-co2-cement,World,1919,10600252.0
+annual-co2-cement,World,1920,12957387.0
+annual-co2-cement,World,1921,13050080.0
+annual-co2-cement,World,1922,14875636.0
+annual-co2-cement,World,1923,23006980.0
+annual-co2-cement,World,1924,25221534.0
+annual-co2-cement,World,1925,27761984.0
+annual-co2-cement,World,1926,28792478.0
+annual-co2-cement,World,1927,31453900.0
+annual-co2-cement,World,1928,35428896.0
+annual-co2-cement,World,1929,36662510.0
+annual-co2-cement,World,1930,36048532.0
+annual-co2-cement,World,1931,30680258.0
+annual-co2-cement,World,1932,24865158.0
+annual-co2-cement,World,1933,24303468.0
+annual-co2-cement,World,1934,28986710.0
+annual-co2-cement,World,1935,32205654.0
+annual-co2-cement,World,1936,38461004.0
+annual-co2-cement,World,1937,41097156.0
+annual-co2-cement,World,1938,41329844.0
+annual-co2-cement,World,1939,43762330.0
+annual-co2-cement,World,1940,39383240.0
+annual-co2-cement,World,1941,44570210.0
+annual-co2-cement,World,1942,39874100.0
+annual-co2-cement,World,1943,36146220.0
+annual-co2-cement,World,1944,28200520.0
+annual-co2-cement,World,1945,23136284.0
+annual-co2-cement,World,1946,37178052.0
+annual-co2-cement,World,1947,43465830.0
+annual-co2-cement,World,1948,51111670.0
+annual-co2-cement,World,1949,58151636.0
+annual-co2-cement,World,1950,66772292.0
+annual-co2-cement,World,1951,75685464.0
+annual-co2-cement,World,1952,80664790.0
+annual-co2-cement,World,1953,89428424.0
+annual-co2-cement,World,1954,97057980.0
+annual-co2-cement,World,1955,107488264.0
+annual-co2-cement,World,1956,116477110.0
+annual-co2-cement,World,1957,122448860.0
+annual-co2-cement,World,1958,129686536.0
+annual-co2-cement,World,1959,145176590.0
+annual-co2-cement,World,1960,157351740.0
+annual-co2-cement,World,1961,164113870.0
+annual-co2-cement,World,1962,176317840.0
+annual-co2-cement,World,1963,185939940.0
+annual-co2-cement,World,1964,206116340.0
+annual-co2-cement,World,1965,216382770.0
+annual-co2-cement,World,1966,232964600.0
+annual-co2-cement,World,1967,240300180.0
+annual-co2-cement,World,1968,255219340.0
+annual-co2-cement,World,1969,270546980.0
+annual-co2-cement,World,1970,288234700.0
+annual-co2-cement,World,1971,303053860.0
+annual-co2-cement,World,1972,321238430.0
+annual-co2-cement,World,1973,340082400.0
+annual-co2-cement,World,1974,340510400.0
+annual-co2-cement,World,1975,340126430.0
+annual-co2-cement,World,1976,355960900.0
+annual-co2-cement,World,1977,372592930.0
+annual-co2-cement,World,1978,397321250.0
+annual-co2-cement,World,1979,403599700.0
+annual-co2-cement,World,1980,406009060.0
+annual-co2-cement,World,1981,406006940.0
+annual-co2-cement,World,1982,403840900.0
+annual-co2-cement,World,1983,413033570.0
+annual-co2-cement,World,1984,420905800.0
+annual-co2-cement,World,1985,425283140.0
+annual-co2-cement,World,1986,441448480.0
+annual-co2-cement,World,1987,457732320.0
+annual-co2-cement,World,1988,481509540.0
+annual-co2-cement,World,1989,491991170.0
+annual-co2-cement,World,1990,491611100.0
+annual-co2-cement,World,1991,503292700.0
+annual-co2-cement,World,1992,524373730.0
+annual-co2-cement,World,1993,547360500.0
+annual-co2-cement,World,1994,584491700.0
+annual-co2-cement,World,1995,617487550.0
+annual-co2-cement,World,1996,630282750.0
+annual-co2-cement,World,1997,655185700.0
+annual-co2-cement,World,1998,654131460.0
+annual-co2-cement,World,1999,685045400.0
+annual-co2-cement,World,2000,715308350.0
+annual-co2-cement,World,2001,747072200.0
+annual-co2-cement,World,2002,775575500.0
+annual-co2-cement,World,2003,854268500.0
+annual-co2-cement,World,2004,892342660.0
+annual-co2-cement,World,2005,962346000.0
+annual-co2-cement,World,2006,1043332030.0
+annual-co2-cement,World,2007,1121862000.0
+annual-co2-cement,World,2008,1133786600.0
+annual-co2-cement,World,2009,1166631200.0
+annual-co2-cement,World,2010,1247354200.0
+annual-co2-cement,World,2011,1340722300.0
+annual-co2-cement,World,2012,1372859600.0
+annual-co2-cement,World,2013,1436552600.0
+annual-co2-cement,World,2014,1487701400.0
+annual-co2-cement,World,2015,1435430800.0
+annual-co2-cement,World,2016,1469646800.0
+annual-co2-cement,World,2017,1491946800.0
+annual-co2-cement,World,2018,1538716900.0
+annual-co2-cement,World,2019,1608098300.0
+annual-co2-cement,World,2020,1611192200.0
+annual-co2-cement,World,2021,1655513600.0
+annual-co2-cement,World,2022,1589167200.0
+annual-co2-cement,World,2023,1549236200.0
+annual-co2-cement,World,2024,1489708000.0
+annual-co2-cement,World,2025,1476742700.0
+annual-co2-emissions-per-country,China,1907,19893872.0
+annual-co2-emissions-per-country,China,1908,22735854.0
+annual-co2-emissions-per-country,China,1909,24251576.0
+annual-co2-emissions-per-country,China,1910,25009438.0
+annual-co2-emissions-per-country,China,1911,24630506.0
+annual-co2-emissions-per-country,China,1912,17029154.0
+annual-co2-emissions-per-country,China,1913,24251576.0
+annual-co2-emissions-per-country,China,1914,26718416.0
+annual-co2-emissions-per-country,China,1915,25420578.0
+annual-co2-emissions-per-country,China,1916,30130690.0
+annual-co2-emissions-per-country,China,1917,32023448.0
+annual-co2-emissions-per-country,China,1918,34747964.0
+annual-co2-emissions-per-country,China,1919,37997296.0
+annual-co2-emissions-per-country,China,1920,40278456.0
+annual-co2-emissions-per-country,China,1921,38762732.0
+annual-co2-emissions-per-country,China,1922,39971524.0
+annual-co2-emissions-per-country,China,1923,46517556.0
+annual-co2-emissions-per-country,China,1924,48846084.0
+annual-co2-emissions-per-country,China,1925,45954840.0
+annual-co2-emissions-per-country,China,1926,43660164.0
+annual-co2-emissions-per-country,China,1927,45808580.0
+annual-co2-emissions-per-country,China,1928,47591444.0
+annual-co2-emissions-per-country,China,1929,48281828.0
+annual-co2-emissions-per-country,China,1930,49558456.0
+annual-co2-emissions-per-country,China,1931,51904660.0
+annual-co2-emissions-per-country,China,1932,50269150.0
+annual-co2-emissions-per-country,China,1933,54111180.0
+annual-co2-emissions-per-country,China,1934,62382628.0
+annual-co2-emissions-per-country,China,1935,72645970.0
+annual-co2-emissions-per-country,China,1936,75477250.0
+annual-co2-emissions-per-country,China,1937,70968650.0
+annual-co2-emissions-per-country,China,1938,61365520.0
+annual-co2-emissions-per-country,China,1939,74426990.0
+annual-co2-emissions-per-country,China,1940,90790530.0
+annual-co2-emissions-per-country,China,1941,113978570.0
+annual-co2-emissions-per-country,China,1942,127613384.0
+annual-co2-emissions-per-country,China,1943,108994540.0
+annual-co2-emissions-per-country,China,1944,103003570.0
+annual-co2-emissions-per-country,China,1945,55892210.0
+annual-co2-emissions-per-country,China,1946,36107050.0
+annual-co2-emissions-per-country,China,1947,41836136.0
+annual-co2-emissions-per-country,China,1948,38400104.0
+annual-co2-emissions-per-country,China,1949,62081100.0
+annual-co2-emissions-per-country,China,1950,78795000.0
+annual-co2-emissions-per-country,China,1951,102052930.0
+annual-co2-emissions-per-country,China,1952,127911390.0
+annual-co2-emissions-per-country,China,1953,133654584.0
+annual-co2-emissions-per-country,China,1954,160653860.0
+annual-co2-emissions-per-country,China,1955,190155060.0
+annual-co2-emissions-per-country,China,1956,215278000.0
+annual-co2-emissions-per-country,China,1957,255176780.0
+annual-co2-emissions-per-country,China,1958,523785340.0
+annual-co2-emissions-per-country,China,1959,718865540.0
+annual-co2-emissions-per-country,China,1960,797250050.0
+annual-co2-emissions-per-country,China,1961,569120600.0
+annual-co2-emissions-per-country,China,1962,458145150.0
+annual-co2-emissions-per-country,China,1963,455203900.0
+annual-co2-emissions-per-country,China,1964,458757470.0
+annual-co2-emissions-per-country,China,1965,497915700.0
+annual-co2-emissions-per-country,China,1966,546436540.0
+annual-co2-emissions-per-country,China,1967,457342300.0
+annual-co2-emissions-per-country,China,1968,492205280.0
+annual-co2-emissions-per-country,China,1969,603147260.0
+annual-co2-emissions-per-country,China,1970,801526000.0
+annual-co2-emissions-per-country,China,1971,901042750.0
+annual-co2-emissions-per-country,China,1972,959226700.0
+annual-co2-emissions-per-country,China,1973,997467140.0
+annual-co2-emissions-per-country,China,1974,1015642500.0
+annual-co2-emissions-per-country,China,1975,1169263400.0
+annual-co2-emissions-per-country,China,1976,1210082300.0
+annual-co2-emissions-per-country,China,1977,1323201300.0
+annual-co2-emissions-per-country,China,1978,1473336400.0
+annual-co2-emissions-per-country,China,1979,1506478200.0
+annual-co2-emissions-per-country,China,1980,1475717600.0
+annual-co2-emissions-per-country,China,1981,1458839400.0
+annual-co2-emissions-per-country,China,1982,1588703200.0
+annual-co2-emissions-per-country,China,1983,1675804000.0
+annual-co2-emissions-per-country,China,1984,1825746200.0
+annual-co2-emissions-per-country,China,1985,1977836300.0
+annual-co2-emissions-per-country,China,1986,2082812800.0
+annual-co2-emissions-per-country,China,1987,2234759000.0
+annual-co2-emissions-per-country,China,1988,2401104400.0
+annual-co2-emissions-per-country,China,1989,2440499200.0
+annual-co2-emissions-per-country,China,1990,2488301600.0
+annual-co2-emissions-per-country,China,1991,2624118800.0
+annual-co2-emissions-per-country,China,1992,2736214500.0
+annual-co2-emissions-per-country,China,1993,2919553500.0
+annual-co2-emissions-per-country,China,1994,3101515500.0
+annual-co2-emissions-per-country,China,1995,3360280600.0
+annual-co2-emissions-per-country,China,1996,3511159800.0
+annual-co2-emissions-per-country,China,1997,3526730800.0
+annual-co2-emissions-per-country,China,1998,3370691800.0
+annual-co2-emissions-per-country,China,1999,3563502000.0
+annual-co2-emissions-per-country,China,2000,3658905000.0
+annual-co2-emissions-per-country,China,2001,3739206700.0
+annual-co2-emissions-per-country,China,2002,4119252000.0
+annual-co2-emissions-per-country,China,2003,4858958000.0
+annual-co2-emissions-per-country,China,2004,5243091500.0
+annual-co2-emissions-per-country,China,2005,5914040000.0
+annual-co2-emissions-per-country,China,2006,6522649000.0
+annual-co2-emissions-per-country,China,2007,7015721500.0
+annual-co2-emissions-per-country,China,2008,7534874000.0
+annual-co2-emissions-per-country,China,2009,7930966000.0
+annual-co2-emissions-per-country,China,2010,8686878000.0
+annual-co2-emissions-per-country,China,2011,9601600000.0
+annual-co2-emissions-per-country,China,2012,9848735000.0
+annual-co2-emissions-per-country,China,2013,10019536000.0
+annual-co2-emissions-per-country,China,2014,10050201000.0
+annual-co2-emissions-per-country,China,2015,9941316000.0
+annual-co2-emissions-per-country,China,2016,9836630000.0
+annual-co2-emissions-per-country,China,2017,10096861000.0
+annual-co2-emissions-per-country,China,2018,10436859000.0
+annual-co2-emissions-per-country,China,2019,10674799000.0
+annual-co2-emissions-per-country,China,2020,10872561000.0
+annual-co2-emissions-per-country,China,2021,11304717000.0
+annual-co2-emissions-per-country,China,2022,11695013000.0
+annual-co2-emissions-per-country,China,2023,12303093000.0
+annual-co2-emissions-per-country,China,2024,12401107000.0
+annual-co2-emissions-per-country,China,2025,12417493000.0
+annual-co2-emissions-per-country,India,1900,11929359.0
+annual-co2-emissions-per-country,India,1901,13179457.0
+annual-co2-emissions-per-country,India,1902,14515176.0
+annual-co2-emissions-per-country,India,1903,14801875.0
+annual-co2-emissions-per-country,India,1904,16560734.0
+annual-co2-emissions-per-country,India,1905,16930440.0
+annual-co2-emissions-per-country,India,1906,19549092.0
+annual-co2-emissions-per-country,India,1907,21772032.0
+annual-co2-emissions-per-country,India,1908,24907818.0
+annual-co2-emissions-per-country,India,1909,24142258.0
+annual-co2-emissions-per-country,India,1910,23486918.0
+annual-co2-emissions-per-country,India,1911,24782022.0
+annual-co2-emissions-per-country,India,1912,28520958.0
+annual-co2-emissions-per-country,India,1913,31466222.0
+annual-co2-emissions-per-country,India,1914,31697598.0
+annual-co2-emissions-per-country,India,1915,33141156.0
+annual-co2-emissions-per-country,India,1916,33516938.0
+annual-co2-emissions-per-country,India,1917,35019164.0
+annual-co2-emissions-per-country,India,1918,39358624.0
+annual-co2-emissions-per-country,India,1919,42974010.0
+annual-co2-emissions-per-country,India,1920,34867384.0
+annual-co2-emissions-per-country,India,1921,37504880.0
+annual-co2-emissions-per-country,India,1922,36902740.0
+annual-co2-emissions-per-country,India,1923,38093164.0
+annual-co2-emissions-per-country,India,1924,40763970.0
+annual-co2-emissions-per-country,India,1925,40270948.0
+annual-co2-emissions-per-country,India,1926,40136764.0
+annual-co2-emissions-per-country,India,1927,42130480.0
+annual-co2-emissions-per-country,India,1928,40072650.0
+annual-co2-emissions-per-country,India,1929,41705316.0
+annual-co2-emissions-per-country,India,1930,42398452.0
+annual-co2-emissions-per-country,India,1931,38850200.0
+annual-co2-emissions-per-country,India,1932,36132096.0
+annual-co2-emissions-per-country,India,1933,35480988.0
+annual-co2-emissions-per-country,India,1934,39624750.0
+annual-co2-emissions-per-country,India,1935,41400260.0
+annual-co2-emissions-per-country,India,1936,40701640.0
+annual-co2-emissions-per-country,India,1937,45067652.0
+annual-co2-emissions-per-country,India,1938,51106704.0
+annual-co2-emissions-per-country,India,1939,50203050.0
+annual-co2-emissions-per-country,India,1940,53196212.0
+annual-co2-emissions-per-country,India,1941,53553144.0
+annual-co2-emissions-per-country,India,1942,53524748.0
+annual-co2-emissions-per-country,India,1943,46646080.0
+annual-co2-emissions-per-country,India,1944,47698916.0
+annual-co2-emissions-per-country,India,1945,52907068.0
+annual-co2-emissions-per-country,India,1946,52277360.0
+annual-co2-emissions-per-country,India,1947,53328972.0
+annual-co2-emissions-per-country,India,1948,53195544.0
+annual-co2-emissions-per-country,India,1949,56186804.0
+annual-co2-emissions-per-country,India,1950,60491772.0
+annual-co2-emissions-per-country,India,1951,63340284.0
+annual-co2-emissions-per-country,India,1952,66780320.0
+annual-co2-emissions-per-country,India,1953,68237860.0
+annual-co2-emissions-per-country,India,1954,71804430.0
+annual-co2-emissions-per-country,India,1955,78199460.0
+annual-co2-emissions-per-country,India,1956,81277910.0
+annual-co2-emissions-per-country,India,1957,91177760.0
+annual-co2-emissions-per-country,India,1958,95441620.0
+annual-co2-emissions-per-country,India,1959,101164710.0
+annual-co2-emissions-per-country,India,1960,111327740.0
+annual-co2-emissions-per-country,India,1961,120410150.0
+annual-co2-emissions-per-country,India,1962,132224120.0
+annual-co2-emissions-per-country,India,1963,142086980.0
+annual-co2-emissions-per-country,India,1964,139728450.0
+annual-co2-emissions-per-country,India,1965,154264370.0
+annual-co2-emissions-per-country,India,1966,160616940.0
+annual-co2-emissions-per-country,India,1967,162132640.0
+annual-co2-emissions-per-country,India,1968,176488510.0
+annual-co2-emissions-per-country,India,1969,180888180.0
+annual-co2-emissions-per-country,India,1970,185178740.0
+annual-co2-emissions-per-country,India,1971,195973000.0
+annual-co2-emissions-per-country,India,1972,207928560.0
+annual-co2-emissions-per-country,India,1973,214474480.0
+annual-co2-emissions-per-country,India,1974,221118900.0
+annual-co2-emissions-per-country,India,1975,239229060.0
+annual-co2-emissions-per-country,India,1976,250894000.0
+annual-co2-emissions-per-country,India,1977,265703420.0
+annual-co2-emissions-per-country,India,1978,270217400.0
+annual-co2-emissions-per-country,India,1979,283381760.0
+annual-co2-emissions-per-country,India,1980,298005400.0
+annual-co2-emissions-per-country,India,1981,323663500.0
+annual-co2-emissions-per-country,India,1982,333703520.0
+annual-co2-emissions-per-country,India,1983,359154620.0
+annual-co2-emissions-per-country,India,1984,368746050.0
+annual-co2-emissions-per-country,India,1985,404558500.0
+annual-co2-emissions-per-country,India,1986,434143780.0
+annual-co2-emissions-per-country,India,1987,462136130.0
+annual-co2-emissions-per-country,India,1988,500148580.0
+annual-co2-emissions-per-country,India,1989,548043800.0
+annual-co2-emissions-per-country,India,1990,584082300.0
+annual-co2-emissions-per-country,India,1991,621428860.0
+annual-co2-emissions-per-country,India,1992,661691700.0
+annual-co2-emissions-per-country,India,1993,683137860.0
+annual-co2-emissions-per-country,India,1994,719629400.0
+annual-co2-emissions-per-country,India,1995,766627400.0
+annual-co2-emissions-per-country,India,1996,829892160.0
+annual-co2-emissions-per-country,India,1997,864863300.0
+annual-co2-emissions-per-country,India,1998,883590300.0
+annual-co2-emissions-per-country,India,1999,942444600.0
+annual-co2-emissions-per-country,India,2000,959811600.0
+annual-co2-emissions-per-country,India,2001,969665900.0
+annual-co2-emissions-per-country,India,2002,992896700.0
+annual-co2-emissions-per-country,India,2003,1023972600.0
+annual-co2-emissions-per-country,India,2004,1085419400.0
+annual-co2-emissions-per-country,India,2005,1181595500.0
+annual-co2-emissions-per-country,India,2006,1293976400.0
+annual-co2-emissions-per-country,India,2007,1394152300.0
+annual-co2-emissions-per-country,India,2008,1491019900.0
+annual-co2-emissions-per-country,India,2009,1614030000.0
+annual-co2-emissions-per-country,India,2010,1679223300.0
+annual-co2-emissions-per-country,India,2011,1765919600.0
+annual-co2-emissions-per-country,India,2012,1926721400.0
+annual-co2-emissions-per-country,India,2013,1996681300.0
+annual-co2-emissions-per-country,India,2014,2147307400.0
+annual-co2-emissions-per-country,India,2015,2230039000.0
+annual-co2-emissions-per-country,India,2016,2349954000.0
+annual-co2-emissions-per-country,India,2017,2424845600.0
+annual-co2-emissions-per-country,India,2018,2592668200.0
+annual-co2-emissions-per-country,India,2019,2607452000.0
+annual-co2-emissions-per-country,India,2020,2418974700.0
+annual-co2-emissions-per-country,India,2021,2670357500.0
+annual-co2-emissions-per-country,India,2022,2821409800.0
+annual-co2-emissions-per-country,India,2023,3049350700.0
+annual-co2-emissions-per-country,India,2024,3175552500.0
+annual-co2-emissions-per-country,India,2025,3203406600.0
+annual-co2-emissions-per-country,United States,1900,664131600.0
+annual-co2-emissions-per-country,United States,1901,723192060.0
+annual-co2-emissions-per-country,United States,1902,766651600.0
+annual-co2-emissions-per-country,United States,1903,896952800.0
+annual-co2-emissions-per-country,United States,1904,884803400.0
+annual-co2-emissions-per-country,United States,1905,989991200.0
+annual-co2-emissions-per-country,United States,1906,1039963970.0
+annual-co2-emissions-per-country,United States,1907,1208486300.0
+annual-co2-emissions-per-country,United States,1908,1057521600.0
+annual-co2-emissions-per-country,United States,1909,1171650800.0
+annual-co2-emissions-per-country,United States,1910,1278529500.0
+annual-co2-emissions-per-country,United States,1911,1265776100.0
+annual-co2-emissions-per-country,United States,1912,1351017700.0
+annual-co2-emissions-per-country,United States,1913,1450855400.0
+annual-co2-emissions-per-country,United States,1914,1325944300.0
+annual-co2-emissions-per-country,United States,1915,1375451600.0
+annual-co2-emissions-per-country,United States,1916,1527240000.0
+annual-co2-emissions-per-country,United States,1917,1679331300.0
+annual-co2-emissions-per-country,United States,1918,1754117200.0
+annual-co2-emissions-per-country,United States,1919,1486433300.0
+annual-co2-emissions-per-country,United States,1920,1747166700.0
+annual-co2-emissions-per-country,United States,1921,1432479000.0
+annual-co2-emissions-per-country,United States,1922,1446013000.0
+annual-co2-emissions-per-country,United States,1923,1909034400.0
+annual-co2-emissions-per-country,United States,1924,1711686500.0
+annual-co2-emissions-per-country,United States,1925,1758185500.0
+annual-co2-emissions-per-country,United States,1926,1906048500.0
+annual-co2-emissions-per-country,United States,1927,1862839200.0
+annual-co2-emissions-per-country,United States,1928,1830965000.0
+annual-co2-emissions-per-country,United States,1929,1963506200.0
+annual-co2-emissions-per-country,United States,1930,1744916200.0
+annual-co2-emissions-per-country,United States,1931,1484959100.0
+annual-co2-emissions-per-country,United States,1932,1257814100.0
+annual-co2-emissions-per-country,United States,1933,1348876800.0
+annual-co2-emissions-per-country,United States,1934,1436238600.0
+annual-co2-emissions-per-country,United States,1935,1492320900.0
+annual-co2-emissions-per-country,United States,1936,1713411700.0
+annual-co2-emissions-per-country,United States,1937,1792609900.0
+annual-co2-emissions-per-country,United States,1938,1515749900.0
+annual-co2-emissions-per-country,United States,1939,1670920400.0
+annual-co2-emissions-per-country,United States,1940,1874985100.0
+annual-co2-emissions-per-country,United States,1941,2043585000.0
+annual-co2-emissions-per-country,United States,1942,2198264800.0
+annual-co2-emissions-per-country,United States,1943,2272059100.0
+annual-co2-emissions-per-country,United States,1944,2444903700.0
+annual-co2-emissions-per-country,United States,1945,2359551500.0
+annual-co2-emissions-per-country,United States,1946,2257493800.0
+annual-co2-emissions-per-country,United States,1947,2485854500.0
+annual-co2-emissions-per-country,United States,1948,2582558700.0
+annual-co2-emissions-per-country,United States,1949,2164862200.0
+annual-co2-emissions-per-country,United States,1950,2547662800.0
+annual-co2-emissions-per-country,United States,1951,2631088600.0
+annual-co2-emissions-per-country,United States,1952,2558283800.0
+annual-co2-emissions-per-country,United States,1953,2619126800.0
+annual-co2-emissions-per-country,United States,1954,2496475100.0
+annual-co2-emissions-per-country,United States,1955,2737833200.0
+annual-co2-emissions-per-country,United States,1956,2871565600.0
+annual-co2-emissions-per-country,United States,1957,2845745700.0
+annual-co2-emissions-per-country,United States,1958,2756798700.0
+annual-co2-emissions-per-country,United States,1959,2847400000.0
+annual-co2-emissions-per-country,United States,1960,2924747500.0
+annual-co2-emissions-per-country,United States,1961,2923651800.0
+annual-co2-emissions-per-country,United States,1962,3036155400.0
+annual-co2-emissions-per-country,United States,1963,3203570700.0
+annual-co2-emissions-per-country,United States,1964,3348065800.0
+annual-co2-emissions-per-country,United States,1965,3472244200.0
+annual-co2-emissions-per-country,United States,1966,3654345000.0
+annual-co2-emissions-per-country,United States,1967,3774113300.0
+annual-co2-emissions-per-country,United States,1968,3912858400.0
+annual-co2-emissions-per-country,United States,1969,4106553300.0
+annual-co2-emissions-per-country,United States,1970,4214058500.0
+annual-co2-emissions-per-country,United States,1971,4237119200.0
+annual-co2-emissions-per-country,United States,1972,4435282400.0
+annual-co2-emissions-per-country,United States,1973,4629348000.0
+annual-co2-emissions-per-country,United States,1974,4464976400.0
+annual-co2-emissions-per-country,United States,1975,4275556600.0
+annual-co2-emissions-per-country,United States,1976,4571914000.0
+annual-co2-emissions-per-country,United States,1977,4699187000.0
+annual-co2-emissions-per-country,United States,1978,4851132400.0
+annual-co2-emissions-per-country,United States,1979,4864933400.0
+annual-co2-emissions-per-country,United States,1980,4680523300.0
+annual-co2-emissions-per-country,United States,1981,4507290000.0
+annual-co2-emissions-per-country,United States,1982,4277275400.0
+annual-co2-emissions-per-country,United States,1983,4311580000.0
+annual-co2-emissions-per-country,United States,1984,4454083600.0
+annual-co2-emissions-per-country,United States,1985,4469950000.0
+annual-co2-emissions-per-country,United States,1986,4468670000.0
+annual-co2-emissions-per-country,United States,1987,4673097000.0
+annual-co2-emissions-per-country,United States,1988,4872574500.0
+annual-co2-emissions-per-country,United States,1989,4960259600.0
+annual-co2-emissions-per-country,United States,1990,5129971700.0
+annual-co2-emissions-per-country,United States,1991,5074085000.0
+annual-co2-emissions-per-country,United States,1992,5181700600.0
+annual-co2-emissions-per-country,United States,1993,5282018300.0
+annual-co2-emissions-per-country,United States,1994,5366491000.0
+annual-co2-emissions-per-country,United States,1995,5431004000.0
+annual-co2-emissions-per-country,United States,1996,5602594000.0
+annual-co2-emissions-per-country,United States,1997,5675566600.0
+annual-co2-emissions-per-country,United States,1998,5741104000.0
+annual-co2-emissions-per-country,United States,1999,5803999000.0
+annual-co2-emissions-per-country,United States,2000,6019104300.0
+annual-co2-emissions-per-country,United States,2001,5901095400.0
+annual-co2-emissions-per-country,United States,2002,5943366000.0
+annual-co2-emissions-per-country,United States,2003,6002166000.0
+annual-co2-emissions-per-country,United States,2004,6109582000.0
+annual-co2-emissions-per-country,United States,2005,6125210000.0
+annual-co2-emissions-per-country,United States,2006,6045406700.0
+annual-co2-emissions-per-country,United States,2007,6117170000.0
+annual-co2-emissions-per-country,United States,2008,5917080000.0
+annual-co2-emissions-per-country,United States,2009,5484916000.0
+annual-co2-emissions-per-country,United States,2010,5664485400.0
+annual-co2-emissions-per-country,United States,2011,5533932500.0
+annual-co2-emissions-per-country,United States,2012,5327134000.0
+annual-co2-emissions-per-country,United States,2013,5466695000.0
+annual-co2-emissions-per-country,United States,2014,5530071600.0
+annual-co2-emissions-per-country,United States,2015,5366323000.0
+annual-co2-emissions-per-country,United States,2016,5248498000.0
+annual-co2-emissions-per-country,United States,2017,5193973000.0
+annual-co2-emissions-per-country,United States,2018,5358224000.0
+annual-co2-emissions-per-country,United States,2019,5237876000.0
+annual-co2-emissions-per-country,United States,2020,4693881000.0
+annual-co2-emissions-per-country,United States,2021,5018117000.0
+annual-co2-emissions-per-country,United States,2022,5065986600.0
+annual-co2-emissions-per-country,United States,2023,4924077600.0
+annual-co2-emissions-per-country,United States,2024,4911720400.0
+annual-co2-emissions-per-country,United States,2025,5035561500.0
+annual-co2-emissions-per-country,World,1900,1966822700.0
+annual-co2-emissions-per-country,World,1901,2029841300.0
+annual-co2-emissions-per-country,World,1902,2081102600.0
+annual-co2-emissions-per-country,World,1903,2268780500.0
+annual-co2-emissions-per-country,World,1904,2294485800.0
+annual-co2-emissions-per-country,World,1905,2445114600.0
+annual-co2-emissions-per-country,World,1906,2554046500.0
+annual-co2-emissions-per-country,World,1907,2910310000.0
+annual-co2-emissions-per-country,World,1908,2796128000.0
+annual-co2-emissions-per-country,World,1909,2913259500.0
+annual-co2-emissions-per-country,World,1910,3056996400.0
+annual-co2-emissions-per-country,World,1911,3104075000.0
+annual-co2-emissions-per-country,World,1912,3261379300.0
+annual-co2-emissions-per-country,World,1913,3532941600.0
+annual-co2-emissions-per-country,World,1914,3203701000.0
+annual-co2-emissions-per-country,World,1915,3152814000.0
+annual-co2-emissions-per-country,World,1916,3405111800.0
+annual-co2-emissions-per-country,World,1917,3559354000.0
+annual-co2-emissions-per-country,World,1918,3509262000.0
+annual-co2-emissions-per-country,World,1919,3045023200.0
+annual-co2-emissions-per-country,World,1920,3551822800.0
+annual-co2-emissions-per-country,World,1921,3121286100.0
+annual-co2-emissions-per-country,World,1922,3271554800.0
+annual-co2-emissions-per-country,World,1923,3716170800.0
+annual-co2-emissions-per-country,World,1924,3730903000.0
+annual-co2-emissions-per-country,World,1925,3756098600.0
+annual-co2-emissions-per-country,World,1926,3694297900.0
+annual-co2-emissions-per-country,World,1927,4032549600.0
+annual-co2-emissions-per-country,World,1928,4000578800.0
+annual-co2-emissions-per-country,World,1929,4293019100.0
+annual-co2-emissions-per-country,World,1930,3963949000.0
+annual-co2-emissions-per-country,World,1931,3543315700.0
+annual-co2-emissions-per-country,World,1932,3195650300.0
+annual-co2-emissions-per-country,World,1933,3365781800.0
+annual-co2-emissions-per-country,World,1934,3659832800.0
+annual-co2-emissions-per-country,World,1935,3840063000.0
+annual-co2-emissions-per-country,World,1936,4212012300.0
+annual-co2-emissions-per-country,World,1937,4502055000.0
+annual-co2-emissions-per-country,World,1938,4238612700.0
+annual-co2-emissions-per-country,World,1939,4484168700.0
+annual-co2-emissions-per-country,World,1940,4898432500.0
+annual-co2-emissions-per-country,World,1941,5005949400.0
+annual-co2-emissions-per-country,World,1942,4987023000.0
+annual-co2-emissions-per-country,World,1943,5078106600.0
+annual-co2-emissions-per-country,World,1944,5169466400.0
+annual-co2-emissions-per-country,World,1945,4294615800.0
+annual-co2-emissions-per-country,World,1946,4619254300.0
+annual-co2-emissions-per-country,World,1947,5177196500.0
+annual-co2-emissions-per-country,World,1948,5461781000.0
+annual-co2-emissions-per-country,World,1949,5213677600.0
+annual-co2-emissions-per-country,World,1950,5924495000.0
+annual-co2-emissions-per-country,World,1951,6378454500.0
+annual-co2-emissions-per-country,World,1952,6459392500.0
+annual-co2-emissions-per-country,World,1953,6640495600.0
+annual-co2-emissions-per-country,World,1954,6776052000.0
+annual-co2-emissions-per-country,World,1955,7431486000.0
+annual-co2-emissions-per-country,World,1956,7914752500.0
+annual-co2-emissions-per-country,World,1957,8169666000.0
+annual-co2-emissions-per-country,World,1958,8403626000.0
+annual-co2-emissions-per-country,World,1959,8845359000.0
+annual-co2-emissions-per-country,World,1960,9384926000.0
+annual-co2-emissions-per-country,World,1961,9422807000.0
+annual-co2-emissions-per-country,World,1962,9761070000.0
+annual-co2-emissions-per-country,World,1963,10313528000.0
+annual-co2-emissions-per-country,World,1964,10882468000.0
+annual-co2-emissions-per-country,World,1965,11362075000.0
+annual-co2-emissions-per-country,World,1966,11920800000.0
+annual-co2-emissions-per-country,World,1967,12295010000.0
+annual-co2-emissions-per-country,World,1968,12978214000.0
+annual-co2-emissions-per-country,World,1969,13846282000.0
+annual-co2-emissions-per-country,World,1970,14693279000.0
+annual-co2-emissions-per-country,World,1971,15282600000.0
+annual-co2-emissions-per-country,World,1972,15989475000.0
+annual-co2-emissions-per-country,World,1973,16857454000.0
+annual-co2-emissions-per-country,World,1974,16765546000.0
+annual-co2-emissions-per-country,World,1975,16724344000.0
+annual-co2-emissions-per-country,World,1976,17715143000.0
+annual-co2-emissions-per-country,World,1977,18211154000.0
+annual-co2-emissions-per-country,World,1978,18879244000.0
+annual-co2-emissions-per-country,World,1979,19368335000.0
+annual-co2-emissions-per-country,World,1980,19228922000.0
+annual-co2-emissions-per-country,World,1981,18731205000.0
+annual-co2-emissions-per-country,World,1982,18582667000.0
+annual-co2-emissions-per-country,World,1983,18786509000.0
+annual-co2-emissions-per-country,World,1984,19358867000.0
+annual-co2-emissions-per-country,World,1985,20048312000.0
+annual-co2-emissions-per-country,World,1986,20346313000.0
+annual-co2-emissions-per-country,World,1987,21098291000.0
+annual-co2-emissions-per-country,World,1988,21927662000.0
+annual-co2-emissions-per-country,World,1989,22236113000.0
+annual-co2-emissions-per-country,World,1990,22779531000.0
+annual-co2-emissions-per-country,World,1991,23238238000.0
+annual-co2-emissions-per-country,World,1992,22546622000.0
+annual-co2-emissions-per-country,World,1993,22779687000.0
+annual-co2-emissions-per-country,World,1994,23013691000.0
+annual-co2-emissions-per-country,World,1995,23558908000.0
+annual-co2-emissions-per-country,World,1996,24273400000.0
+annual-co2-emissions-per-country,World,1997,24431874000.0
+annual-co2-emissions-per-country,World,1998,24344885000.0
+annual-co2-emissions-per-country,World,1999,24852392000.0
+annual-co2-emissions-per-country,World,2000,25507824000.0
+annual-co2-emissions-per-country,World,2001,25681363000.0
+annual-co2-emissions-per-country,World,2002,26252636000.0
+annual-co2-emissions-per-country,World,2003,27640973000.0
+annual-co2-emissions-per-country,World,2004,28609528000.0
+annual-co2-emissions-per-country,World,2005,29632664000.0
+annual-co2-emissions-per-country,World,2006,30574146000.0
+annual-co2-emissions-per-country,World,2007,31517080000.0
+annual-co2-emissions-per-country,World,2008,32048350000.0
+annual-co2-emissions-per-country,World,2009,31507739000.0
+annual-co2-emissions-per-country,World,2010,33323946000.0
+annual-co2-emissions-per-country,World,2011,34511475000.0
+annual-co2-emissions-per-country,World,2012,34924850000.0
+annual-co2-emissions-per-country,World,2013,35265225000.0
+annual-co2-emissions-per-country,World,2014,35522060000.0
+annual-co2-emissions-per-country,World,2015,35485730000.0
+annual-co2-emissions-per-country,World,2016,35487797000.0
+annual-co2-emissions-per-country,World,2017,36074033000.0
+annual-co2-emissions-per-country,World,2018,36863242000.0
+annual-co2-emissions-per-country,World,2019,37060624000.0
+annual-co2-emissions-per-country,World,2020,35095286000.0
+annual-co2-emissions-per-country,World,2021,36889070000.0
+annual-co2-emissions-per-country,World,2022,37471130000.0
+annual-co2-emissions-per-country,World,2023,38138913000.0
+annual-co2-emissions-per-country,World,2024,38647415000.0
+annual-co2-emissions-per-country,World,2025,38995104000.0

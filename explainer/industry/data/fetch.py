@@ -331,7 +331,11 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (831259, "FCX"), (1164727, "NEM"), (1001838, "SCCO"), (915913, "ALB"),
                  (7084, "ADM"), (1996862, "BG"), (1755672, "CTVA"), (315189, "DE"), (100493, "TSN"), (1324404, "CF"),
                  (1285785, "MOS"), (802481, "PPC"), (48465, "HRL"), (40704, "GIS"), (1637459, "KHC"), (77476, "PEP"),
-                 (1103982, "MDLZ"), (47111, "HSY"), (56873, "KR")]
+                 (1103982, "MDLZ"), (47111, "HSY"), (56873, "KR"),
+                 (73309, "NUE"), (1022671, "STLD"), (764065, "CLF"), (1163302, "X"), (22444, "CMC"),
+                 (849395, "CRH"), (2035989, "AMRZ"), (1396009, "VMC"), (916076, "MLM"), (918646, "EXP"),
+                 (1675149, "AA"), (949157, "CENX"), (51434, "IP"), (2005951, "SW"), (75677, "PKG"), (9389, "BALL"),
+                 (1219601, "CCK"), (812074, "OI")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -354,7 +358,19 @@ SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
                  "BG": {"revenue": ["Revenues", "SalesRevenueNet"]},
                  "HRL": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
                  "KHC": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
-                 "CF": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
+                 "CF": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 # US Steel tags part of its sales (2017-2021) as revenue from contracts; its total is Revenues.
+                 # Commercial Metals, Ball and O-I tag revenue including the taxes they collect; Steel Dynamics and
+                 # Ball tag profit to common shareholders, not NetIncomeLoss, in most years; Commercial Metals tags
+                 # ProfitLoss before 2019
+                 "X": {"revenue": ["Revenues", "SalesRevenueNet"]},
+                 "CMC": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues",
+                                     "SalesRevenueGoodsNet"], "net_income": ["NetIncomeLoss", "ProfitLoss"]},
+                 "BALL": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "SalesRevenueNet"],
+                          "net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 "OI": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues",
+                                    "SalesRevenueGoodsNet"]},
+                 "STLD": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
 
 
 def sec_annual():
@@ -871,15 +887,21 @@ def fred_metals():
                    "; ".join(f"{k} {v}" for k, v in FRED_METALS.items()) + ")"])
 
 
-IFRS_COMPANIES = [(811809, "BHP"), (863064, "RIO"), (917851, "VALE")]
+IFRS_COMPANIES = [(811809, "BHP"), (863064, "RIO"), (917851, "VALE"), (1243429, "MT"), (1076378, "CX")]
+# ArcelorMittal tags revenue as revenue from contracts with customers since 2018, and its capital spending with
+# intangibles and other non-current assets
+IFRS_OVERRIDES = {"MT": {"revenue": ["Revenue", "RevenueFromContractsWithCustomers"],
+                         "capex": ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+                                   "PurchaseOfPropertyPlantAndEquipmentIntangibleAssetsOtherThanGoodwillInvestment"
+                                   "PropertyAndOtherNoncurrentAssets"]}}
 IFRS_ITEMS = {"revenue": ["Revenue"], "profit": ["ProfitLossAttributableToOwnersOfParent", "ProfitLoss"],
               "operating_cash": ["CashFlowsFromUsedInOperatingActivities"],
               "capex": ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"]}
 
 
 def sec_ifrs():
-    """Annual figures of the three big diversified miners from their Forms 20-F (SEC company facts, IFRS tags): BHP's
-    fiscal years end in June, Rio Tinto's and Vale's in December."""
+    """Annual figures of the three big diversified miners (Part 9), ArcelorMittal and Cemex (Part 11) from their Forms
+    20-F (SEC company facts, IFRS tags, US dollars): BHP's fiscal years end in June, the others' in December."""
     import time
 
     out = []
@@ -889,6 +911,7 @@ def sec_ifrs():
         time.sleep(0.5)
         years: dict = {}
         for item, tags in IFRS_ITEMS.items():
+            tags = IFRS_OVERRIDES.get(tic, {}).get(item, tags)
             for tag in tags:
                 best: dict = {}
                 for v in ifrs.get(tag, {}).get("units", {}).get("USD", []):
@@ -1074,7 +1097,98 @@ def fred_food():
                   ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_FOOD.items()) + ")"])
 
 
-JOBS = {"ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+DS140_HEAVY = {"cement": "ds140-cement-2021", "steel": "ds140-iron-steel-2021", "scrap": "ds140-iron-steel-scrap-2021",
+               "aluminum": "ds140-aluminum-2021", "crushed_stone": "ds140-crushed_stone-2022",
+               "sand_gravel": "ds140-construction_sand_and%20gravel_2022"}
+DS140_COLS = {"production": ("production", "raw steel production", "primary production"),
+              "consumption": ("apparent consumption", "reported consumption"),
+              "unit_value": ("unit value ($/t)",), "unit_value_98": ("unit value (98$/t)",),
+              "world_production": ("world production",)}
+
+
+def usgs_heavy():
+    """US Geological Survey, Data Series 140, for the heavy materials of Part 11: US production, apparent consumption,
+    unit value (dollars a metric ton, of the year and of 1998) and world production of cement, raw steel, iron and
+    steel scrap, aluminium, crushed stone and construction sand and gravel, every year since 1900 (or the first year
+    recorded) to 2021 or 2022.  Long format: one row per (material, year, item)."""
+    import io
+
+    import openpyxl
+
+    out = []
+    for mat, f in DS140_HEAVY.items():
+        wb = openpyxl.load_workbook(io.BytesIO(_get(DS140_BASE + f + ".xlsx")), data_only=True, read_only=True)
+        ws = wb["Steel"] if mat == "steel" else wb[wb.sheetnames[0]]
+        data = list(ws.iter_rows(values_only=True))
+        hi = next(i for i, r in enumerate(data) if r[0] == "Year")
+        hdr = [" ".join(str(c or "").split()).lower() for c in data[hi]]
+        cols = {item: next(j for j, h in enumerate(hdr) if h in names) for item, names in DS140_COLS.items()
+                if any(h in names for h in hdr)}
+        for r in data[hi + 1:]:
+            if isinstance(r[0], (int, float)) and 1800 < r[0] < 2100:
+                for item, j in cols.items():
+                    v = r[j]
+                    if isinstance(v, (int, float)):
+                        out.append([mat, int(r[0]), item, float(v)])
+    return _write("usgs_heavy", ["material", "year", "item", "value"], out,
+                  ["https://www.usgs.gov/centers/national-minerals-information-center/historical-statistics-mineral-and-"
+                   "material-commodities (USGS Data Series 140; " + ", ".join(f.replace("%20", " ") + ".xlsx"
+                                                                              for f in DS140_HEAVY.values()) +
+                   "; metric tons; unit values in dollars a metric ton and in 1998 dollars; for steel, production is "
+                   "raw steel; for aluminium, primary production)"])
+
+
+FRED_HEAVY = {"WPU1017": "PPI steel mill products (1982=100)", "WPU101704": "PPI hot-rolled steel sheet and strip",
+              "WPU1012": "PPI iron and steel scrap", "PCU327310327310": "PPI cement manufacturing",
+              "PCU327320327320": "PPI ready-mix concrete", "WPU1321": "PPI construction sand, gravel and crushed stone",
+              "PCU212312212312": "PPI crushed and broken limestone", "WPU102502": "PPI aluminium mill shapes",
+              "PCU322211322211": "PPI corrugated and solid fiber boxes", "PCU322130322130": "PPI paperboard mills",
+              "PCU327213327213": "PPI glass containers", "PCU332431332431": "PPI metal cans",
+              "IPG3311A2S": "industrial production: iron and steel products", "CAPUTLG3311A2S":
+              "capacity utilization: iron and steel products", "IPG3313S": "industrial production: alumina and "
+              "aluminum", "IPN32731S": "industrial production: cement (not seasonally adjusted)",
+              "IPG3221S": "industrial production: pulp, paper and paperboard mills", "TTLCONS": "total US construction "
+              "spending ($m, annual rate)", "APU0000711211": "average price, bananas ($ a pound)",
+              "CPIAUCSL": "CPI, all items"}
+
+
+def fred_heavy():
+    """Monthly series for Part 11 (via FRED): producer prices of steel, scrap, cement, concrete, stone, aluminium,
+    boxes, glass and cans (BLS), industrial production and capacity utilization (Federal Reserve G.17), construction
+    spending (Census), the average price of bananas and the CPI (BLS)."""
+    out = []
+    for sid in FRED_HEAVY:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_heavy", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_HEAVY.items()) + ")"])
+
+
+OWID_CO2 = ["annual-co2-cement", "annual-co2-emissions-per-country"]
+OWID_CO2_ENTITIES = ("World", "China", "India", "United States")
+
+
+def owid_co2():
+    """The Global Carbon Budget's CO2 from cement (the chemistry of the kiln, not its fuel) and all fossil and industrial
+    CO2, by year, for the world, China, India and the US (tonnes; via Our World in Data, CC BY 4.0)."""
+    out = []
+    for slug in OWID_CO2:
+        txt = _get(f"https://ourworldindata.org/grapher/{slug}.csv?v=1&csvType=full&useColumnShortNames=true").decode()
+        rows = list(csv.reader(io.StringIO(txt)))
+        col = len(rows[0]) - 1
+        for r in rows[1:]:
+            if r[0] in OWID_CO2_ENTITIES and r[col] not in ("", None) and int(r[2]) >= 1900:
+                out.append([slug, r[0], int(r[2]), float(r[col])])
+    return _write("owid_co2", ["series", "entity", "year", "value"], out,
+                  ["https://ourworldindata.org/grapher/" + s for s in OWID_CO2] +
+                  ["Global Carbon Budget (2025), Friedlingstein et al.; cement: Andrew (2019)"])
+
+
+JOBS = {"usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
