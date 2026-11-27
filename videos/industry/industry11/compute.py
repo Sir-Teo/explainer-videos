@@ -215,12 +215,13 @@ def results() -> dict:
 
     # --- aggregates -----------------------------------------------------------------------------------------------------
     st = U["crushed_stone"]
-    stone_real = {y: st["unit_value"][y] / cpi.get(y, np.nan) * cpi_last for y in st["unit_value"] if y in cpi}
+    # USGS's own 1998-dollar series reaches back to 1900; carry it to today's dollars with the CPI from 1998
+    stone_real = {y: v * cpi_last / cpi[1998] for y, v in st["unit_value_98"].items()}
     mcs = {2022: 14.31, 2023: 15.86, 2024: 17.50, 2025: get("usgs.stone.us.price.2025")}
     for y, v in mcs.items():
         if y in cpi:
             stone_real[y] = v / cpi[y] * cpi_last
-    steel_real = {y: U["steel"]["unit_value"][y] / cpi[y] * cpi_last for y in U["steel"]["unit_value"] if y in cpi}
+    steel_real = {y: v * cpi_last / cpi[1998] for y, v in U["steel"]["unit_value_98"].items()}
     R["aggregates"] = dict(tonnes=get("usgs.stone.us.2025"), value=get("usgs.stone.us.value.2025"),
                            quarries=get("usgs.stone.us.quarries"), price=get("usgs.stone.us.price.2025"),
                            aggregate=get("usgs.stone.us.aggregate"), to_cement=get("usgs.stone.us.cement"),
