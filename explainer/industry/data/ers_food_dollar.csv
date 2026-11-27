@@ -1,0 +1,2118 @@
+# source: https://www.ers.usda.gov/media/7052/food-dollar-nominal-data-in-machine-readable-format.zip
+# source: https://www.ers.usda.gov/media/7055/food-dollar-nominal-data-2011-model-1993-2023.csv
+# retrieved: 2026-11-27
+model,year,channel,series,category,unit,value
+agfeds,2007,All,Industry group bill,Advertising,cents,2.7
+agfeds,2007,All,Industry group bill,Advertising,usd_m,27960.1
+agfeds,2007,All,Industry group bill,Agribusiness,cents,3.8
+agfeds,2007,All,Industry group bill,Agribusiness,usd_m,38977.9
+agfeds,2007,All,Industry group bill,Crops,cents,3.0
+agfeds,2007,All,Industry group bill,Crops,usd_m,31418.9
+agfeds,2007,All,Industry group bill,Energy,cents,5.7
+agfeds,2007,All,Industry group bill,Energy,usd_m,58956.0
+agfeds,2007,All,Industry group bill,Finance and insurance,cents,4.0
+agfeds,2007,All,Industry group bill,Finance and insurance,usd_m,41380.9
+agfeds,2007,All,Industry group bill,Food processing,cents,17.9
+agfeds,2007,All,Industry group bill,Food processing,usd_m,184976.3
+agfeds,2007,All,Industry group bill,Food retail,cents,14.7
+agfeds,2007,All,Industry group bill,Food retail,usd_m,151858.9
+agfeds,2007,All,Industry group bill,Food services,cents,31.4
+agfeds,2007,All,Industry group bill,Food services,usd_m,324099.2
+agfeds,2007,All,Industry group bill,Food wholesale,cents,5.9
+agfeds,2007,All,Industry group bill,Food wholesale,usd_m,60728.2
+agfeds,2007,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2007,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11130.9
+agfeds,2007,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2007,All,Industry group bill,Legal and accounting,usd_m,16109.2
+agfeds,2007,All,Industry group bill,Livestock,cents,3.8
+agfeds,2007,All,Industry group bill,Livestock,usd_m,39291.0
+agfeds,2007,All,Industry group bill,Transportation and storage,cents,4.2
+agfeds,2007,All,Industry group bill,Transportation and storage,usd_m,43701.4
+agfeds,2007,All,Industry group total,Industry group total,cents,100.0
+agfeds,2007,All,Industry group total,Industry group total,usd_m,1030588.7
+agfeds,2007,All,Marketing bill,Farm share,cents,14.7
+agfeds,2007,All,Marketing bill,Farm value,usd_m,151891.5
+agfeds,2007,All,Marketing bill,Marketing share,cents,85.3
+agfeds,2007,All,Marketing bill,Marketing value,usd_m,878774.4
+agfeds,2007,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2007,All,Total spending by production source,Domestic food dollars,usd_m,1030665.9
+agfeds,2007,All,Total spending by production source,Imported food dollars,cents,11.8
+agfeds,2007,All,Total spending by production source,Imported food dollars,usd_m,121963.6
+agfeds,2007,Food-at-home,Industry group bill,Advertising,cents,2.0
+agfeds,2007,Food-at-home,Industry group bill,Advertising,usd_m,10463.2
+agfeds,2007,Food-at-home,Industry group bill,Agribusiness,cents,5.2
+agfeds,2007,Food-at-home,Industry group bill,Agribusiness,usd_m,27018.9
+agfeds,2007,Food-at-home,Industry group bill,Crops,cents,3.8
+agfeds,2007,Food-at-home,Industry group bill,Crops,usd_m,19994.4
+agfeds,2007,Food-at-home,Industry group bill,Energy,cents,6.1
+agfeds,2007,Food-at-home,Industry group bill,Energy,usd_m,31882.1
+agfeds,2007,Food-at-home,Industry group bill,Finance and insurance,cents,4.0
+agfeds,2007,Food-at-home,Industry group bill,Finance and insurance,usd_m,21027.7
+agfeds,2007,Food-at-home,Industry group bill,Food processing,cents,27.3
+agfeds,2007,Food-at-home,Industry group bill,Food processing,usd_m,141808.4
+agfeds,2007,Food-at-home,Industry group bill,Food retail,cents,27.5
+agfeds,2007,Food-at-home,Industry group bill,Food retail,usd_m,142672.7
+agfeds,2007,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2007,Food-at-home,Industry group bill,Food services,usd_m,2855.5
+agfeds,2007,Food-at-home,Industry group bill,Food wholesale,cents,9.5
+agfeds,2007,Food-at-home,Industry group bill,Food wholesale,usd_m,49182.9
+agfeds,2007,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2007,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6741.1
+agfeds,2007,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2007,Food-at-home,Industry group bill,Legal and accounting,usd_m,7416.9
+agfeds,2007,Food-at-home,Industry group bill,Livestock,cents,5.1
+agfeds,2007,Food-at-home,Industry group bill,Livestock,usd_m,26693.3
+agfeds,2007,Food-at-home,Industry group bill,Transportation and storage,cents,6.1
+agfeds,2007,Food-at-home,Industry group bill,Transportation and storage,usd_m,31819.9
+agfeds,2007,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2007,Food-at-home,Industry group total,Industry group total,usd_m,519577.1
+agfeds,2007,Food-at-home,Marketing bill,Farm share,cents,19.6
+agfeds,2007,Food-at-home,Marketing bill,Farm value,usd_m,102012.3
+agfeds,2007,Food-at-home,Marketing bill,Marketing share,cents,80.4
+agfeds,2007,Food-at-home,Marketing bill,Marketing value,usd_m,417613.7
+agfeds,2007,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2007,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,519626.0
+agfeds,2007,Food-at-home,Total spending by production source,Imported food dollars,cents,10.0
+agfeds,2007,Food-at-home,Total spending by production source,Imported food dollars,usd_m,51805.6
+agfeds,2007,Food-away-from-home,Industry group bill,Advertising,cents,3.4
+agfeds,2007,Food-away-from-home,Industry group bill,Advertising,usd_m,17496.9
+agfeds,2007,Food-away-from-home,Industry group bill,Agribusiness,cents,2.3
+agfeds,2007,Food-away-from-home,Industry group bill,Agribusiness,usd_m,11959.0
+agfeds,2007,Food-away-from-home,Industry group bill,Crops,cents,2.2
+agfeds,2007,Food-away-from-home,Industry group bill,Crops,usd_m,11424.5
+agfeds,2007,Food-away-from-home,Industry group bill,Energy,cents,5.3
+agfeds,2007,Food-away-from-home,Industry group bill,Energy,usd_m,27073.9
+agfeds,2007,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.0
+agfeds,2007,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,20353.3
+agfeds,2007,Food-away-from-home,Industry group bill,Food processing,cents,8.4
+agfeds,2007,Food-away-from-home,Industry group bill,Food processing,usd_m,43167.9
+agfeds,2007,Food-away-from-home,Industry group bill,Food retail,cents,1.8
+agfeds,2007,Food-away-from-home,Industry group bill,Food retail,usd_m,9186.2
+agfeds,2007,Food-away-from-home,Industry group bill,Food services,cents,62.9
+agfeds,2007,Food-away-from-home,Industry group bill,Food services,usd_m,321243.6
+agfeds,2007,Food-away-from-home,Industry group bill,Food wholesale,cents,2.3
+agfeds,2007,Food-away-from-home,Industry group bill,Food wholesale,usd_m,11545.3
+agfeds,2007,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.9
+agfeds,2007,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4389.8
+agfeds,2007,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2007,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,8692.2
+agfeds,2007,Food-away-from-home,Industry group bill,Livestock,cents,2.5
+agfeds,2007,Food-away-from-home,Industry group bill,Livestock,usd_m,12597.7
+agfeds,2007,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.3
+agfeds,2007,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,11881.5
+agfeds,2007,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2007,Food-away-from-home,Industry group total,Industry group total,usd_m,511011.6
+agfeds,2007,Food-away-from-home,Marketing bill,Farm share,cents,9.8
+agfeds,2007,Food-away-from-home,Marketing bill,Farm value,usd_m,49879.2
+agfeds,2007,Food-away-from-home,Marketing bill,Marketing share,cents,90.2
+agfeds,2007,Food-away-from-home,Marketing bill,Marketing value,usd_m,461160.7
+agfeds,2007,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2007,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,511039.9
+agfeds,2007,Food-away-from-home,Total spending by production source,Imported food dollars,cents,13.7
+agfeds,2007,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,70158.0
+agfeds,2008,All,Industry group bill,Advertising,cents,2.5
+agfeds,2008,All,Industry group bill,Advertising,usd_m,26895.6
+agfeds,2008,All,Industry group bill,Agribusiness,cents,4.1
+agfeds,2008,All,Industry group bill,Agribusiness,usd_m,43436.1
+agfeds,2008,All,Industry group bill,Crops,cents,3.1
+agfeds,2008,All,Industry group bill,Crops,usd_m,32447.0
+agfeds,2008,All,Industry group bill,Energy,cents,6.9
+agfeds,2008,All,Industry group bill,Energy,usd_m,73258.2
+agfeds,2008,All,Industry group bill,Finance and insurance,cents,3.6
+agfeds,2008,All,Industry group bill,Finance and insurance,usd_m,37684.3
+agfeds,2008,All,Industry group bill,Food processing,cents,18.2
+agfeds,2008,All,Industry group bill,Food processing,usd_m,192201.2
+agfeds,2008,All,Industry group bill,Food retail,cents,14.5
+agfeds,2008,All,Industry group bill,Food retail,usd_m,153235.5
+agfeds,2008,All,Industry group bill,Food services,cents,30.9
+agfeds,2008,All,Industry group bill,Food services,usd_m,327324.0
+agfeds,2008,All,Industry group bill,Food wholesale,cents,5.8
+agfeds,2008,All,Industry group bill,Food wholesale,usd_m,61486.3
+agfeds,2008,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2008,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11177.3
+agfeds,2008,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2008,All,Industry group bill,Legal and accounting,usd_m,16438.0
+agfeds,2008,All,Industry group bill,Livestock,cents,3.4
+agfeds,2008,All,Industry group bill,Livestock,usd_m,36217.4
+agfeds,2008,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2008,All,Industry group bill,Transportation and storage,usd_m,46667.0
+agfeds,2008,All,Industry group total,Industry group total,cents,100.0
+agfeds,2008,All,Industry group total,Industry group total,usd_m,1058467.9
+agfeds,2008,All,Marketing bill,Farm share,cents,14.9
+agfeds,2008,All,Marketing bill,Farm value,usd_m,157791.0
+agfeds,2008,All,Marketing bill,Marketing share,cents,85.1
+agfeds,2008,All,Marketing bill,Marketing value,usd_m,900761.6
+agfeds,2008,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2008,All,Total spending by production source,Domestic food dollars,usd_m,1058552.6
+agfeds,2008,All,Total spending by production source,Imported food dollars,cents,13.2
+agfeds,2008,All,Total spending by production source,Imported food dollars,usd_m,139241.0
+agfeds,2008,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2008,Food-at-home,Industry group bill,Advertising,usd_m,9951.7
+agfeds,2008,Food-at-home,Industry group bill,Agribusiness,cents,5.7
+agfeds,2008,Food-at-home,Industry group bill,Agribusiness,usd_m,30679.2
+agfeds,2008,Food-at-home,Industry group bill,Crops,cents,3.9
+agfeds,2008,Food-at-home,Industry group bill,Crops,usd_m,21081.1
+agfeds,2008,Food-at-home,Industry group bill,Energy,cents,7.5
+agfeds,2008,Food-at-home,Industry group bill,Energy,usd_m,40321.8
+agfeds,2008,Food-at-home,Industry group bill,Finance and insurance,cents,3.6
+agfeds,2008,Food-at-home,Industry group bill,Finance and insurance,usd_m,19584.4
+agfeds,2008,Food-at-home,Industry group bill,Food processing,cents,27.4
+agfeds,2008,Food-at-home,Industry group bill,Food processing,usd_m,148091.3
+agfeds,2008,Food-at-home,Industry group bill,Food retail,cents,26.6
+agfeds,2008,Food-at-home,Industry group bill,Food retail,usd_m,143861.1
+agfeds,2008,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2008,Food-at-home,Industry group bill,Food services,usd_m,2845.9
+agfeds,2008,Food-at-home,Industry group bill,Food wholesale,cents,9.2
+agfeds,2008,Food-at-home,Industry group bill,Food wholesale,usd_m,49792.1
+agfeds,2008,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2008,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6920.9
+agfeds,2008,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2008,Food-at-home,Industry group bill,Legal and accounting,usd_m,7553.1
+agfeds,2008,Food-at-home,Industry group bill,Livestock,cents,4.7
+agfeds,2008,Food-at-home,Industry group bill,Livestock,usd_m,25218.1
+agfeds,2008,Food-at-home,Industry group bill,Transportation and storage,cents,6.3
+agfeds,2008,Food-at-home,Industry group bill,Transportation and storage,usd_m,34204.9
+agfeds,2008,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2008,Food-at-home,Industry group total,Industry group total,usd_m,540105.5
+agfeds,2008,Food-at-home,Marketing bill,Farm share,cents,20.0
+agfeds,2008,Food-at-home,Marketing bill,Farm value,usd_m,108217.5
+agfeds,2008,Food-at-home,Marketing bill,Marketing share,cents,80.0
+agfeds,2008,Food-at-home,Marketing bill,Marketing value,usd_m,431941.6
+agfeds,2008,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2008,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,540159.1
+agfeds,2008,Food-at-home,Total spending by production source,Imported food dollars,cents,10.8
+agfeds,2008,Food-at-home,Total spending by production source,Imported food dollars,usd_m,58566.3
+agfeds,2008,Food-away-from-home,Industry group bill,Advertising,cents,3.3
+agfeds,2008,Food-away-from-home,Industry group bill,Advertising,usd_m,16943.9
+agfeds,2008,Food-away-from-home,Industry group bill,Agribusiness,cents,2.5
+agfeds,2008,Food-away-from-home,Industry group bill,Agribusiness,usd_m,12756.9
+agfeds,2008,Food-away-from-home,Industry group bill,Crops,cents,2.2
+agfeds,2008,Food-away-from-home,Industry group bill,Crops,usd_m,11365.8
+agfeds,2008,Food-away-from-home,Industry group bill,Energy,cents,6.4
+agfeds,2008,Food-away-from-home,Industry group bill,Energy,usd_m,32936.4
+agfeds,2008,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.5
+agfeds,2008,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,18100.0
+agfeds,2008,Food-away-from-home,Industry group bill,Food processing,cents,8.5
+agfeds,2008,Food-away-from-home,Industry group bill,Food processing,usd_m,44109.9
+agfeds,2008,Food-away-from-home,Industry group bill,Food retail,cents,1.8
+agfeds,2008,Food-away-from-home,Industry group bill,Food retail,usd_m,9374.4
+agfeds,2008,Food-away-from-home,Industry group bill,Food services,cents,62.6
+agfeds,2008,Food-away-from-home,Industry group bill,Food services,usd_m,324478.1
+agfeds,2008,Food-away-from-home,Industry group bill,Food wholesale,cents,2.3
+agfeds,2008,Food-away-from-home,Industry group bill,Food wholesale,usd_m,11694.2
+agfeds,2008,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2008,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4256.4
+agfeds,2008,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2008,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,8884.9
+agfeds,2008,Food-away-from-home,Industry group bill,Livestock,cents,2.1
+agfeds,2008,Food-away-from-home,Industry group bill,Livestock,usd_m,10999.3
+agfeds,2008,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.4
+agfeds,2008,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,12462.1
+agfeds,2008,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2008,Food-away-from-home,Industry group total,Industry group total,usd_m,518362.4
+agfeds,2008,Food-away-from-home,Marketing bill,Farm share,cents,9.6
+agfeds,2008,Food-away-from-home,Marketing bill,Farm value,usd_m,49573.5
+agfeds,2008,Food-away-from-home,Marketing bill,Marketing share,cents,90.4
+agfeds,2008,Food-away-from-home,Marketing bill,Marketing value,usd_m,468820.0
+agfeds,2008,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2008,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,518393.5
+agfeds,2008,Food-away-from-home,Total spending by production source,Imported food dollars,cents,15.6
+agfeds,2008,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,80674.8
+agfeds,2009,All,Industry group bill,Advertising,cents,2.4
+agfeds,2009,All,Industry group bill,Advertising,usd_m,25704.7
+agfeds,2009,All,Industry group bill,Agribusiness,cents,4.2
+agfeds,2009,All,Industry group bill,Agribusiness,usd_m,44307.1
+agfeds,2009,All,Industry group bill,Crops,cents,3.1
+agfeds,2009,All,Industry group bill,Crops,usd_m,32978.6
+agfeds,2009,All,Industry group bill,Energy,cents,5.1
+agfeds,2009,All,Industry group bill,Energy,usd_m,54020.1
+agfeds,2009,All,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2009,All,Industry group bill,Finance and insurance,usd_m,39209.6
+agfeds,2009,All,Industry group bill,Food processing,cents,20.1
+agfeds,2009,All,Industry group bill,Food processing,usd_m,212394.6
+agfeds,2009,All,Industry group bill,Food retail,cents,14.5
+agfeds,2009,All,Industry group bill,Food retail,usd_m,153206.9
+agfeds,2009,All,Industry group bill,Food services,cents,30.9
+agfeds,2009,All,Industry group bill,Food services,usd_m,326011.0
+agfeds,2009,All,Industry group bill,Food wholesale,cents,5.9
+agfeds,2009,All,Industry group bill,Food wholesale,usd_m,62182.0
+agfeds,2009,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2009,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11192.9
+agfeds,2009,All,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2009,All,Industry group bill,Legal and accounting,usd_m,16110.3
+agfeds,2009,All,Industry group bill,Livestock,cents,2.9
+agfeds,2009,All,Industry group bill,Livestock,usd_m,30474.7
+agfeds,2009,All,Industry group bill,Transportation and storage,cents,4.5
+agfeds,2009,All,Industry group bill,Transportation and storage,usd_m,47662.6
+agfeds,2009,All,Industry group total,Industry group total,cents,100.0
+agfeds,2009,All,Industry group total,Industry group total,usd_m,1055455.0
+agfeds,2009,All,Marketing bill,Farm share,cents,14.2
+agfeds,2009,All,Marketing bill,Farm value,usd_m,149473.3
+agfeds,2009,All,Marketing bill,Marketing share,cents,85.8
+agfeds,2009,All,Marketing bill,Marketing value,usd_m,906080.1
+agfeds,2009,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2009,All,Total spending by production source,Domestic food dollars,usd_m,1055553.4
+agfeds,2009,All,Total spending by production source,Imported food dollars,cents,12.4
+agfeds,2009,All,Total spending by production source,Imported food dollars,usd_m,131331.2
+agfeds,2009,Food-at-home,Industry group bill,Advertising,cents,1.7
+agfeds,2009,Food-at-home,Industry group bill,Advertising,usd_m,9093.6
+agfeds,2009,Food-at-home,Industry group bill,Agribusiness,cents,5.7
+agfeds,2009,Food-at-home,Industry group bill,Agribusiness,usd_m,30594.7
+agfeds,2009,Food-at-home,Industry group bill,Crops,cents,3.9
+agfeds,2009,Food-at-home,Industry group bill,Crops,usd_m,20739.9
+agfeds,2009,Food-at-home,Industry group bill,Energy,cents,5.3
+agfeds,2009,Food-at-home,Industry group bill,Energy,usd_m,28126.4
+agfeds,2009,Food-at-home,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2009,Food-at-home,Industry group bill,Finance and insurance,usd_m,19959.2
+agfeds,2009,Food-at-home,Industry group bill,Food processing,cents,30.3
+agfeds,2009,Food-at-home,Industry group bill,Food processing,usd_m,161681.0
+agfeds,2009,Food-at-home,Industry group bill,Food retail,cents,26.6
+agfeds,2009,Food-at-home,Industry group bill,Food retail,usd_m,142209.5
+agfeds,2009,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2009,Food-at-home,Industry group bill,Food services,usd_m,2657.1
+agfeds,2009,Food-at-home,Industry group bill,Food wholesale,cents,9.3
+agfeds,2009,Food-at-home,Industry group bill,Food wholesale,usd_m,49533.1
+agfeds,2009,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2009,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6847.1
+agfeds,2009,Food-at-home,Industry group bill,Legal and accounting,cents,1.3
+agfeds,2009,Food-at-home,Industry group bill,Legal and accounting,usd_m,7131.3
+agfeds,2009,Food-at-home,Industry group bill,Livestock,cents,3.9
+agfeds,2009,Food-at-home,Industry group bill,Livestock,usd_m,20589.3
+agfeds,2009,Food-at-home,Industry group bill,Transportation and storage,cents,6.5
+agfeds,2009,Food-at-home,Industry group bill,Transportation and storage,usd_m,34678.5
+agfeds,2009,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2009,Food-at-home,Industry group total,Industry group total,usd_m,533840.7
+agfeds,2009,Food-at-home,Marketing bill,Farm share,cents,18.7
+agfeds,2009,Food-at-home,Marketing bill,Farm value,usd_m,99775.6
+agfeds,2009,Food-at-home,Marketing bill,Marketing share,cents,81.3
+agfeds,2009,Food-at-home,Marketing bill,Marketing value,usd_m,434088.5
+agfeds,2009,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2009,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,533864.1
+agfeds,2009,Food-at-home,Total spending by production source,Imported food dollars,cents,10.6
+agfeds,2009,Food-at-home,Total spending by production source,Imported food dollars,usd_m,56779.6
+agfeds,2009,Food-away-from-home,Industry group bill,Advertising,cents,3.2
+agfeds,2009,Food-away-from-home,Industry group bill,Advertising,usd_m,16611.2
+agfeds,2009,Food-away-from-home,Industry group bill,Agribusiness,cents,2.6
+agfeds,2009,Food-away-from-home,Industry group bill,Agribusiness,usd_m,13712.4
+agfeds,2009,Food-away-from-home,Industry group bill,Crops,cents,2.3
+agfeds,2009,Food-away-from-home,Industry group bill,Crops,usd_m,12238.7
+agfeds,2009,Food-away-from-home,Industry group bill,Energy,cents,5.0
+agfeds,2009,Food-away-from-home,Industry group bill,Energy,usd_m,25893.8
+agfeds,2009,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2009,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,19250.4
+agfeds,2009,Food-away-from-home,Industry group bill,Food processing,cents,9.7
+agfeds,2009,Food-away-from-home,Industry group bill,Food processing,usd_m,50713.6
+agfeds,2009,Food-away-from-home,Industry group bill,Food retail,cents,2.1
+agfeds,2009,Food-away-from-home,Industry group bill,Food retail,usd_m,10997.3
+agfeds,2009,Food-away-from-home,Industry group bill,Food services,cents,62.0
+agfeds,2009,Food-away-from-home,Industry group bill,Food services,usd_m,323353.9
+agfeds,2009,Food-away-from-home,Industry group bill,Food wholesale,cents,2.4
+agfeds,2009,Food-away-from-home,Industry group bill,Food wholesale,usd_m,12648.9
+agfeds,2009,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2009,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4345.7
+agfeds,2009,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2009,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,8979.0
+agfeds,2009,Food-away-from-home,Industry group bill,Livestock,cents,1.9
+agfeds,2009,Food-away-from-home,Industry group bill,Livestock,usd_m,9885.4
+agfeds,2009,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.5
+agfeds,2009,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,12984.1
+agfeds,2009,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2009,Food-away-from-home,Industry group total,Industry group total,usd_m,521614.4
+agfeds,2009,Food-away-from-home,Marketing bill,Farm share,cents,9.5
+agfeds,2009,Food-away-from-home,Marketing bill,Farm value,usd_m,49697.7
+agfeds,2009,Food-away-from-home,Marketing bill,Marketing share,cents,90.5
+agfeds,2009,Food-away-from-home,Marketing bill,Marketing value,usd_m,471991.6
+agfeds,2009,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2009,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,521689.2
+agfeds,2009,Food-away-from-home,Total spending by production source,Imported food dollars,cents,14.3
+agfeds,2009,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,74551.6
+agfeds,2010,All,Industry group bill,Advertising,cents,2.4
+agfeds,2010,All,Industry group bill,Advertising,usd_m,26001.0
+agfeds,2010,All,Industry group bill,Agribusiness,cents,4.3
+agfeds,2010,All,Industry group bill,Agribusiness,usd_m,46076.3
+agfeds,2010,All,Industry group bill,Crops,cents,3.2
+agfeds,2010,All,Industry group bill,Crops,usd_m,34771.4
+agfeds,2010,All,Industry group bill,Energy,cents,5.9
+agfeds,2010,All,Industry group bill,Energy,usd_m,63277.6
+agfeds,2010,All,Industry group bill,Finance and insurance,cents,3.5
+agfeds,2010,All,Industry group bill,Finance and insurance,usd_m,37267.2
+agfeds,2010,All,Industry group bill,Food processing,cents,19.0
+agfeds,2010,All,Industry group bill,Food processing,usd_m,205162.6
+agfeds,2010,All,Industry group bill,Food retail,cents,14.6
+agfeds,2010,All,Industry group bill,Food retail,usd_m,157125.1
+agfeds,2010,All,Industry group bill,Food services,cents,31.0
+agfeds,2010,All,Industry group bill,Food services,usd_m,334375.3
+agfeds,2010,All,Industry group bill,Food wholesale,cents,6.1
+agfeds,2010,All,Industry group bill,Food wholesale,usd_m,65482.6
+agfeds,2010,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2010,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11205.1
+agfeds,2010,All,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2010,All,Industry group bill,Legal and accounting,usd_m,16564.8
+agfeds,2010,All,Industry group bill,Livestock,cents,3.3
+agfeds,2010,All,Industry group bill,Livestock,usd_m,35247.1
+agfeds,2010,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2010,All,Industry group bill,Transportation and storage,usd_m,47007.4
+agfeds,2010,All,Industry group total,Industry group total,cents,100.0
+agfeds,2010,All,Industry group total,Industry group total,usd_m,1079563.4
+agfeds,2010,All,Marketing bill,Farm share,cents,14.7
+agfeds,2010,All,Marketing bill,Farm value,usd_m,158559.9
+agfeds,2010,All,Marketing bill,Marketing share,cents,85.3
+agfeds,2010,All,Marketing bill,Marketing value,usd_m,921099.4
+agfeds,2010,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2010,All,Total spending by production source,Domestic food dollars,usd_m,1079659.3
+agfeds,2010,All,Total spending by production source,Imported food dollars,cents,13.4
+agfeds,2010,All,Total spending by production source,Imported food dollars,usd_m,144248.3
+agfeds,2010,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2010,Food-at-home,Industry group bill,Advertising,usd_m,9799.5
+agfeds,2010,Food-at-home,Industry group bill,Agribusiness,cents,5.9
+agfeds,2010,Food-at-home,Industry group bill,Agribusiness,usd_m,32395.3
+agfeds,2010,Food-at-home,Industry group bill,Crops,cents,4.1
+agfeds,2010,Food-at-home,Industry group bill,Crops,usd_m,22523.7
+agfeds,2010,Food-at-home,Industry group bill,Energy,cents,6.0
+agfeds,2010,Food-at-home,Industry group bill,Energy,usd_m,32792.0
+agfeds,2010,Food-at-home,Industry group bill,Finance and insurance,cents,3.6
+agfeds,2010,Food-at-home,Industry group bill,Finance and insurance,usd_m,19503.6
+agfeds,2010,Food-at-home,Industry group bill,Food processing,cents,28.4
+agfeds,2010,Food-at-home,Industry group bill,Food processing,usd_m,155545.3
+agfeds,2010,Food-at-home,Industry group bill,Food retail,cents,26.9
+agfeds,2010,Food-at-home,Industry group bill,Food retail,usd_m,147177.4
+agfeds,2010,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2010,Food-at-home,Industry group bill,Food services,usd_m,2644.0
+agfeds,2010,Food-at-home,Industry group bill,Food wholesale,cents,9.5
+agfeds,2010,Food-at-home,Industry group bill,Food wholesale,usd_m,52209.8
+agfeds,2010,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.2
+agfeds,2010,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6788.1
+agfeds,2010,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2010,Food-at-home,Industry group bill,Legal and accounting,usd_m,7681.5
+agfeds,2010,Food-at-home,Industry group bill,Livestock,cents,4.4
+agfeds,2010,Food-at-home,Industry group bill,Livestock,usd_m,24300.7
+agfeds,2010,Food-at-home,Industry group bill,Transportation and storage,cents,6.2
+agfeds,2010,Food-at-home,Industry group bill,Transportation and storage,usd_m,33942.8
+agfeds,2010,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2010,Food-at-home,Industry group total,Industry group total,usd_m,547303.8
+agfeds,2010,Food-at-home,Marketing bill,Farm share,cents,19.7
+agfeds,2010,Food-at-home,Marketing bill,Farm value,usd_m,107933.6
+agfeds,2010,Food-at-home,Marketing bill,Marketing share,cents,80.3
+agfeds,2010,Food-at-home,Marketing bill,Marketing value,usd_m,439391.2
+agfeds,2010,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2010,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,547324.8
+agfeds,2010,Food-at-home,Total spending by production source,Imported food dollars,cents,11.3
+agfeds,2010,Food-at-home,Total spending by production source,Imported food dollars,usd_m,61970.6
+agfeds,2010,Food-away-from-home,Industry group bill,Advertising,cents,3.0
+agfeds,2010,Food-away-from-home,Industry group bill,Advertising,usd_m,16201.5
+agfeds,2010,Food-away-from-home,Industry group bill,Agribusiness,cents,2.6
+agfeds,2010,Food-away-from-home,Industry group bill,Agribusiness,usd_m,13680.9
+agfeds,2010,Food-away-from-home,Industry group bill,Crops,cents,2.3
+agfeds,2010,Food-away-from-home,Industry group bill,Crops,usd_m,12247.8
+agfeds,2010,Food-away-from-home,Industry group bill,Energy,cents,5.7
+agfeds,2010,Food-away-from-home,Industry group bill,Energy,usd_m,30485.6
+agfeds,2010,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.3
+agfeds,2010,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,17763.6
+agfeds,2010,Food-away-from-home,Industry group bill,Food processing,cents,9.3
+agfeds,2010,Food-away-from-home,Industry group bill,Food processing,usd_m,49617.3
+agfeds,2010,Food-away-from-home,Industry group bill,Food retail,cents,1.9
+agfeds,2010,Food-away-from-home,Industry group bill,Food retail,usd_m,9947.6
+agfeds,2010,Food-away-from-home,Industry group bill,Food services,cents,62.3
+agfeds,2010,Food-away-from-home,Industry group bill,Food services,usd_m,331731.3
+agfeds,2010,Food-away-from-home,Industry group bill,Food wholesale,cents,2.5
+agfeds,2010,Food-away-from-home,Industry group bill,Food wholesale,usd_m,13272.8
+agfeds,2010,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2010,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4417.0
+agfeds,2010,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2010,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,8883.3
+agfeds,2010,Food-away-from-home,Industry group bill,Livestock,cents,2.1
+agfeds,2010,Food-away-from-home,Industry group bill,Livestock,usd_m,10946.3
+agfeds,2010,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.5
+agfeds,2010,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,13064.6
+agfeds,2010,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2010,Food-away-from-home,Industry group total,Industry group total,usd_m,532259.6
+agfeds,2010,Food-away-from-home,Marketing bill,Farm share,cents,9.5
+agfeds,2010,Food-away-from-home,Marketing bill,Farm value,usd_m,50626.3
+agfeds,2010,Food-away-from-home,Marketing bill,Marketing share,cents,90.5
+agfeds,2010,Food-away-from-home,Marketing bill,Marketing value,usd_m,481708.3
+agfeds,2010,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2010,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,532334.6
+agfeds,2010,Food-away-from-home,Total spending by production source,Imported food dollars,cents,15.5
+agfeds,2010,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,82277.7
+agfeds,2011,All,Industry group bill,Advertising,cents,2.4
+agfeds,2011,All,Industry group bill,Advertising,usd_m,26688.0
+agfeds,2011,All,Industry group bill,Agribusiness,cents,4.4
+agfeds,2011,All,Industry group bill,Agribusiness,usd_m,49407.0
+agfeds,2011,All,Industry group bill,Crops,cents,3.9
+agfeds,2011,All,Industry group bill,Crops,usd_m,44094.6
+agfeds,2011,All,Industry group bill,Energy,cents,6.3
+agfeds,2011,All,Industry group bill,Energy,usd_m,71522.2
+agfeds,2011,All,Industry group bill,Finance and insurance,cents,3.3
+agfeds,2011,All,Industry group bill,Finance and insurance,usd_m,37772.8
+agfeds,2011,All,Industry group bill,Food processing,cents,18.0
+agfeds,2011,All,Industry group bill,Food processing,usd_m,204426.7
+agfeds,2011,All,Industry group bill,Food retail,cents,14.1
+agfeds,2011,All,Industry group bill,Food retail,usd_m,159632.0
+agfeds,2011,All,Industry group bill,Food services,cents,31.0
+agfeds,2011,All,Industry group bill,Food services,usd_m,352071.1
+agfeds,2011,All,Industry group bill,Food wholesale,cents,6.0
+agfeds,2011,All,Industry group bill,Food wholesale,usd_m,67817.4
+agfeds,2011,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2011,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11336.8
+agfeds,2011,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2011,All,Industry group bill,Legal and accounting,usd_m,17633.8
+agfeds,2011,All,Industry group bill,Livestock,cents,3.7
+agfeds,2011,All,Industry group bill,Livestock,usd_m,42159.6
+agfeds,2011,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2011,All,Industry group bill,Transportation and storage,usd_m,49524.7
+agfeds,2011,All,Industry group total,Industry group total,cents,100.0
+agfeds,2011,All,Industry group total,Industry group total,usd_m,1134086.6
+agfeds,2011,All,Marketing bill,Farm share,cents,16.0
+agfeds,2011,All,Marketing bill,Farm value,usd_m,181351.7
+agfeds,2011,All,Marketing bill,Marketing share,cents,84.0
+agfeds,2011,All,Marketing bill,Marketing value,usd_m,952888.2
+agfeds,2011,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2011,All,Total spending by production source,Domestic food dollars,usd_m,1134239.9
+agfeds,2011,All,Total spending by production source,Imported food dollars,cents,14.3
+agfeds,2011,All,Total spending by production source,Imported food dollars,usd_m,162185.8
+agfeds,2011,Food-at-home,Industry group bill,Advertising,cents,1.7
+agfeds,2011,Food-at-home,Industry group bill,Advertising,usd_m,9955.7
+agfeds,2011,Food-at-home,Industry group bill,Agribusiness,cents,6.0
+agfeds,2011,Food-at-home,Industry group bill,Agribusiness,usd_m,34753.2
+agfeds,2011,Food-at-home,Industry group bill,Crops,cents,5.0
+agfeds,2011,Food-at-home,Industry group bill,Crops,usd_m,28755.3
+agfeds,2011,Food-at-home,Industry group bill,Energy,cents,6.7
+agfeds,2011,Food-at-home,Industry group bill,Energy,usd_m,38407.6
+agfeds,2011,Food-at-home,Industry group bill,Finance and insurance,cents,3.4
+agfeds,2011,Food-at-home,Industry group bill,Finance and insurance,usd_m,19603.6
+agfeds,2011,Food-at-home,Industry group bill,Food processing,cents,27.0
+agfeds,2011,Food-at-home,Industry group bill,Food processing,usd_m,155319.4
+agfeds,2011,Food-at-home,Industry group bill,Food retail,cents,26.4
+agfeds,2011,Food-at-home,Industry group bill,Food retail,usd_m,151494.3
+agfeds,2011,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2011,Food-at-home,Industry group bill,Food services,usd_m,2676.3
+agfeds,2011,Food-at-home,Industry group bill,Food wholesale,cents,9.4
+agfeds,2011,Food-at-home,Industry group bill,Food wholesale,usd_m,54251.7
+agfeds,2011,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.2
+agfeds,2011,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6820.6
+agfeds,2011,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2011,Food-at-home,Industry group bill,Legal and accounting,usd_m,8057.4
+agfeds,2011,Food-at-home,Industry group bill,Livestock,cents,5.0
+agfeds,2011,Food-at-home,Industry group bill,Livestock,usd_m,28635.9
+agfeds,2011,Food-at-home,Industry group bill,Transportation and storage,cents,6.2
+agfeds,2011,Food-at-home,Industry group bill,Transportation and storage,usd_m,35662.4
+agfeds,2011,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2011,Food-at-home,Industry group total,Industry group total,usd_m,574393.6
+agfeds,2011,Food-at-home,Marketing bill,Farm share,cents,21.4
+agfeds,2011,Food-at-home,Marketing bill,Farm value,usd_m,123027.7
+agfeds,2011,Food-at-home,Marketing bill,Marketing share,cents,78.6
+agfeds,2011,Food-at-home,Marketing bill,Marketing value,usd_m,451416.5
+agfeds,2011,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2011,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,574444.3
+agfeds,2011,Food-at-home,Total spending by production source,Imported food dollars,cents,12.1
+agfeds,2011,Food-at-home,Total spending by production source,Imported food dollars,usd_m,69526.1
+agfeds,2011,Food-away-from-home,Industry group bill,Advertising,cents,3.0
+agfeds,2011,Food-away-from-home,Industry group bill,Advertising,usd_m,16732.3
+agfeds,2011,Food-away-from-home,Industry group bill,Agribusiness,cents,2.6
+agfeds,2011,Food-away-from-home,Industry group bill,Agribusiness,usd_m,14653.8
+agfeds,2011,Food-away-from-home,Industry group bill,Crops,cents,2.7
+agfeds,2011,Food-away-from-home,Industry group bill,Crops,usd_m,15339.3
+agfeds,2011,Food-away-from-home,Industry group bill,Energy,cents,5.9
+agfeds,2011,Food-away-from-home,Industry group bill,Energy,usd_m,33114.6
+agfeds,2011,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.2
+agfeds,2011,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,18169.2
+agfeds,2011,Food-away-from-home,Industry group bill,Food processing,cents,8.8
+agfeds,2011,Food-away-from-home,Industry group bill,Food processing,usd_m,49107.3
+agfeds,2011,Food-away-from-home,Industry group bill,Food retail,cents,1.5
+agfeds,2011,Food-away-from-home,Industry group bill,Food retail,usd_m,8137.6
+agfeds,2011,Food-away-from-home,Industry group bill,Food services,cents,62.4
+agfeds,2011,Food-away-from-home,Industry group bill,Food services,usd_m,349394.8
+agfeds,2011,Food-away-from-home,Industry group bill,Food wholesale,cents,2.4
+agfeds,2011,Food-away-from-home,Industry group bill,Food wholesale,usd_m,13565.6
+agfeds,2011,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2011,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4516.2
+agfeds,2011,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2011,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,9576.4
+agfeds,2011,Food-away-from-home,Industry group bill,Livestock,cents,2.4
+agfeds,2011,Food-away-from-home,Industry group bill,Livestock,usd_m,13523.7
+agfeds,2011,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.5
+agfeds,2011,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,13862.3
+agfeds,2011,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2011,Food-away-from-home,Industry group total,Industry group total,usd_m,559693.1
+agfeds,2011,Food-away-from-home,Marketing bill,Farm share,cents,10.4
+agfeds,2011,Food-away-from-home,Marketing bill,Farm value,usd_m,58324.0
+agfeds,2011,Food-away-from-home,Marketing bill,Marketing share,cents,89.6
+agfeds,2011,Food-away-from-home,Marketing bill,Marketing value,usd_m,501471.6
+agfeds,2011,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2011,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,559795.6
+agfeds,2011,Food-away-from-home,Total spending by production source,Imported food dollars,cents,16.6
+agfeds,2011,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,92659.7
+agfeds,2012,All,Industry group bill,Advertising,cents,2.4
+agfeds,2012,All,Industry group bill,Advertising,usd_m,28127.3
+agfeds,2012,All,Industry group bill,Agribusiness,cents,4.6
+agfeds,2012,All,Industry group bill,Agribusiness,usd_m,54567.8
+agfeds,2012,All,Industry group bill,Crops,cents,4.0
+agfeds,2012,All,Industry group bill,Crops,usd_m,47787.9
+agfeds,2012,All,Industry group bill,Energy,cents,5.6
+agfeds,2012,All,Industry group bill,Energy,usd_m,66452.9
+agfeds,2012,All,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2012,All,Industry group bill,Finance and insurance,usd_m,43643.1
+agfeds,2012,All,Industry group bill,Food processing,cents,17.8
+agfeds,2012,All,Industry group bill,Food processing,usd_m,211672.6
+agfeds,2012,All,Industry group bill,Food retail,cents,13.7
+agfeds,2012,All,Industry group bill,Food retail,usd_m,162619.9
+agfeds,2012,All,Industry group bill,Food services,cents,31.8
+agfeds,2012,All,Industry group bill,Food services,usd_m,377335.5
+agfeds,2012,All,Industry group bill,Food wholesale,cents,6.1
+agfeds,2012,All,Industry group bill,Food wholesale,usd_m,72271.8
+agfeds,2012,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2012,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,12712.3
+agfeds,2012,All,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2012,All,Industry group bill,Legal and accounting,usd_m,19626.5
+agfeds,2012,All,Industry group bill,Livestock,cents,3.3
+agfeds,2012,All,Industry group bill,Livestock,usd_m,38828.2
+agfeds,2012,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2012,All,Industry group bill,Transportation and storage,usd_m,51964.6
+agfeds,2012,All,Industry group total,Industry group total,cents,100.0
+agfeds,2012,All,Industry group total,Industry group total,usd_m,1187610.5
+agfeds,2012,All,Marketing bill,Farm share,cents,16.1
+agfeds,2012,All,Marketing bill,Farm value,usd_m,191747.0
+agfeds,2012,All,Marketing bill,Marketing share,cents,83.9
+agfeds,2012,All,Marketing bill,Marketing value,usd_m,996009.0
+agfeds,2012,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2012,All,Total spending by production source,Domestic food dollars,usd_m,1187756.0
+agfeds,2012,All,Total spending by production source,Imported food dollars,cents,14.1
+agfeds,2012,All,Total spending by production source,Imported food dollars,usd_m,167485.4
+agfeds,2012,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2012,Food-at-home,Industry group bill,Advertising,usd_m,10533.3
+agfeds,2012,Food-at-home,Industry group bill,Agribusiness,cents,6.4
+agfeds,2012,Food-at-home,Industry group bill,Agribusiness,usd_m,38446.4
+agfeds,2012,Food-at-home,Industry group bill,Crops,cents,5.5
+agfeds,2012,Food-at-home,Industry group bill,Crops,usd_m,32533.1
+agfeds,2012,Food-at-home,Industry group bill,Energy,cents,6.0
+agfeds,2012,Food-at-home,Industry group bill,Energy,usd_m,35534.0
+agfeds,2012,Food-at-home,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2012,Food-at-home,Industry group bill,Finance and insurance,usd_m,22161.8
+agfeds,2012,Food-at-home,Industry group bill,Food processing,cents,26.9
+agfeds,2012,Food-at-home,Industry group bill,Food processing,usd_m,160452.7
+agfeds,2012,Food-at-home,Industry group bill,Food retail,cents,26.0
+agfeds,2012,Food-at-home,Industry group bill,Food retail,usd_m,155373.1
+agfeds,2012,Food-at-home,Industry group bill,Food services,cents,0.4
+agfeds,2012,Food-at-home,Industry group bill,Food services,usd_m,2677.4
+agfeds,2012,Food-at-home,Industry group bill,Food wholesale,cents,9.8
+agfeds,2012,Food-at-home,Industry group bill,Food wholesale,usd_m,58288.9
+agfeds,2012,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2012,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7990.4
+agfeds,2012,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2012,Food-at-home,Industry group bill,Legal and accounting,usd_m,8670.9
+agfeds,2012,Food-at-home,Industry group bill,Livestock,cents,4.4
+agfeds,2012,Food-at-home,Industry group bill,Livestock,usd_m,26145.7
+agfeds,2012,Food-at-home,Industry group bill,Transportation and storage,cents,6.3
+agfeds,2012,Food-at-home,Industry group bill,Transportation and storage,usd_m,37609.6
+agfeds,2012,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2012,Food-at-home,Industry group total,Industry group total,usd_m,596417.1
+agfeds,2012,Food-at-home,Marketing bill,Farm share,cents,22.1
+agfeds,2012,Food-at-home,Marketing bill,Farm value,usd_m,131801.7
+agfeds,2012,Food-at-home,Marketing bill,Marketing share,cents,77.9
+agfeds,2012,Food-at-home,Marketing bill,Marketing value,usd_m,464650.8
+agfeds,2012,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2012,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,596452.6
+agfeds,2012,Food-at-home,Total spending by production source,Imported food dollars,cents,11.9
+agfeds,2012,Food-at-home,Total spending by production source,Imported food dollars,usd_m,70792.7
+agfeds,2012,Food-away-from-home,Industry group bill,Advertising,cents,3.0
+agfeds,2012,Food-away-from-home,Industry group bill,Advertising,usd_m,17594.0
+agfeds,2012,Food-away-from-home,Industry group bill,Agribusiness,cents,2.7
+agfeds,2012,Food-away-from-home,Industry group bill,Agribusiness,usd_m,16121.4
+agfeds,2012,Food-away-from-home,Industry group bill,Crops,cents,2.6
+agfeds,2012,Food-away-from-home,Industry group bill,Crops,usd_m,15254.8
+agfeds,2012,Food-away-from-home,Industry group bill,Energy,cents,5.2
+agfeds,2012,Food-away-from-home,Industry group bill,Energy,usd_m,30918.8
+agfeds,2012,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.6
+agfeds,2012,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,21481.3
+agfeds,2012,Food-away-from-home,Industry group bill,Food processing,cents,8.7
+agfeds,2012,Food-away-from-home,Industry group bill,Food processing,usd_m,51220.0
+agfeds,2012,Food-away-from-home,Industry group bill,Food retail,cents,1.2
+agfeds,2012,Food-away-from-home,Industry group bill,Food retail,usd_m,7246.7
+agfeds,2012,Food-away-from-home,Industry group bill,Food services,cents,63.4
+agfeds,2012,Food-away-from-home,Industry group bill,Food services,usd_m,374658.2
+agfeds,2012,Food-away-from-home,Industry group bill,Food wholesale,cents,2.4
+agfeds,2012,Food-away-from-home,Industry group bill,Food wholesale,usd_m,13982.9
+agfeds,2012,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2012,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4721.9
+agfeds,2012,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.9
+agfeds,2012,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,10955.7
+agfeds,2012,Food-away-from-home,Industry group bill,Livestock,cents,2.1
+agfeds,2012,Food-away-from-home,Industry group bill,Livestock,usd_m,12682.5
+agfeds,2012,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.4
+agfeds,2012,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,14355.0
+agfeds,2012,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2012,Food-away-from-home,Industry group total,Industry group total,usd_m,591193.4
+agfeds,2012,Food-away-from-home,Marketing bill,Farm share,cents,10.1
+agfeds,2012,Food-away-from-home,Marketing bill,Farm value,usd_m,59945.2
+agfeds,2012,Food-away-from-home,Marketing bill,Marketing share,cents,89.9
+agfeds,2012,Food-away-from-home,Marketing bill,Marketing value,usd_m,531358.2
+agfeds,2012,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2012,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,591303.5
+agfeds,2012,Food-away-from-home,Total spending by production source,Imported food dollars,cents,16.4
+agfeds,2012,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,96692.7
+agfeds,2013,All,Industry group bill,Advertising,cents,2.3
+agfeds,2013,All,Industry group bill,Advertising,usd_m,28394.2
+agfeds,2013,All,Industry group bill,Agribusiness,cents,4.2
+agfeds,2013,All,Industry group bill,Agribusiness,usd_m,53096.0
+agfeds,2013,All,Industry group bill,Crops,cents,4.1
+agfeds,2013,All,Industry group bill,Crops,usd_m,51315.1
+agfeds,2013,All,Industry group bill,Energy,cents,5.4
+agfeds,2013,All,Industry group bill,Energy,usd_m,67805.0
+agfeds,2013,All,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2013,All,Industry group bill,Finance and insurance,usd_m,46027.6
+agfeds,2013,All,Industry group bill,Food processing,cents,17.4
+agfeds,2013,All,Industry group bill,Food processing,usd_m,218370.9
+agfeds,2013,All,Industry group bill,Food retail,cents,13.5
+agfeds,2013,All,Industry group bill,Food retail,usd_m,168674.2
+agfeds,2013,All,Industry group bill,Food services,cents,32.5
+agfeds,2013,All,Industry group bill,Food services,usd_m,407892.4
+agfeds,2013,All,Industry group bill,Food wholesale,cents,6.4
+agfeds,2013,All,Industry group bill,Food wholesale,usd_m,79635.5
+agfeds,2013,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2013,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,12490.1
+agfeds,2013,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2013,All,Industry group bill,Legal and accounting,usd_m,19803.2
+agfeds,2013,All,Industry group bill,Livestock,cents,3.8
+agfeds,2013,All,Industry group bill,Livestock,usd_m,47446.2
+agfeds,2013,All,Industry group bill,Transportation and storage,cents,4.2
+agfeds,2013,All,Industry group bill,Transportation and storage,usd_m,52443.4
+agfeds,2013,All,Industry group total,Industry group total,cents,100.0
+agfeds,2013,All,Industry group total,Industry group total,usd_m,1253393.8
+agfeds,2013,All,Marketing bill,Farm share,cents,16.2
+agfeds,2013,All,Marketing bill,Farm value,usd_m,202521.8
+agfeds,2013,All,Marketing bill,Marketing share,cents,83.8
+agfeds,2013,All,Marketing bill,Marketing value,usd_m,1051051.7
+agfeds,2013,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2013,All,Total spending by production source,Domestic food dollars,usd_m,1253573.6
+agfeds,2013,All,Total spending by production source,Imported food dollars,cents,13.1
+agfeds,2013,All,Total spending by production source,Imported food dollars,usd_m,164014.0
+agfeds,2013,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2013,Food-at-home,Industry group bill,Advertising,usd_m,10940.8
+agfeds,2013,Food-at-home,Industry group bill,Agribusiness,cents,5.9
+agfeds,2013,Food-at-home,Industry group bill,Agribusiness,usd_m,36777.6
+agfeds,2013,Food-at-home,Industry group bill,Crops,cents,5.7
+agfeds,2013,Food-at-home,Industry group bill,Crops,usd_m,35458.6
+agfeds,2013,Food-at-home,Industry group bill,Energy,cents,5.8
+agfeds,2013,Food-at-home,Industry group bill,Energy,usd_m,35789.7
+agfeds,2013,Food-at-home,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2013,Food-at-home,Industry group bill,Finance and insurance,usd_m,22640.2
+agfeds,2013,Food-at-home,Industry group bill,Food processing,cents,26.6
+agfeds,2013,Food-at-home,Industry group bill,Food processing,usd_m,164366.2
+agfeds,2013,Food-at-home,Industry group bill,Food retail,cents,26.0
+agfeds,2013,Food-at-home,Industry group bill,Food retail,usd_m,160622.1
+agfeds,2013,Food-at-home,Industry group bill,Food services,cents,0.4
+agfeds,2013,Food-at-home,Industry group bill,Food services,usd_m,2341.0
+agfeds,2013,Food-at-home,Industry group bill,Food wholesale,cents,10.3
+agfeds,2013,Food-at-home,Industry group bill,Food wholesale,usd_m,63707.0
+agfeds,2013,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.2
+agfeds,2013,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7618.4
+agfeds,2013,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2013,Food-at-home,Industry group bill,Legal and accounting,usd_m,8836.6
+agfeds,2013,Food-at-home,Industry group bill,Livestock,cents,5.1
+agfeds,2013,Food-at-home,Industry group bill,Livestock,usd_m,31607.3
+agfeds,2013,Food-at-home,Industry group bill,Transportation and storage,cents,6.1
+agfeds,2013,Food-at-home,Industry group bill,Transportation and storage,usd_m,37398.4
+agfeds,2013,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2013,Food-at-home,Industry group total,Industry group total,usd_m,618103.9
+agfeds,2013,Food-at-home,Marketing bill,Farm share,cents,22.3
+agfeds,2013,Food-at-home,Marketing bill,Farm value,usd_m,137964.9
+agfeds,2013,Food-at-home,Marketing bill,Marketing share,cents,77.7
+agfeds,2013,Food-at-home,Marketing bill,Marketing value,usd_m,480181.5
+agfeds,2013,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2013,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,618146.4
+agfeds,2013,Food-at-home,Total spending by production source,Imported food dollars,cents,11.3
+agfeds,2013,Food-at-home,Total spending by production source,Imported food dollars,usd_m,70042.0
+agfeds,2013,Food-away-from-home,Industry group bill,Advertising,cents,2.7
+agfeds,2013,Food-away-from-home,Industry group bill,Advertising,usd_m,17453.4
+agfeds,2013,Food-away-from-home,Industry group bill,Agribusiness,cents,2.6
+agfeds,2013,Food-away-from-home,Industry group bill,Agribusiness,usd_m,16318.5
+agfeds,2013,Food-away-from-home,Industry group bill,Crops,cents,2.5
+agfeds,2013,Food-away-from-home,Industry group bill,Crops,usd_m,15856.4
+agfeds,2013,Food-away-from-home,Industry group bill,Energy,cents,5.0
+agfeds,2013,Food-away-from-home,Industry group bill,Energy,usd_m,32015.3
+agfeds,2013,Food-away-from-home,Industry group bill,Finance and insurance,cents,3.7
+agfeds,2013,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,23387.4
+agfeds,2013,Food-away-from-home,Industry group bill,Food processing,cents,8.5
+agfeds,2013,Food-away-from-home,Industry group bill,Food processing,usd_m,54004.7
+agfeds,2013,Food-away-from-home,Industry group bill,Food retail,cents,1.3
+agfeds,2013,Food-away-from-home,Industry group bill,Food retail,usd_m,8052.0
+agfeds,2013,Food-away-from-home,Industry group bill,Food services,cents,63.8
+agfeds,2013,Food-away-from-home,Industry group bill,Food services,usd_m,405551.4
+agfeds,2013,Food-away-from-home,Industry group bill,Food wholesale,cents,2.5
+agfeds,2013,Food-away-from-home,Industry group bill,Food wholesale,usd_m,15928.6
+agfeds,2013,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2013,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,4871.7
+agfeds,2013,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2013,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,10966.6
+agfeds,2013,Food-away-from-home,Industry group bill,Livestock,cents,2.5
+agfeds,2013,Food-away-from-home,Industry group bill,Livestock,usd_m,15838.9
+agfeds,2013,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.4
+agfeds,2013,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,15045.1
+agfeds,2013,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2013,Food-away-from-home,Industry group total,Industry group total,usd_m,635289.9
+agfeds,2013,Food-away-from-home,Marketing bill,Farm share,cents,10.2
+agfeds,2013,Food-away-from-home,Marketing bill,Farm value,usd_m,64556.9
+agfeds,2013,Food-away-from-home,Marketing bill,Marketing share,cents,89.8
+agfeds,2013,Food-away-from-home,Marketing bill,Marketing value,usd_m,570870.3
+agfeds,2013,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2013,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,635427.2
+agfeds,2013,Food-away-from-home,Total spending by production source,Imported food dollars,cents,14.8
+agfeds,2013,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,93971.9
+agfeds,2014,All,Industry group bill,Advertising,cents,2.2
+agfeds,2014,All,Industry group bill,Advertising,usd_m,29108.6
+agfeds,2014,All,Industry group bill,Agribusiness,cents,4.4
+agfeds,2014,All,Industry group bill,Agribusiness,usd_m,58369.2
+agfeds,2014,All,Industry group bill,Crops,cents,3.5
+agfeds,2014,All,Industry group bill,Crops,usd_m,46641.2
+agfeds,2014,All,Industry group bill,Energy,cents,5.3
+agfeds,2014,All,Industry group bill,Energy,usd_m,69908.7
+agfeds,2014,All,Industry group bill,Finance and insurance,cents,4.1
+agfeds,2014,All,Industry group bill,Finance and insurance,usd_m,53888.8
+agfeds,2014,All,Industry group bill,Food processing,cents,17.3
+agfeds,2014,All,Industry group bill,Food processing,usd_m,228440.3
+agfeds,2014,All,Industry group bill,Food retail,cents,13.4
+agfeds,2014,All,Industry group bill,Food retail,usd_m,176312.1
+agfeds,2014,All,Industry group bill,Food services,cents,32.8
+agfeds,2014,All,Industry group bill,Food services,usd_m,432558.7
+agfeds,2014,All,Industry group bill,Food wholesale,cents,6.2
+agfeds,2014,All,Industry group bill,Food wholesale,usd_m,81223.9
+agfeds,2014,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2014,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,13990.4
+agfeds,2014,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2014,All,Industry group bill,Legal and accounting,usd_m,20839.7
+agfeds,2014,All,Industry group bill,Livestock,cents,3.9
+agfeds,2014,All,Industry group bill,Livestock,usd_m,51474.5
+agfeds,2014,All,Industry group bill,Transportation and storage,cents,4.2
+agfeds,2014,All,Industry group bill,Transportation and storage,usd_m,55581.8
+agfeds,2014,All,Industry group total,Industry group total,cents,100.0
+agfeds,2014,All,Industry group total,Industry group total,usd_m,1318337.9
+agfeds,2014,All,Marketing bill,Farm share,cents,16.3
+agfeds,2014,All,Marketing bill,Farm value,usd_m,214372.0
+agfeds,2014,All,Marketing bill,Marketing share,cents,83.7
+agfeds,2014,All,Marketing bill,Marketing value,usd_m,1104141.0
+agfeds,2014,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2014,All,Total spending by production source,Domestic food dollars,usd_m,1318513.0
+agfeds,2014,All,Total spending by production source,Imported food dollars,cents,14.1
+agfeds,2014,All,Total spending by production source,Imported food dollars,usd_m,185600.3
+agfeds,2014,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2014,Food-at-home,Industry group bill,Advertising,usd_m,11760.0
+agfeds,2014,Food-at-home,Industry group bill,Agribusiness,cents,6.2
+agfeds,2014,Food-at-home,Industry group bill,Agribusiness,usd_m,40149.7
+agfeds,2014,Food-at-home,Industry group bill,Crops,cents,4.9
+agfeds,2014,Food-at-home,Industry group bill,Crops,usd_m,31744.9
+agfeds,2014,Food-at-home,Industry group bill,Energy,cents,5.7
+agfeds,2014,Food-at-home,Industry group bill,Energy,usd_m,36655.5
+agfeds,2014,Food-at-home,Industry group bill,Finance and insurance,cents,4.1
+agfeds,2014,Food-at-home,Industry group bill,Finance and insurance,usd_m,26128.4
+agfeds,2014,Food-at-home,Industry group bill,Food processing,cents,26.4
+agfeds,2014,Food-at-home,Industry group bill,Food processing,usd_m,169743.4
+agfeds,2014,Food-at-home,Industry group bill,Food retail,cents,26.2
+agfeds,2014,Food-at-home,Industry group bill,Food retail,usd_m,168808.2
+agfeds,2014,Food-at-home,Industry group bill,Food services,cents,0.3
+agfeds,2014,Food-at-home,Industry group bill,Food services,usd_m,2058.4
+agfeds,2014,Food-at-home,Industry group bill,Food wholesale,cents,10.1
+agfeds,2014,Food-at-home,Industry group bill,Food wholesale,usd_m,64840.0
+agfeds,2014,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2014,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,8423.4
+agfeds,2014,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2014,Food-at-home,Industry group bill,Legal and accounting,usd_m,9503.2
+agfeds,2014,Food-at-home,Industry group bill,Livestock,cents,5.3
+agfeds,2014,Food-at-home,Industry group bill,Livestock,usd_m,34396.8
+agfeds,2014,Food-at-home,Industry group bill,Transportation and storage,cents,6.1
+agfeds,2014,Food-at-home,Industry group bill,Transportation and storage,usd_m,38916.2
+agfeds,2014,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2014,Food-at-home,Industry group total,Industry group total,usd_m,643128.0
+agfeds,2014,Food-at-home,Marketing bill,Farm share,cents,22.5
+agfeds,2014,Food-at-home,Marketing bill,Farm value,usd_m,144992.9
+agfeds,2014,Food-at-home,Marketing bill,Marketing share,cents,77.5
+agfeds,2014,Food-at-home,Marketing bill,Marketing value,usd_m,498168.5
+agfeds,2014,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2014,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,643161.4
+agfeds,2014,Food-at-home,Total spending by production source,Imported food dollars,cents,11.9
+agfeds,2014,Food-at-home,Total spending by production source,Imported food dollars,usd_m,76812.0
+agfeds,2014,Food-away-from-home,Industry group bill,Advertising,cents,2.6
+agfeds,2014,Food-away-from-home,Industry group bill,Advertising,usd_m,17348.6
+agfeds,2014,Food-away-from-home,Industry group bill,Agribusiness,cents,2.7
+agfeds,2014,Food-away-from-home,Industry group bill,Agribusiness,usd_m,18219.5
+agfeds,2014,Food-away-from-home,Industry group bill,Crops,cents,2.2
+agfeds,2014,Food-away-from-home,Industry group bill,Crops,usd_m,14896.3
+agfeds,2014,Food-away-from-home,Industry group bill,Energy,cents,4.9
+agfeds,2014,Food-away-from-home,Industry group bill,Energy,usd_m,33253.2
+agfeds,2014,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.1
+agfeds,2014,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,27760.4
+agfeds,2014,Food-away-from-home,Industry group bill,Food processing,cents,8.7
+agfeds,2014,Food-away-from-home,Industry group bill,Food processing,usd_m,58696.9
+agfeds,2014,Food-away-from-home,Industry group bill,Food retail,cents,1.1
+agfeds,2014,Food-away-from-home,Industry group bill,Food retail,usd_m,7503.9
+agfeds,2014,Food-away-from-home,Industry group bill,Food services,cents,63.7
+agfeds,2014,Food-away-from-home,Industry group bill,Food services,usd_m,430500.3
+agfeds,2014,Food-away-from-home,Industry group bill,Food wholesale,cents,2.4
+agfeds,2014,Food-away-from-home,Industry group bill,Food wholesale,usd_m,16383.9
+agfeds,2014,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2014,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,5567.0
+agfeds,2014,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2014,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,11336.5
+agfeds,2014,Food-away-from-home,Industry group bill,Livestock,cents,2.5
+agfeds,2014,Food-away-from-home,Industry group bill,Livestock,usd_m,17077.7
+agfeds,2014,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.5
+agfeds,2014,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,16665.6
+agfeds,2014,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2014,Food-away-from-home,Industry group total,Industry group total,usd_m,675209.9
+agfeds,2014,Food-away-from-home,Marketing bill,Farm share,cents,10.3
+agfeds,2014,Food-away-from-home,Marketing bill,Farm value,usd_m,69379.1
+agfeds,2014,Food-away-from-home,Marketing bill,Marketing share,cents,89.7
+agfeds,2014,Food-away-from-home,Marketing bill,Marketing value,usd_m,605972.4
+agfeds,2014,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2014,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,675351.6
+agfeds,2014,Food-away-from-home,Total spending by production source,Imported food dollars,cents,16.1
+agfeds,2014,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,108788.3
+agfeds,2015,All,Industry group bill,Advertising,cents,2.2
+agfeds,2015,All,Industry group bill,Advertising,usd_m,31013.6
+agfeds,2015,All,Industry group bill,Agribusiness,cents,3.8
+agfeds,2015,All,Industry group bill,Agribusiness,usd_m,53661.5
+agfeds,2015,All,Industry group bill,Crops,cents,2.9
+agfeds,2015,All,Industry group bill,Crops,usd_m,40560.5
+agfeds,2015,All,Industry group bill,Energy,cents,4.2
+agfeds,2015,All,Industry group bill,Energy,usd_m,58271.8
+agfeds,2015,All,Industry group bill,Finance and insurance,cents,4.3
+agfeds,2015,All,Industry group bill,Finance and insurance,usd_m,59603.7
+agfeds,2015,All,Industry group bill,Food processing,cents,17.6
+agfeds,2015,All,Industry group bill,Food processing,usd_m,246048.3
+agfeds,2015,All,Industry group bill,Food retail,cents,13.4
+agfeds,2015,All,Industry group bill,Food retail,usd_m,186976.3
+agfeds,2015,All,Industry group bill,Food services,cents,34.7
+agfeds,2015,All,Industry group bill,Food services,usd_m,484711.0
+agfeds,2015,All,Industry group bill,Food wholesale,cents,6.5
+agfeds,2015,All,Industry group bill,Food wholesale,usd_m,90153.7
+agfeds,2015,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2015,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,14544.8
+agfeds,2015,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2015,All,Industry group bill,Legal and accounting,usd_m,22249.8
+agfeds,2015,All,Industry group bill,Livestock,cents,3.3
+agfeds,2015,All,Industry group bill,Livestock,usd_m,45392.2
+agfeds,2015,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2015,All,Industry group bill,Transportation and storage,usd_m,61730.7
+agfeds,2015,All,Industry group total,Industry group total,cents,100.0
+agfeds,2015,All,Industry group total,Industry group total,usd_m,1394918.0
+agfeds,2015,All,Marketing bill,Farm share,cents,13.9
+agfeds,2015,All,Marketing bill,Farm value,usd_m,193965.8
+agfeds,2015,All,Marketing bill,Marketing share,cents,86.1
+agfeds,2015,All,Marketing bill,Marketing value,usd_m,1201142.9
+agfeds,2015,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2015,All,Total spending by production source,Domestic food dollars,usd_m,1395108.7
+agfeds,2015,All,Total spending by production source,Imported food dollars,cents,14.0
+agfeds,2015,All,Total spending by production source,Imported food dollars,usd_m,194865.6
+agfeds,2015,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2015,Food-at-home,Industry group bill,Advertising,usd_m,11945.8
+agfeds,2015,Food-at-home,Industry group bill,Agribusiness,cents,5.6
+agfeds,2015,Food-at-home,Industry group bill,Agribusiness,usd_m,36820.4
+agfeds,2015,Food-at-home,Industry group bill,Crops,cents,4.2
+agfeds,2015,Food-at-home,Industry group bill,Crops,usd_m,27774.9
+agfeds,2015,Food-at-home,Industry group bill,Energy,cents,4.4
+agfeds,2015,Food-at-home,Industry group bill,Energy,usd_m,28539.7
+agfeds,2015,Food-at-home,Industry group bill,Finance and insurance,cents,4.2
+agfeds,2015,Food-at-home,Industry group bill,Finance and insurance,usd_m,27348.2
+agfeds,2015,Food-at-home,Industry group bill,Food processing,cents,27.9
+agfeds,2015,Food-at-home,Industry group bill,Food processing,usd_m,182942.3
+agfeds,2015,Food-at-home,Industry group bill,Food retail,cents,26.9
+agfeds,2015,Food-at-home,Industry group bill,Food retail,usd_m,176094.2
+agfeds,2015,Food-at-home,Industry group bill,Food services,cents,0.3
+agfeds,2015,Food-at-home,Industry group bill,Food services,usd_m,1892.9
+agfeds,2015,Food-at-home,Industry group bill,Food wholesale,cents,10.9
+agfeds,2015,Food-at-home,Industry group bill,Food wholesale,usd_m,71146.3
+agfeds,2015,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.4
+agfeds,2015,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,8854.8
+agfeds,2015,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2015,Food-at-home,Industry group bill,Legal and accounting,usd_m,9672.0
+agfeds,2015,Food-at-home,Industry group bill,Livestock,cents,4.5
+agfeds,2015,Food-at-home,Industry group bill,Livestock,usd_m,29371.5
+agfeds,2015,Food-at-home,Industry group bill,Transportation and storage,cents,6.5
+agfeds,2015,Food-at-home,Industry group bill,Transportation and storage,usd_m,42328.3
+agfeds,2015,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2015,Food-at-home,Industry group total,Industry group total,usd_m,654731.3
+agfeds,2015,Food-at-home,Marketing bill,Farm share,cents,19.9
+agfeds,2015,Food-at-home,Marketing bill,Farm value,usd_m,130221.3
+agfeds,2015,Food-at-home,Marketing bill,Marketing share,cents,80.1
+agfeds,2015,Food-at-home,Marketing bill,Marketing value,usd_m,524547.6
+agfeds,2015,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2015,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,654768.9
+agfeds,2015,Food-at-home,Total spending by production source,Imported food dollars,cents,12.3
+agfeds,2015,Food-at-home,Total spending by production source,Imported food dollars,usd_m,80502.6
+agfeds,2015,Food-away-from-home,Industry group bill,Advertising,cents,2.6
+agfeds,2015,Food-away-from-home,Industry group bill,Advertising,usd_m,19067.8
+agfeds,2015,Food-away-from-home,Industry group bill,Agribusiness,cents,2.3
+agfeds,2015,Food-away-from-home,Industry group bill,Agribusiness,usd_m,16841.1
+agfeds,2015,Food-away-from-home,Industry group bill,Crops,cents,1.7
+agfeds,2015,Food-away-from-home,Industry group bill,Crops,usd_m,12785.6
+agfeds,2015,Food-away-from-home,Industry group bill,Energy,cents,4.0
+agfeds,2015,Food-away-from-home,Industry group bill,Energy,usd_m,29732.2
+agfeds,2015,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2015,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,32255.6
+agfeds,2015,Food-away-from-home,Industry group bill,Food processing,cents,8.5
+agfeds,2015,Food-away-from-home,Industry group bill,Food processing,usd_m,63106.0
+agfeds,2015,Food-away-from-home,Industry group bill,Food retail,cents,1.5
+agfeds,2015,Food-away-from-home,Industry group bill,Food retail,usd_m,10882.0
+agfeds,2015,Food-away-from-home,Industry group bill,Food services,cents,65.2
+agfeds,2015,Food-away-from-home,Industry group bill,Food services,usd_m,482818.2
+agfeds,2015,Food-away-from-home,Industry group bill,Food wholesale,cents,2.6
+agfeds,2015,Food-away-from-home,Industry group bill,Food wholesale,usd_m,19007.4
+agfeds,2015,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2015,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,5690.0
+agfeds,2015,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.7
+agfeds,2015,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,12577.8
+agfeds,2015,Food-away-from-home,Industry group bill,Livestock,cents,2.2
+agfeds,2015,Food-away-from-home,Industry group bill,Livestock,usd_m,16020.6
+agfeds,2015,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.6
+agfeds,2015,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,19402.4
+agfeds,2015,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2015,Food-away-from-home,Industry group total,Industry group total,usd_m,740186.6
+agfeds,2015,Food-away-from-home,Marketing bill,Farm share,cents,8.6
+agfeds,2015,Food-away-from-home,Marketing bill,Farm value,usd_m,63744.5
+agfeds,2015,Food-away-from-home,Marketing bill,Marketing share,cents,91.4
+agfeds,2015,Food-away-from-home,Marketing bill,Marketing value,usd_m,676595.3
+agfeds,2015,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2015,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,740339.8
+agfeds,2015,Food-away-from-home,Total spending by production source,Imported food dollars,cents,15.4
+agfeds,2015,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,114363.0
+agfeds,2016,All,Industry group bill,Advertising,cents,2.3
+agfeds,2016,All,Industry group bill,Advertising,usd_m,32686.0
+agfeds,2016,All,Industry group bill,Agribusiness,cents,3.6
+agfeds,2016,All,Industry group bill,Agribusiness,usd_m,51861.3
+agfeds,2016,All,Industry group bill,Crops,cents,2.7
+agfeds,2016,All,Industry group bill,Crops,usd_m,38800.3
+agfeds,2016,All,Industry group bill,Energy,cents,3.7
+agfeds,2016,All,Industry group bill,Energy,usd_m,53179.9
+agfeds,2016,All,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2016,All,Industry group bill,Finance and insurance,usd_m,65397.1
+agfeds,2016,All,Industry group bill,Food processing,cents,17.9
+agfeds,2016,All,Industry group bill,Food processing,usd_m,258407.3
+agfeds,2016,All,Industry group bill,Food retail,cents,13.4
+agfeds,2016,All,Industry group bill,Food retail,usd_m,194131.8
+agfeds,2016,All,Industry group bill,Food services,cents,35.9
+agfeds,2016,All,Industry group bill,Food services,usd_m,518442.3
+agfeds,2016,All,Industry group bill,Food wholesale,cents,6.3
+agfeds,2016,All,Industry group bill,Food wholesale,usd_m,91330.5
+agfeds,2016,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2016,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,15099.3
+agfeds,2016,All,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2016,All,Industry group bill,Legal and accounting,usd_m,22765.7
+agfeds,2016,All,Industry group bill,Livestock,cents,2.7
+agfeds,2016,All,Industry group bill,Livestock,usd_m,39556.5
+agfeds,2016,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2016,All,Industry group bill,Transportation and storage,usd_m,63873.0
+agfeds,2016,All,Industry group total,Industry group total,cents,100.0
+agfeds,2016,All,Industry group total,Industry group total,usd_m,1445531.0
+agfeds,2016,All,Marketing bill,Farm share,cents,12.7
+agfeds,2016,All,Marketing bill,Farm value,usd_m,184040.4
+agfeds,2016,All,Marketing bill,Marketing share,cents,87.3
+agfeds,2016,All,Marketing bill,Marketing value,usd_m,1261682.3
+agfeds,2016,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2016,All,Total spending by production source,Domestic food dollars,usd_m,1445722.7
+agfeds,2016,All,Total spending by production source,Imported food dollars,cents,14.9
+agfeds,2016,All,Total spending by production source,Imported food dollars,usd_m,215600.7
+agfeds,2016,Food-at-home,Industry group bill,Advertising,cents,1.9
+agfeds,2016,Food-at-home,Industry group bill,Advertising,usd_m,12638.5
+agfeds,2016,Food-at-home,Industry group bill,Agribusiness,cents,5.3
+agfeds,2016,Food-at-home,Industry group bill,Agribusiness,usd_m,34950.5
+agfeds,2016,Food-at-home,Industry group bill,Crops,cents,3.9
+agfeds,2016,Food-at-home,Industry group bill,Crops,usd_m,26151.9
+agfeds,2016,Food-at-home,Industry group bill,Energy,cents,3.9
+agfeds,2016,Food-at-home,Industry group bill,Energy,usd_m,25817.4
+agfeds,2016,Food-at-home,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2016,Food-at-home,Industry group bill,Finance and insurance,usd_m,29319.6
+agfeds,2016,Food-at-home,Industry group bill,Food processing,cents,28.8
+agfeds,2016,Food-at-home,Industry group bill,Food processing,usd_m,191602.3
+agfeds,2016,Food-at-home,Industry group bill,Food retail,cents,27.5
+agfeds,2016,Food-at-home,Industry group bill,Food retail,usd_m,182860.9
+agfeds,2016,Food-at-home,Industry group bill,Food services,cents,0.2
+agfeds,2016,Food-at-home,Industry group bill,Food services,usd_m,1592.3
+agfeds,2016,Food-at-home,Industry group bill,Food wholesale,cents,10.8
+agfeds,2016,Food-at-home,Industry group bill,Food wholesale,usd_m,72111.0
+agfeds,2016,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.4
+agfeds,2016,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,9096.4
+agfeds,2016,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2016,Food-at-home,Industry group bill,Legal and accounting,usd_m,9968.5
+agfeds,2016,Food-at-home,Industry group bill,Livestock,cents,3.8
+agfeds,2016,Food-at-home,Industry group bill,Livestock,usd_m,25434.3
+agfeds,2016,Food-at-home,Industry group bill,Transportation and storage,cents,6.5
+agfeds,2016,Food-at-home,Industry group bill,Transportation and storage,usd_m,43499.0
+agfeds,2016,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2016,Food-at-home,Industry group total,Industry group total,usd_m,665042.6
+agfeds,2016,Food-at-home,Marketing bill,Farm share,cents,18.3
+agfeds,2016,Food-at-home,Marketing bill,Farm value,usd_m,121797.3
+agfeds,2016,Food-at-home,Marketing bill,Marketing share,cents,81.7
+agfeds,2016,Food-at-home,Marketing bill,Marketing value,usd_m,543278.9
+agfeds,2016,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2016,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,665076.3
+agfeds,2016,Food-at-home,Total spending by production source,Imported food dollars,cents,12.9
+agfeds,2016,Food-at-home,Total spending by production source,Imported food dollars,usd_m,85678.4
+agfeds,2016,Food-away-from-home,Industry group bill,Advertising,cents,2.6
+agfeds,2016,Food-away-from-home,Industry group bill,Advertising,usd_m,20047.5
+agfeds,2016,Food-away-from-home,Industry group bill,Agribusiness,cents,2.2
+agfeds,2016,Food-away-from-home,Industry group bill,Agribusiness,usd_m,16910.8
+agfeds,2016,Food-away-from-home,Industry group bill,Crops,cents,1.6
+agfeds,2016,Food-away-from-home,Industry group bill,Crops,usd_m,12648.4
+agfeds,2016,Food-away-from-home,Industry group bill,Energy,cents,3.5
+agfeds,2016,Food-away-from-home,Industry group bill,Energy,usd_m,27362.5
+agfeds,2016,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.6
+agfeds,2016,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,36077.5
+agfeds,2016,Food-away-from-home,Industry group bill,Food processing,cents,8.6
+agfeds,2016,Food-away-from-home,Industry group bill,Food processing,usd_m,66805.0
+agfeds,2016,Food-away-from-home,Industry group bill,Food retail,cents,1.4
+agfeds,2016,Food-away-from-home,Industry group bill,Food retail,usd_m,11270.9
+agfeds,2016,Food-away-from-home,Industry group bill,Food services,cents,66.2
+agfeds,2016,Food-away-from-home,Industry group bill,Food services,usd_m,516850.0
+agfeds,2016,Food-away-from-home,Industry group bill,Food wholesale,cents,2.5
+agfeds,2016,Food-away-from-home,Industry group bill,Food wholesale,usd_m,19219.5
+agfeds,2016,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2016,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6002.9
+agfeds,2016,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2016,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,12797.2
+agfeds,2016,Food-away-from-home,Industry group bill,Livestock,cents,1.8
+agfeds,2016,Food-away-from-home,Industry group bill,Livestock,usd_m,14122.2
+agfeds,2016,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.6
+agfeds,2016,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,20374.1
+agfeds,2016,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2016,Food-away-from-home,Industry group total,Industry group total,usd_m,780488.4
+agfeds,2016,Food-away-from-home,Marketing bill,Farm share,cents,8.0
+agfeds,2016,Food-away-from-home,Marketing bill,Farm value,usd_m,62243.1
+agfeds,2016,Food-away-from-home,Marketing bill,Marketing share,cents,92.0
+agfeds,2016,Food-away-from-home,Marketing bill,Marketing value,usd_m,718403.4
+agfeds,2016,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2016,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,780646.5
+agfeds,2016,Food-away-from-home,Total spending by production source,Imported food dollars,cents,16.6
+agfeds,2016,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,129922.3
+agfeds,2017,All,Industry group bill,Advertising,cents,2.2
+agfeds,2017,All,Industry group bill,Advertising,usd_m,32352.3
+agfeds,2017,All,Industry group bill,Agribusiness,cents,3.5
+agfeds,2017,All,Industry group bill,Agribusiness,usd_m,52249.4
+agfeds,2017,All,Industry group bill,Crops,cents,2.9
+agfeds,2017,All,Industry group bill,Crops,usd_m,42847.4
+agfeds,2017,All,Industry group bill,Energy,cents,4.1
+agfeds,2017,All,Industry group bill,Energy,usd_m,60295.2
+agfeds,2017,All,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2017,All,Industry group bill,Finance and insurance,usd_m,65735.6
+agfeds,2017,All,Industry group bill,Food processing,cents,17.6
+agfeds,2017,All,Industry group bill,Food processing,usd_m,259779.6
+agfeds,2017,All,Industry group bill,Food retail,cents,13.8
+agfeds,2017,All,Industry group bill,Food retail,usd_m,204315.9
+agfeds,2017,All,Industry group bill,Food services,cents,35.1
+agfeds,2017,All,Industry group bill,Food services,usd_m,518188.2
+agfeds,2017,All,Industry group bill,Food wholesale,cents,6.5
+agfeds,2017,All,Industry group bill,Food wholesale,usd_m,96511.5
+agfeds,2017,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2017,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,15805.4
+agfeds,2017,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2017,All,Industry group bill,Legal and accounting,usd_m,21291.4
+agfeds,2017,All,Industry group bill,Livestock,cents,3.0
+agfeds,2017,All,Industry group bill,Livestock,usd_m,43718.6
+agfeds,2017,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2017,All,Industry group bill,Transportation and storage,usd_m,64644.8
+agfeds,2017,All,Industry group total,Industry group total,cents,100.0
+agfeds,2017,All,Industry group total,Industry group total,usd_m,1477735.3
+agfeds,2017,All,Marketing bill,Farm share,cents,13.1
+agfeds,2017,All,Marketing bill,Farm value,usd_m,193041.8
+agfeds,2017,All,Marketing bill,Marketing share,cents,86.9
+agfeds,2017,All,Marketing bill,Marketing value,usd_m,1284771.4
+agfeds,2017,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2017,All,Total spending by production source,Domestic food dollars,usd_m,1477813.3
+agfeds,2017,All,Total spending by production source,Imported food dollars,cents,15.2
+agfeds,2017,All,Total spending by production source,Imported food dollars,usd_m,224751.8
+agfeds,2017,Food-at-home,Industry group bill,Advertising,cents,2.0
+agfeds,2017,Food-at-home,Industry group bill,Advertising,usd_m,12921.7
+agfeds,2017,Food-at-home,Industry group bill,Agribusiness,cents,5.2
+agfeds,2017,Food-at-home,Industry group bill,Agribusiness,usd_m,33832.7
+agfeds,2017,Food-at-home,Industry group bill,Crops,cents,4.2
+agfeds,2017,Food-at-home,Industry group bill,Crops,usd_m,27225.6
+agfeds,2017,Food-at-home,Industry group bill,Energy,cents,4.4
+agfeds,2017,Food-at-home,Industry group bill,Energy,usd_m,28582.2
+agfeds,2017,Food-at-home,Industry group bill,Finance and insurance,cents,4.3
+agfeds,2017,Food-at-home,Industry group bill,Finance and insurance,usd_m,28298.6
+agfeds,2017,Food-at-home,Industry group bill,Food processing,cents,27.5
+agfeds,2017,Food-at-home,Industry group bill,Food processing,usd_m,179338.5
+agfeds,2017,Food-at-home,Industry group bill,Food retail,cents,27.9
+agfeds,2017,Food-at-home,Industry group bill,Food retail,usd_m,181609.2
+agfeds,2017,Food-at-home,Industry group bill,Food services,cents,0.3
+agfeds,2017,Food-at-home,Industry group bill,Food services,usd_m,1949.4
+agfeds,2017,Food-at-home,Industry group bill,Food wholesale,cents,10.9
+agfeds,2017,Food-at-home,Industry group bill,Food wholesale,usd_m,71080.2
+agfeds,2017,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.4
+agfeds,2017,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,8926.0
+agfeds,2017,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2017,Food-at-home,Industry group bill,Legal and accounting,usd_m,9798.2
+agfeds,2017,Food-at-home,Industry group bill,Livestock,cents,4.1
+agfeds,2017,Food-at-home,Industry group bill,Livestock,usd_m,27029.0
+agfeds,2017,Food-at-home,Industry group bill,Transportation and storage,cents,6.3
+agfeds,2017,Food-at-home,Industry group bill,Transportation and storage,usd_m,40889.0
+agfeds,2017,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2017,Food-at-home,Industry group total,Industry group total,usd_m,651480.4
+agfeds,2017,Food-at-home,Marketing bill,Farm share,cents,18.7
+agfeds,2017,Food-at-home,Marketing bill,Farm value,usd_m,121940.4
+agfeds,2017,Food-at-home,Marketing bill,Marketing share,cents,81.3
+agfeds,2017,Food-at-home,Marketing bill,Marketing value,usd_m,529578.5
+agfeds,2017,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2017,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,651518.9
+agfeds,2017,Food-at-home,Total spending by production source,Imported food dollars,cents,13.4
+agfeds,2017,Food-at-home,Total spending by production source,Imported food dollars,usd_m,87346.5
+agfeds,2017,Food-away-from-home,Industry group bill,Advertising,cents,2.4
+agfeds,2017,Food-away-from-home,Industry group bill,Advertising,usd_m,19430.7
+agfeds,2017,Food-away-from-home,Industry group bill,Agribusiness,cents,2.2
+agfeds,2017,Food-away-from-home,Industry group bill,Agribusiness,usd_m,18416.7
+agfeds,2017,Food-away-from-home,Industry group bill,Crops,cents,1.9
+agfeds,2017,Food-away-from-home,Industry group bill,Crops,usd_m,15621.7
+agfeds,2017,Food-away-from-home,Industry group bill,Energy,cents,3.8
+agfeds,2017,Food-away-from-home,Industry group bill,Energy,usd_m,31713.0
+agfeds,2017,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2017,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,37437.0
+agfeds,2017,Food-away-from-home,Industry group bill,Food processing,cents,9.7
+agfeds,2017,Food-away-from-home,Industry group bill,Food processing,usd_m,80441.1
+agfeds,2017,Food-away-from-home,Industry group bill,Food retail,cents,2.7
+agfeds,2017,Food-away-from-home,Industry group bill,Food retail,usd_m,22706.7
+agfeds,2017,Food-away-from-home,Industry group bill,Food services,cents,62.5
+agfeds,2017,Food-away-from-home,Industry group bill,Food services,usd_m,516238.8
+agfeds,2017,Food-away-from-home,Industry group bill,Food wholesale,cents,3.1
+agfeds,2017,Food-away-from-home,Industry group bill,Food wholesale,usd_m,25431.3
+agfeds,2017,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2017,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6879.4
+agfeds,2017,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2017,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,11493.2
+agfeds,2017,Food-away-from-home,Industry group bill,Livestock,cents,2.0
+agfeds,2017,Food-away-from-home,Industry group bill,Livestock,usd_m,16689.6
+agfeds,2017,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.9
+agfeds,2017,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,23755.8
+agfeds,2017,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2017,Food-away-from-home,Industry group total,Industry group total,usd_m,826254.9
+agfeds,2017,Food-away-from-home,Marketing bill,Farm share,cents,8.6
+agfeds,2017,Food-away-from-home,Marketing bill,Farm value,usd_m,71101.4
+agfeds,2017,Food-away-from-home,Marketing bill,Marketing share,cents,91.4
+agfeds,2017,Food-away-from-home,Marketing bill,Marketing value,usd_m,755192.9
+agfeds,2017,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2017,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,826294.3
+agfeds,2017,Food-away-from-home,Total spending by production source,Imported food dollars,cents,16.6
+agfeds,2017,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,137405.3
+agfeds,2018,All,Industry group bill,Advertising,cents,2.2
+agfeds,2018,All,Industry group bill,Advertising,usd_m,33783.2
+agfeds,2018,All,Industry group bill,Agribusiness,cents,3.3
+agfeds,2018,All,Industry group bill,Agribusiness,usd_m,50408.4
+agfeds,2018,All,Industry group bill,Crops,cents,2.7
+agfeds,2018,All,Industry group bill,Crops,usd_m,41119.0
+agfeds,2018,All,Industry group bill,Energy,cents,4.3
+agfeds,2018,All,Industry group bill,Energy,usd_m,64849.3
+agfeds,2018,All,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2018,All,Industry group bill,Finance and insurance,usd_m,67661.3
+agfeds,2018,All,Industry group bill,Food processing,cents,17.5
+agfeds,2018,All,Industry group bill,Food processing,usd_m,265227.0
+agfeds,2018,All,Industry group bill,Food retail,cents,13.6
+agfeds,2018,All,Industry group bill,Food retail,usd_m,207335.9
+agfeds,2018,All,Industry group bill,Food services,cents,35.6
+agfeds,2018,All,Industry group bill,Food services,usd_m,540377.9
+agfeds,2018,All,Industry group bill,Food wholesale,cents,6.5
+agfeds,2018,All,Industry group bill,Food wholesale,usd_m,99287.6
+agfeds,2018,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2018,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,16337.2
+agfeds,2018,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2018,All,Industry group bill,Legal and accounting,usd_m,21661.6
+agfeds,2018,All,Industry group bill,Livestock,cents,2.9
+agfeds,2018,All,Industry group bill,Livestock,usd_m,43460.0
+agfeds,2018,All,Industry group bill,Transportation and storage,cents,4.5
+agfeds,2018,All,Industry group bill,Transportation and storage,usd_m,68215.4
+agfeds,2018,All,Industry group total,Industry group total,cents,100.0
+agfeds,2018,All,Industry group total,Industry group total,usd_m,1519723.9
+agfeds,2018,All,Marketing bill,Farm share,cents,12.5
+agfeds,2018,All,Marketing bill,Farm value,usd_m,189637.6
+agfeds,2018,All,Marketing bill,Marketing share,cents,87.5
+agfeds,2018,All,Marketing bill,Marketing value,usd_m,1330193.2
+agfeds,2018,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2018,All,Total spending by production source,Domestic food dollars,usd_m,1519830.8
+agfeds,2018,All,Total spending by production source,Imported food dollars,cents,17.0
+agfeds,2018,All,Total spending by production source,Imported food dollars,usd_m,258400.1
+agfeds,2018,Food-at-home,Industry group bill,Advertising,cents,2.0
+agfeds,2018,Food-at-home,Industry group bill,Advertising,usd_m,13492.5
+agfeds,2018,Food-at-home,Industry group bill,Agribusiness,cents,4.9
+agfeds,2018,Food-at-home,Industry group bill,Agribusiness,usd_m,32980.2
+agfeds,2018,Food-at-home,Industry group bill,Crops,cents,3.9
+agfeds,2018,Food-at-home,Industry group bill,Crops,usd_m,26126.3
+agfeds,2018,Food-at-home,Industry group bill,Energy,cents,4.6
+agfeds,2018,Food-at-home,Industry group bill,Energy,usd_m,30953.2
+agfeds,2018,Food-at-home,Industry group bill,Finance and insurance,cents,4.3
+agfeds,2018,Food-at-home,Industry group bill,Finance and insurance,usd_m,28752.6
+agfeds,2018,Food-at-home,Industry group bill,Food processing,cents,27.7
+agfeds,2018,Food-at-home,Industry group bill,Food processing,usd_m,185666.6
+agfeds,2018,Food-at-home,Industry group bill,Food retail,cents,27.8
+agfeds,2018,Food-at-home,Industry group bill,Food retail,usd_m,186276.8
+agfeds,2018,Food-at-home,Industry group bill,Food services,cents,0.3
+agfeds,2018,Food-at-home,Industry group bill,Food services,usd_m,1940.3
+agfeds,2018,Food-at-home,Industry group bill,Food wholesale,cents,11.0
+agfeds,2018,Food-at-home,Industry group bill,Food wholesale,usd_m,73974.3
+agfeds,2018,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.4
+agfeds,2018,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,9297.5
+agfeds,2018,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2018,Food-at-home,Industry group bill,Legal and accounting,usd_m,9937.4
+agfeds,2018,Food-at-home,Industry group bill,Livestock,cents,4.0
+agfeds,2018,Food-at-home,Industry group bill,Livestock,usd_m,26706.3
+agfeds,2018,Food-at-home,Industry group bill,Transportation and storage,cents,6.5
+agfeds,2018,Food-at-home,Industry group bill,Transportation and storage,usd_m,43549.5
+agfeds,2018,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2018,Food-at-home,Industry group total,Industry group total,usd_m,669653.4
+agfeds,2018,Food-at-home,Marketing bill,Farm share,cents,17.9
+agfeds,2018,Food-at-home,Marketing bill,Farm value,usd_m,120205.0
+agfeds,2018,Food-at-home,Marketing bill,Marketing share,cents,82.1
+agfeds,2018,Food-at-home,Marketing bill,Marketing value,usd_m,549507.0
+agfeds,2018,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2018,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,669712.1
+agfeds,2018,Food-at-home,Total spending by production source,Imported food dollars,cents,14.7
+agfeds,2018,Food-at-home,Total spending by production source,Imported food dollars,usd_m,98390.1
+agfeds,2018,Food-away-from-home,Industry group bill,Advertising,cents,2.4
+agfeds,2018,Food-away-from-home,Industry group bill,Advertising,usd_m,20290.7
+agfeds,2018,Food-away-from-home,Industry group bill,Agribusiness,cents,2.1
+agfeds,2018,Food-away-from-home,Industry group bill,Agribusiness,usd_m,17428.3
+agfeds,2018,Food-away-from-home,Industry group bill,Crops,cents,1.8
+agfeds,2018,Food-away-from-home,Industry group bill,Crops,usd_m,14992.7
+agfeds,2018,Food-away-from-home,Industry group bill,Energy,cents,4.0
+agfeds,2018,Food-away-from-home,Industry group bill,Energy,usd_m,33896.1
+agfeds,2018,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.6
+agfeds,2018,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,38908.7
+agfeds,2018,Food-away-from-home,Industry group bill,Food processing,cents,9.4
+agfeds,2018,Food-away-from-home,Industry group bill,Food processing,usd_m,79560.4
+agfeds,2018,Food-away-from-home,Industry group bill,Food retail,cents,2.5
+agfeds,2018,Food-away-from-home,Industry group bill,Food retail,usd_m,21059.2
+agfeds,2018,Food-away-from-home,Industry group bill,Food services,cents,63.3
+agfeds,2018,Food-away-from-home,Industry group bill,Food services,usd_m,538437.6
+agfeds,2018,Food-away-from-home,Industry group bill,Food wholesale,cents,3.0
+agfeds,2018,Food-away-from-home,Industry group bill,Food wholesale,usd_m,25313.3
+agfeds,2018,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2018,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7039.7
+agfeds,2018,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2018,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,11724.2
+agfeds,2018,Food-away-from-home,Industry group bill,Livestock,cents,2.0
+agfeds,2018,Food-away-from-home,Industry group bill,Livestock,usd_m,16753.7
+agfeds,2018,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.9
+agfeds,2018,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,24665.9
+agfeds,2018,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2018,Food-away-from-home,Industry group total,Industry group total,usd_m,850070.5
+agfeds,2018,Food-away-from-home,Marketing bill,Farm share,cents,8.2
+agfeds,2018,Food-away-from-home,Marketing bill,Farm value,usd_m,69432.5
+agfeds,2018,Food-away-from-home,Marketing bill,Marketing share,cents,91.8
+agfeds,2018,Food-away-from-home,Marketing bill,Marketing value,usd_m,780686.2
+agfeds,2018,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2018,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,850118.7
+agfeds,2018,Food-away-from-home,Total spending by production source,Imported food dollars,cents,18.8
+agfeds,2018,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,160010.0
+agfeds,2019,All,Industry group bill,Advertising,cents,2.3
+agfeds,2019,All,Industry group bill,Advertising,usd_m,36260.8
+agfeds,2019,All,Industry group bill,Agribusiness,cents,3.4
+agfeds,2019,All,Industry group bill,Agribusiness,usd_m,54017.0
+agfeds,2019,All,Industry group bill,Crops,cents,2.3
+agfeds,2019,All,Industry group bill,Crops,usd_m,36256.1
+agfeds,2019,All,Industry group bill,Energy,cents,4.0
+agfeds,2019,All,Industry group bill,Energy,usd_m,62646.0
+agfeds,2019,All,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2019,All,Industry group bill,Finance and insurance,usd_m,71777.6
+agfeds,2019,All,Industry group bill,Food processing,cents,17.2
+agfeds,2019,All,Industry group bill,Food processing,usd_m,271611.6
+agfeds,2019,All,Industry group bill,Food retail,cents,13.7
+agfeds,2019,All,Industry group bill,Food retail,usd_m,215724.1
+agfeds,2019,All,Industry group bill,Food services,cents,36.3
+agfeds,2019,All,Industry group bill,Food services,usd_m,572506.8
+agfeds,2019,All,Industry group bill,Food wholesale,cents,6.6
+agfeds,2019,All,Industry group bill,Food wholesale,usd_m,103480.7
+agfeds,2019,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2019,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,17817.1
+agfeds,2019,All,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2019,All,Industry group bill,Legal and accounting,usd_m,23180.2
+agfeds,2019,All,Industry group bill,Livestock,cents,2.7
+agfeds,2019,All,Industry group bill,Livestock,usd_m,41883.9
+agfeds,2019,All,Industry group bill,Transportation and storage,cents,4.5
+agfeds,2019,All,Industry group bill,Transportation and storage,usd_m,71435.9
+agfeds,2019,All,Industry group total,Industry group total,cents,100.0
+agfeds,2019,All,Industry group total,Industry group total,usd_m,1578598.0
+agfeds,2019,All,Marketing bill,Farm share,cents,12.0
+agfeds,2019,All,Marketing bill,Farm value,usd_m,189258.1
+agfeds,2019,All,Marketing bill,Marketing share,cents,88.0
+agfeds,2019,All,Marketing bill,Marketing value,usd_m,1389528.1
+agfeds,2019,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2019,All,Total spending by production source,Domestic food dollars,usd_m,1578786.2
+agfeds,2019,All,Total spending by production source,Imported food dollars,cents,17.4
+agfeds,2019,All,Total spending by production source,Imported food dollars,usd_m,274242.8
+agfeds,2019,Food-at-home,Industry group bill,Advertising,cents,2.1
+agfeds,2019,Food-at-home,Industry group bill,Advertising,usd_m,14638.3
+agfeds,2019,Food-at-home,Industry group bill,Agribusiness,cents,5.2
+agfeds,2019,Food-at-home,Industry group bill,Agribusiness,usd_m,35861.0
+agfeds,2019,Food-at-home,Industry group bill,Crops,cents,3.4
+agfeds,2019,Food-at-home,Industry group bill,Crops,usd_m,23721.9
+agfeds,2019,Food-at-home,Industry group bill,Energy,cents,4.3
+agfeds,2019,Food-at-home,Industry group bill,Energy,usd_m,30055.3
+agfeds,2019,Food-at-home,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2019,Food-at-home,Industry group bill,Finance and insurance,usd_m,30378.3
+agfeds,2019,Food-at-home,Industry group bill,Food processing,cents,27.7
+agfeds,2019,Food-at-home,Industry group bill,Food processing,usd_m,191438.0
+agfeds,2019,Food-at-home,Industry group bill,Food retail,cents,27.9
+agfeds,2019,Food-at-home,Industry group bill,Food retail,usd_m,193359.9
+agfeds,2019,Food-at-home,Industry group bill,Food services,cents,0.3
+agfeds,2019,Food-at-home,Industry group bill,Food services,usd_m,1926.3
+agfeds,2019,Food-at-home,Industry group bill,Food wholesale,cents,11.2
+agfeds,2019,Food-at-home,Industry group bill,Food wholesale,usd_m,77396.3
+agfeds,2019,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.5
+agfeds,2019,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,10352.5
+agfeds,2019,Food-at-home,Industry group bill,Legal and accounting,cents,1.6
+agfeds,2019,Food-at-home,Industry group bill,Legal and accounting,usd_m,10758.3
+agfeds,2019,Food-at-home,Industry group bill,Livestock,cents,3.8
+agfeds,2019,Food-at-home,Industry group bill,Livestock,usd_m,26153.1
+agfeds,2019,Food-at-home,Industry group bill,Transportation and storage,cents,6.6
+agfeds,2019,Food-at-home,Industry group bill,Transportation and storage,usd_m,45660.6
+agfeds,2019,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2019,Food-at-home,Industry group total,Industry group total,usd_m,691699.7
+agfeds,2019,Food-at-home,Marketing bill,Farm share,cents,17.7
+agfeds,2019,Food-at-home,Marketing bill,Farm value,usd_m,122185.0
+agfeds,2019,Food-at-home,Marketing bill,Marketing share,cents,82.3
+agfeds,2019,Food-at-home,Marketing bill,Marketing value,usd_m,569627.9
+agfeds,2019,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2019,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,691813.0
+agfeds,2019,Food-at-home,Total spending by production source,Imported food dollars,cents,15.1
+agfeds,2019,Food-at-home,Total spending by production source,Imported food dollars,usd_m,104191.8
+agfeds,2019,Food-away-from-home,Industry group bill,Advertising,cents,2.4
+agfeds,2019,Food-away-from-home,Industry group bill,Advertising,usd_m,21622.5
+agfeds,2019,Food-away-from-home,Industry group bill,Agribusiness,cents,2.0
+agfeds,2019,Food-away-from-home,Industry group bill,Agribusiness,usd_m,18156.0
+agfeds,2019,Food-away-from-home,Industry group bill,Crops,cents,1.4
+agfeds,2019,Food-away-from-home,Industry group bill,Crops,usd_m,12534.2
+agfeds,2019,Food-away-from-home,Industry group bill,Energy,cents,3.7
+agfeds,2019,Food-away-from-home,Industry group bill,Energy,usd_m,32590.7
+agfeds,2019,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.7
+agfeds,2019,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,41399.3
+agfeds,2019,Food-away-from-home,Industry group bill,Food processing,cents,9.0
+agfeds,2019,Food-away-from-home,Industry group bill,Food processing,usd_m,80173.6
+agfeds,2019,Food-away-from-home,Industry group bill,Food retail,cents,2.5
+agfeds,2019,Food-away-from-home,Industry group bill,Food retail,usd_m,22364.2
+agfeds,2019,Food-away-from-home,Industry group bill,Food services,cents,64.3
+agfeds,2019,Food-away-from-home,Industry group bill,Food services,usd_m,570580.6
+agfeds,2019,Food-away-from-home,Industry group bill,Food wholesale,cents,2.9
+agfeds,2019,Food-away-from-home,Industry group bill,Food wholesale,usd_m,26084.4
+agfeds,2019,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2019,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7464.6
+agfeds,2019,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2019,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,12422.0
+agfeds,2019,Food-away-from-home,Industry group bill,Livestock,cents,1.8
+agfeds,2019,Food-away-from-home,Industry group bill,Livestock,usd_m,15730.8
+agfeds,2019,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.9
+agfeds,2019,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,25775.3
+agfeds,2019,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2019,Food-away-from-home,Industry group total,Industry group total,usd_m,886898.3
+agfeds,2019,Food-away-from-home,Marketing bill,Farm share,cents,7.6
+agfeds,2019,Food-away-from-home,Marketing bill,Farm value,usd_m,67073.1
+agfeds,2019,Food-away-from-home,Marketing bill,Marketing share,cents,92.4
+agfeds,2019,Food-away-from-home,Marketing bill,Marketing value,usd_m,819900.1
+agfeds,2019,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2019,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,886973.3
+agfeds,2019,Food-away-from-home,Total spending by production source,Imported food dollars,cents,19.2
+agfeds,2019,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,170050.9
+agfeds,2020,All,Industry group bill,Advertising,cents,2.3
+agfeds,2020,All,Industry group bill,Advertising,usd_m,35326.9
+agfeds,2020,All,Industry group bill,Agribusiness,cents,3.8
+agfeds,2020,All,Industry group bill,Agribusiness,usd_m,58226.7
+agfeds,2020,All,Industry group bill,Crops,cents,2.2
+agfeds,2020,All,Industry group bill,Crops,usd_m,33252.2
+agfeds,2020,All,Industry group bill,Energy,cents,3.4
+agfeds,2020,All,Industry group bill,Energy,usd_m,52435.1
+agfeds,2020,All,Industry group bill,Finance and insurance,cents,4.9
+agfeds,2020,All,Industry group bill,Finance and insurance,usd_m,74572.2
+agfeds,2020,All,Industry group bill,Food processing,cents,19.4
+agfeds,2020,All,Industry group bill,Food processing,usd_m,295039.0
+agfeds,2020,All,Industry group bill,Food retail,cents,15.8
+agfeds,2020,All,Industry group bill,Food retail,usd_m,240596.1
+agfeds,2020,All,Industry group bill,Food services,cents,31.0
+agfeds,2020,All,Industry group bill,Food services,usd_m,472520.0
+agfeds,2020,All,Industry group bill,Food wholesale,cents,6.9
+agfeds,2020,All,Industry group bill,Food wholesale,usd_m,105404.4
+agfeds,2020,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.2
+agfeds,2020,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,18246.4
+agfeds,2020,All,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2020,All,Industry group bill,Legal and accounting,usd_m,22435.0
+agfeds,2020,All,Industry group bill,Livestock,cents,2.8
+agfeds,2020,All,Industry group bill,Livestock,usd_m,43108.5
+agfeds,2020,All,Industry group bill,Transportation and storage,cents,4.7
+agfeds,2020,All,Industry group bill,Transportation and storage,usd_m,71094.3
+agfeds,2020,All,Industry group total,Industry group total,cents,100.0
+agfeds,2020,All,Industry group total,Industry group total,usd_m,1522256.7
+agfeds,2020,All,Marketing bill,Farm share,cents,12.5
+agfeds,2020,All,Marketing bill,Farm value,usd_m,190841.7
+agfeds,2020,All,Marketing bill,Marketing share,cents,87.5
+agfeds,2020,All,Marketing bill,Marketing value,usd_m,1331458.8
+agfeds,2020,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2020,All,Total spending by production source,Domestic food dollars,usd_m,1522300.6
+agfeds,2020,All,Total spending by production source,Imported food dollars,cents,17.2
+agfeds,2020,All,Total spending by production source,Imported food dollars,usd_m,262089.1
+agfeds,2020,Food-at-home,Industry group bill,Advertising,cents,2.1
+agfeds,2020,Food-at-home,Industry group bill,Advertising,usd_m,15876.8
+agfeds,2020,Food-at-home,Industry group bill,Agribusiness,cents,5.3
+agfeds,2020,Food-at-home,Industry group bill,Agribusiness,usd_m,39478.1
+agfeds,2020,Food-at-home,Industry group bill,Crops,cents,3.0
+agfeds,2020,Food-at-home,Industry group bill,Crops,usd_m,22195.1
+agfeds,2020,Food-at-home,Industry group bill,Energy,cents,3.6
+agfeds,2020,Food-at-home,Industry group bill,Energy,usd_m,27187.5
+agfeds,2020,Food-at-home,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2020,Food-at-home,Industry group bill,Finance and insurance,usd_m,32986.3
+agfeds,2020,Food-at-home,Industry group bill,Food processing,cents,28.8
+agfeds,2020,Food-at-home,Industry group bill,Food processing,usd_m,214306.2
+agfeds,2020,Food-at-home,Industry group bill,Food retail,cents,28.5
+agfeds,2020,Food-at-home,Industry group bill,Food retail,usd_m,212076.8
+agfeds,2020,Food-at-home,Industry group bill,Food services,cents,0.2
+agfeds,2020,Food-at-home,Industry group bill,Food services,usd_m,1586.7
+agfeds,2020,Food-at-home,Industry group bill,Food wholesale,cents,10.8
+agfeds,2020,Food-at-home,Industry group bill,Food wholesale,usd_m,80341.3
+agfeds,2020,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.5
+agfeds,2020,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11274.4
+agfeds,2020,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2020,Food-at-home,Industry group bill,Legal and accounting,usd_m,11479.3
+agfeds,2020,Food-at-home,Industry group bill,Livestock,cents,3.7
+agfeds,2020,Food-at-home,Industry group bill,Livestock,usd_m,27707.7
+agfeds,2020,Food-at-home,Industry group bill,Transportation and storage,cents,6.5
+agfeds,2020,Food-at-home,Industry group bill,Transportation and storage,usd_m,48375.1
+agfeds,2020,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2020,Food-at-home,Industry group total,Industry group total,usd_m,744871.3
+agfeds,2020,Food-at-home,Marketing bill,Farm share,cents,17.0
+agfeds,2020,Food-at-home,Marketing bill,Farm value,usd_m,126476.4
+agfeds,2020,Food-at-home,Marketing bill,Marketing share,cents,83.0
+agfeds,2020,Food-at-home,Marketing bill,Marketing value,usd_m,618421.4
+agfeds,2020,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2020,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,744897.8
+agfeds,2020,Food-at-home,Total spending by production source,Imported food dollars,cents,15.5
+agfeds,2020,Food-at-home,Total spending by production source,Imported food dollars,usd_m,115200.3
+agfeds,2020,Food-away-from-home,Industry group bill,Advertising,cents,2.5
+agfeds,2020,Food-away-from-home,Industry group bill,Advertising,usd_m,19450.1
+agfeds,2020,Food-away-from-home,Industry group bill,Agribusiness,cents,2.4
+agfeds,2020,Food-away-from-home,Industry group bill,Agribusiness,usd_m,18748.6
+agfeds,2020,Food-away-from-home,Industry group bill,Crops,cents,1.4
+agfeds,2020,Food-away-from-home,Industry group bill,Crops,usd_m,11057.1
+agfeds,2020,Food-away-from-home,Industry group bill,Energy,cents,3.2
+agfeds,2020,Food-away-from-home,Industry group bill,Energy,usd_m,25247.6
+agfeds,2020,Food-away-from-home,Industry group bill,Finance and insurance,cents,5.3
+agfeds,2020,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,41585.9
+agfeds,2020,Food-away-from-home,Industry group bill,Food processing,cents,10.4
+agfeds,2020,Food-away-from-home,Industry group bill,Food processing,usd_m,80732.8
+agfeds,2020,Food-away-from-home,Industry group bill,Food retail,cents,3.7
+agfeds,2020,Food-away-from-home,Industry group bill,Food retail,usd_m,28519.3
+agfeds,2020,Food-away-from-home,Industry group bill,Food services,cents,60.6
+agfeds,2020,Food-away-from-home,Industry group bill,Food services,usd_m,470933.3
+agfeds,2020,Food-away-from-home,Industry group bill,Food wholesale,cents,3.2
+agfeds,2020,Food-away-from-home,Industry group bill,Food wholesale,usd_m,25063.1
+agfeds,2020,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.9
+agfeds,2020,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,6972.0
+agfeds,2020,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2020,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,10955.7
+agfeds,2020,Food-away-from-home,Industry group bill,Livestock,cents,2.0
+agfeds,2020,Food-away-from-home,Industry group bill,Livestock,usd_m,15400.8
+agfeds,2020,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.9
+agfeds,2020,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,22719.1
+agfeds,2020,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2020,Food-away-from-home,Industry group total,Industry group total,usd_m,777385.4
+agfeds,2020,Food-away-from-home,Marketing bill,Farm share,cents,8.3
+agfeds,2020,Food-away-from-home,Marketing bill,Farm value,usd_m,64365.3
+agfeds,2020,Food-away-from-home,Marketing bill,Marketing share,cents,91.7
+agfeds,2020,Food-away-from-home,Marketing bill,Marketing value,usd_m,713037.4
+agfeds,2020,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2020,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,777402.7
+agfeds,2020,Food-away-from-home,Total spending by production source,Imported food dollars,cents,18.9
+agfeds,2020,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,146888.9
+agfeds,2021,All,Industry group bill,Advertising,cents,2.2
+agfeds,2021,All,Industry group bill,Advertising,usd_m,36791.9
+agfeds,2021,All,Industry group bill,Agribusiness,cents,3.4
+agfeds,2021,All,Industry group bill,Agribusiness,usd_m,55712.4
+agfeds,2021,All,Industry group bill,Crops,cents,3.1
+agfeds,2021,All,Industry group bill,Crops,usd_m,50772.0
+agfeds,2021,All,Industry group bill,Energy,cents,4.1
+agfeds,2021,All,Industry group bill,Energy,usd_m,66869.1
+agfeds,2021,All,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2021,All,Industry group bill,Finance and insurance,usd_m,74129.6
+agfeds,2021,All,Industry group bill,Food processing,cents,18.0
+agfeds,2021,All,Industry group bill,Food processing,usd_m,295202.3
+agfeds,2021,All,Industry group bill,Food retail,cents,15.2
+agfeds,2021,All,Industry group bill,Food retail,usd_m,247980.6
+agfeds,2021,All,Industry group bill,Food services,cents,32.1
+agfeds,2021,All,Industry group bill,Food services,usd_m,525817.7
+agfeds,2021,All,Industry group bill,Food wholesale,cents,7.0
+agfeds,2021,All,Industry group bill,Food wholesale,usd_m,113753.9
+agfeds,2021,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.1
+agfeds,2021,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,17501.8
+agfeds,2021,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2021,All,Industry group bill,Legal and accounting,usd_m,22462.5
+agfeds,2021,All,Industry group bill,Livestock,cents,3.2
+agfeds,2021,All,Industry group bill,Livestock,usd_m,52715.2
+agfeds,2021,All,Industry group bill,Transportation and storage,cents,4.7
+agfeds,2021,All,Industry group bill,Transportation and storage,usd_m,76989.0
+agfeds,2021,All,Industry group total,Industry group total,cents,100.0
+agfeds,2021,All,Industry group total,Industry group total,usd_m,1636698.0
+agfeds,2021,All,Marketing bill,Farm share,cents,13.2
+agfeds,2021,All,Marketing bill,Farm value,usd_m,216020.0
+agfeds,2021,All,Marketing bill,Marketing share,cents,86.8
+agfeds,2021,All,Marketing bill,Marketing value,usd_m,1420717.3
+agfeds,2021,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2021,All,Total spending by production source,Domestic food dollars,usd_m,1636737.3
+agfeds,2021,All,Total spending by production source,Imported food dollars,cents,19.1
+agfeds,2021,All,Total spending by production source,Imported food dollars,usd_m,311991.4
+agfeds,2021,Food-at-home,Industry group bill,Advertising,cents,2.1
+agfeds,2021,Food-at-home,Industry group bill,Advertising,usd_m,16070.7
+agfeds,2021,Food-at-home,Industry group bill,Agribusiness,cents,4.8
+agfeds,2021,Food-at-home,Industry group bill,Agribusiness,usd_m,37386.5
+agfeds,2021,Food-at-home,Industry group bill,Crops,cents,4.3
+agfeds,2021,Food-at-home,Industry group bill,Crops,usd_m,33659.0
+agfeds,2021,Food-at-home,Industry group bill,Energy,cents,4.5
+agfeds,2021,Food-at-home,Industry group bill,Energy,usd_m,35540.0
+agfeds,2021,Food-at-home,Industry group bill,Finance and insurance,cents,4.2
+agfeds,2021,Food-at-home,Industry group bill,Finance and insurance,usd_m,32527.4
+agfeds,2021,Food-at-home,Industry group bill,Food processing,cents,27.3
+agfeds,2021,Food-at-home,Industry group bill,Food processing,usd_m,214072.3
+agfeds,2021,Food-at-home,Industry group bill,Food retail,cents,27.9
+agfeds,2021,Food-at-home,Industry group bill,Food retail,usd_m,218308.7
+agfeds,2021,Food-at-home,Industry group bill,Food services,cents,0.4
+agfeds,2021,Food-at-home,Industry group bill,Food services,usd_m,3083.0
+agfeds,2021,Food-at-home,Industry group bill,Food wholesale,cents,11.0
+agfeds,2021,Food-at-home,Industry group bill,Food wholesale,usd_m,86430.3
+agfeds,2021,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2021,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,10380.5
+agfeds,2021,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2021,Food-at-home,Industry group bill,Legal and accounting,usd_m,11228.1
+agfeds,2021,Food-at-home,Industry group bill,Livestock,cents,4.2
+agfeds,2021,Food-at-home,Industry group bill,Livestock,usd_m,32769.3
+agfeds,2021,Food-at-home,Industry group bill,Transportation and storage,cents,6.6
+agfeds,2021,Food-at-home,Industry group bill,Transportation and storage,usd_m,51929.6
+agfeds,2021,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2021,Food-at-home,Industry group total,Industry group total,usd_m,783385.5
+agfeds,2021,Food-at-home,Marketing bill,Farm share,cents,17.9
+agfeds,2021,Food-at-home,Marketing bill,Farm value,usd_m,140530.1
+agfeds,2021,Food-at-home,Marketing bill,Marketing share,cents,82.1
+agfeds,2021,Food-at-home,Marketing bill,Marketing value,usd_m,642876.1
+agfeds,2021,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2021,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,783406.2
+agfeds,2021,Food-at-home,Total spending by production source,Imported food dollars,cents,17.1
+agfeds,2021,Food-at-home,Total spending by production source,Imported food dollars,usd_m,134053.0
+agfeds,2021,Food-away-from-home,Industry group bill,Advertising,cents,2.4
+agfeds,2021,Food-away-from-home,Industry group bill,Advertising,usd_m,20721.2
+agfeds,2021,Food-away-from-home,Industry group bill,Agribusiness,cents,2.1
+agfeds,2021,Food-away-from-home,Industry group bill,Agribusiness,usd_m,18325.9
+agfeds,2021,Food-away-from-home,Industry group bill,Crops,cents,2.0
+agfeds,2021,Food-away-from-home,Industry group bill,Crops,usd_m,17113.0
+agfeds,2021,Food-away-from-home,Industry group bill,Energy,cents,3.7
+agfeds,2021,Food-away-from-home,Industry group bill,Energy,usd_m,31329.1
+agfeds,2021,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.9
+agfeds,2021,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,41602.2
+agfeds,2021,Food-away-from-home,Industry group bill,Food processing,cents,9.5
+agfeds,2021,Food-away-from-home,Industry group bill,Food processing,usd_m,81130.0
+agfeds,2021,Food-away-from-home,Industry group bill,Food retail,cents,3.5
+agfeds,2021,Food-away-from-home,Industry group bill,Food retail,usd_m,29671.9
+agfeds,2021,Food-away-from-home,Industry group bill,Food services,cents,61.3
+agfeds,2021,Food-away-from-home,Industry group bill,Food services,usd_m,522734.7
+agfeds,2021,Food-away-from-home,Industry group bill,Food wholesale,cents,3.2
+agfeds,2021,Food-away-from-home,Industry group bill,Food wholesale,usd_m,27323.6
+agfeds,2021,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2021,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7121.3
+agfeds,2021,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.3
+agfeds,2021,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,11234.3
+agfeds,2021,Food-away-from-home,Industry group bill,Livestock,cents,2.3
+agfeds,2021,Food-away-from-home,Industry group bill,Livestock,usd_m,19945.9
+agfeds,2021,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.9
+agfeds,2021,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,25059.4
+agfeds,2021,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2021,Food-away-from-home,Industry group total,Industry group total,usd_m,853312.5
+agfeds,2021,Food-away-from-home,Marketing bill,Farm share,cents,8.8
+agfeds,2021,Food-away-from-home,Marketing bill,Farm value,usd_m,75489.9
+agfeds,2021,Food-away-from-home,Marketing bill,Marketing share,cents,91.2
+agfeds,2021,Food-away-from-home,Marketing bill,Marketing value,usd_m,777841.2
+agfeds,2021,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2021,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,853331.1
+agfeds,2021,Food-away-from-home,Total spending by production source,Imported food dollars,cents,20.9
+agfeds,2021,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,177938.4
+agfeds,2022,All,Industry group bill,Advertising,cents,2.3
+agfeds,2022,All,Industry group bill,Advertising,usd_m,40410.6
+agfeds,2022,All,Industry group bill,Agribusiness,cents,3.3
+agfeds,2022,All,Industry group bill,Agribusiness,usd_m,59183.4
+agfeds,2022,All,Industry group bill,Crops,cents,3.7
+agfeds,2022,All,Industry group bill,Crops,usd_m,65410.6
+agfeds,2022,All,Industry group bill,Energy,cents,4.2
+agfeds,2022,All,Industry group bill,Energy,usd_m,75979.3
+agfeds,2022,All,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2022,All,Industry group bill,Finance and insurance,usd_m,79834.3
+agfeds,2022,All,Industry group bill,Food processing,cents,16.7
+agfeds,2022,All,Industry group bill,Food processing,usd_m,299711.7
+agfeds,2022,All,Industry group bill,Food retail,cents,14.9
+agfeds,2022,All,Industry group bill,Food retail,usd_m,267477.9
+agfeds,2022,All,Industry group bill,Food services,cents,32.4
+agfeds,2022,All,Industry group bill,Food services,usd_m,579763.2
+agfeds,2022,All,Industry group bill,Food wholesale,cents,6.9
+agfeds,2022,All,Industry group bill,Food wholesale,usd_m,124218.6
+agfeds,2022,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2022,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,18150.8
+agfeds,2022,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2022,All,Industry group bill,Legal and accounting,usd_m,25513.5
+agfeds,2022,All,Industry group bill,Livestock,cents,3.9
+agfeds,2022,All,Industry group bill,Livestock,usd_m,69004.3
+agfeds,2022,All,Industry group bill,Transportation and storage,cents,4.8
+agfeds,2022,All,Industry group bill,Transportation and storage,usd_m,85408.3
+agfeds,2022,All,Industry group total,Industry group total,cents,100.0
+agfeds,2022,All,Industry group total,Industry group total,usd_m,1790066.7
+agfeds,2022,All,Marketing bill,Farm share,cents,14.3
+agfeds,2022,All,Marketing bill,Farm value,usd_m,255721.3
+agfeds,2022,All,Marketing bill,Marketing share,cents,85.7
+agfeds,2022,All,Marketing bill,Marketing value,usd_m,1534559.8
+agfeds,2022,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2022,All,Total spending by production source,Domestic food dollars,usd_m,1790281.1
+agfeds,2022,All,Total spending by production source,Imported food dollars,cents,19.0
+agfeds,2022,All,Total spending by production source,Imported food dollars,usd_m,340540.5
+agfeds,2022,Food-at-home,Industry group bill,Advertising,cents,2.0
+agfeds,2022,Food-at-home,Industry group bill,Advertising,usd_m,16474.8
+agfeds,2022,Food-at-home,Industry group bill,Agribusiness,cents,4.8
+agfeds,2022,Food-at-home,Industry group bill,Agribusiness,usd_m,39467.6
+agfeds,2022,Food-at-home,Industry group bill,Crops,cents,5.2
+agfeds,2022,Food-at-home,Industry group bill,Crops,usd_m,43468.3
+agfeds,2022,Food-at-home,Industry group bill,Energy,cents,4.6
+agfeds,2022,Food-at-home,Industry group bill,Energy,usd_m,38274.2
+agfeds,2022,Food-at-home,Industry group bill,Finance and insurance,cents,4.1
+agfeds,2022,Food-at-home,Industry group bill,Finance and insurance,usd_m,34038.3
+agfeds,2022,Food-at-home,Industry group bill,Food processing,cents,25.5
+agfeds,2022,Food-at-home,Industry group bill,Food processing,usd_m,211444.7
+agfeds,2022,Food-at-home,Industry group bill,Food retail,cents,27.8
+agfeds,2022,Food-at-home,Industry group bill,Food retail,usd_m,230240.2
+agfeds,2022,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2022,Food-at-home,Industry group bill,Food services,usd_m,3903.9
+agfeds,2022,Food-at-home,Industry group bill,Food wholesale,cents,11.0
+agfeds,2022,Food-at-home,Industry group bill,Food wholesale,usd_m,91352.4
+agfeds,2022,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2022,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,10702.9
+agfeds,2022,Food-at-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2022,Food-at-home,Industry group bill,Legal and accounting,usd_m,12057.2
+agfeds,2022,Food-at-home,Industry group bill,Livestock,cents,5.2
+agfeds,2022,Food-at-home,Industry group bill,Livestock,usd_m,42792.3
+agfeds,2022,Food-at-home,Industry group bill,Transportation and storage,cents,6.7
+agfeds,2022,Food-at-home,Industry group bill,Transportation and storage,usd_m,55224.7
+agfeds,2022,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2022,Food-at-home,Industry group total,Industry group total,usd_m,829441.4
+agfeds,2022,Food-at-home,Marketing bill,Farm share,cents,20.0
+agfeds,2022,Food-at-home,Marketing bill,Farm value,usd_m,165671.7
+agfeds,2022,Food-at-home,Marketing bill,Marketing share,cents,80.0
+agfeds,2022,Food-at-home,Marketing bill,Marketing value,usd_m,663866.2
+agfeds,2022,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2022,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,829537.9
+agfeds,2022,Food-at-home,Total spending by production source,Imported food dollars,cents,17.9
+agfeds,2022,Food-at-home,Total spending by production source,Imported food dollars,usd_m,148453.1
+agfeds,2022,Food-away-from-home,Industry group bill,Advertising,cents,2.5
+agfeds,2022,Food-away-from-home,Industry group bill,Advertising,usd_m,23935.8
+agfeds,2022,Food-away-from-home,Industry group bill,Agribusiness,cents,2.1
+agfeds,2022,Food-away-from-home,Industry group bill,Agribusiness,usd_m,19715.8
+agfeds,2022,Food-away-from-home,Industry group bill,Crops,cents,2.3
+agfeds,2022,Food-away-from-home,Industry group bill,Crops,usd_m,21942.3
+agfeds,2022,Food-away-from-home,Industry group bill,Energy,cents,3.9
+agfeds,2022,Food-away-from-home,Industry group bill,Energy,usd_m,37705.2
+agfeds,2022,Food-away-from-home,Industry group bill,Finance and insurance,cents,4.8
+agfeds,2022,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,45796.0
+agfeds,2022,Food-away-from-home,Industry group bill,Food processing,cents,9.2
+agfeds,2022,Food-away-from-home,Industry group bill,Food processing,usd_m,88267.0
+agfeds,2022,Food-away-from-home,Industry group bill,Food retail,cents,3.9
+agfeds,2022,Food-away-from-home,Industry group bill,Food retail,usd_m,37237.8
+agfeds,2022,Food-away-from-home,Industry group bill,Food services,cents,59.9
+agfeds,2022,Food-away-from-home,Industry group bill,Food services,usd_m,575859.3
+agfeds,2022,Food-away-from-home,Industry group bill,Food wholesale,cents,3.4
+agfeds,2022,Food-away-from-home,Industry group bill,Food wholesale,usd_m,32866.2
+agfeds,2022,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.8
+agfeds,2022,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7447.9
+agfeds,2022,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2022,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,13456.4
+agfeds,2022,Food-away-from-home,Industry group bill,Livestock,cents,2.7
+agfeds,2022,Food-away-from-home,Industry group bill,Livestock,usd_m,26212.1
+agfeds,2022,Food-away-from-home,Industry group bill,Transportation and storage,cents,3.1
+agfeds,2022,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,30183.6
+agfeds,2022,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2022,Food-away-from-home,Industry group total,Industry group total,usd_m,960625.4
+agfeds,2022,Food-away-from-home,Marketing bill,Farm share,cents,9.4
+agfeds,2022,Food-away-from-home,Marketing bill,Farm value,usd_m,90049.6
+agfeds,2022,Food-away-from-home,Marketing bill,Marketing share,cents,90.6
+agfeds,2022,Food-away-from-home,Marketing bill,Marketing value,usd_m,870693.6
+agfeds,2022,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2022,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,960743.2
+agfeds,2022,Food-away-from-home,Total spending by production source,Imported food dollars,cents,20.0
+agfeds,2022,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,192087.5
+agfeds,2023,All,Industry group bill,Advertising,cents,2.2
+agfeds,2023,All,Industry group bill,Advertising,usd_m,44099.8
+agfeds,2023,All,Industry group bill,Agribusiness,cents,3.1
+agfeds,2023,All,Industry group bill,Agribusiness,usd_m,61822.5
+agfeds,2023,All,Industry group bill,Crops,cents,3.0
+agfeds,2023,All,Industry group bill,Crops,usd_m,59301.8
+agfeds,2023,All,Industry group bill,Energy,cents,3.6
+agfeds,2023,All,Industry group bill,Energy,usd_m,70706.6
+agfeds,2023,All,Industry group bill,Finance and insurance,cents,5.0
+agfeds,2023,All,Industry group bill,Finance and insurance,usd_m,98651.2
+agfeds,2023,All,Industry group bill,Food processing,cents,17.2
+agfeds,2023,All,Industry group bill,Food processing,usd_m,338180.2
+agfeds,2023,All,Industry group bill,Food retail,cents,14.5
+agfeds,2023,All,Industry group bill,Food retail,usd_m,286562.8
+agfeds,2023,All,Industry group bill,Food services,cents,34.5
+agfeds,2023,All,Industry group bill,Food services,usd_m,680695.8
+agfeds,2023,All,Industry group bill,Food wholesale,cents,6.8
+agfeds,2023,All,Industry group bill,Food wholesale,usd_m,134077.7
+agfeds,2023,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.9
+agfeds,2023,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,18549.8
+agfeds,2023,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2023,All,Industry group bill,Legal and accounting,usd_m,27439.1
+agfeds,2023,All,Industry group bill,Livestock,cents,3.2
+agfeds,2023,All,Industry group bill,Livestock,usd_m,63191.5
+agfeds,2023,All,Industry group bill,Transportation and storage,cents,4.4
+agfeds,2023,All,Industry group bill,Transportation and storage,usd_m,86886.1
+agfeds,2023,All,Industry group total,Industry group total,cents,100.0
+agfeds,2023,All,Industry group total,Industry group total,usd_m,1970165.1
+agfeds,2023,All,Marketing bill,Farm share,cents,12.7
+agfeds,2023,All,Marketing bill,Farm value,usd_m,249757.0
+agfeds,2023,All,Marketing bill,Marketing share,cents,87.3
+agfeds,2023,All,Marketing bill,Marketing value,usd_m,1720468.7
+agfeds,2023,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2023,All,Total spending by production source,Domestic food dollars,usd_m,1970225.7
+agfeds,2023,All,Total spending by production source,Imported food dollars,cents,18.0
+agfeds,2023,All,Total spending by production source,Imported food dollars,usd_m,353864.6
+agfeds,2023,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2023,Food-at-home,Industry group bill,Advertising,usd_m,16223.2
+agfeds,2023,Food-at-home,Industry group bill,Agribusiness,cents,4.7
+agfeds,2023,Food-at-home,Industry group bill,Agribusiness,usd_m,41586.6
+agfeds,2023,Food-at-home,Industry group bill,Crops,cents,4.4
+agfeds,2023,Food-at-home,Industry group bill,Crops,usd_m,39497.1
+agfeds,2023,Food-at-home,Industry group bill,Energy,cents,3.6
+agfeds,2023,Food-at-home,Industry group bill,Energy,usd_m,32261.8
+agfeds,2023,Food-at-home,Industry group bill,Finance and insurance,cents,4.4
+agfeds,2023,Food-at-home,Industry group bill,Finance and insurance,usd_m,38800.3
+agfeds,2023,Food-at-home,Industry group bill,Food processing,cents,27.4
+agfeds,2023,Food-at-home,Industry group bill,Food processing,usd_m,243124.4
+agfeds,2023,Food-at-home,Industry group bill,Food retail,cents,28.4
+agfeds,2023,Food-at-home,Industry group bill,Food retail,usd_m,251902.6
+agfeds,2023,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2023,Food-at-home,Industry group bill,Food services,usd_m,4146.6
+agfeds,2023,Food-at-home,Industry group bill,Food wholesale,cents,11.4
+agfeds,2023,Food-at-home,Industry group bill,Food wholesale,usd_m,101139.6
+agfeds,2023,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2023,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11310.8
+agfeds,2023,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2023,Food-at-home,Industry group bill,Legal and accounting,usd_m,12233.8
+agfeds,2023,Food-at-home,Industry group bill,Livestock,cents,4.5
+agfeds,2023,Food-at-home,Industry group bill,Livestock,usd_m,39650.6
+agfeds,2023,Food-at-home,Industry group bill,Transportation and storage,cents,6.4
+agfeds,2023,Food-at-home,Industry group bill,Transportation and storage,usd_m,56635.4
+agfeds,2023,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2023,Food-at-home,Industry group total,Industry group total,usd_m,888512.9
+agfeds,2023,Food-at-home,Marketing bill,Farm share,cents,18.4
+agfeds,2023,Food-at-home,Marketing bill,Farm value,usd_m,163553.2
+agfeds,2023,Food-at-home,Marketing bill,Marketing share,cents,81.6
+agfeds,2023,Food-at-home,Marketing bill,Marketing value,usd_m,724989.8
+agfeds,2023,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2023,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,888543.0
+agfeds,2023,Food-at-home,Total spending by production source,Imported food dollars,cents,16.9
+agfeds,2023,Food-at-home,Total spending by production source,Imported food dollars,usd_m,150540.2
+agfeds,2023,Food-away-from-home,Industry group bill,Advertising,cents,2.6
+agfeds,2023,Food-away-from-home,Industry group bill,Advertising,usd_m,27876.6
+agfeds,2023,Food-away-from-home,Industry group bill,Agribusiness,cents,1.9
+agfeds,2023,Food-away-from-home,Industry group bill,Agribusiness,usd_m,20236.0
+agfeds,2023,Food-away-from-home,Industry group bill,Crops,cents,1.8
+agfeds,2023,Food-away-from-home,Industry group bill,Crops,usd_m,19804.7
+agfeds,2023,Food-away-from-home,Industry group bill,Energy,cents,3.6
+agfeds,2023,Food-away-from-home,Industry group bill,Energy,usd_m,38444.8
+agfeds,2023,Food-away-from-home,Industry group bill,Finance and insurance,cents,5.5
+agfeds,2023,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,59850.9
+agfeds,2023,Food-away-from-home,Industry group bill,Food processing,cents,8.8
+agfeds,2023,Food-away-from-home,Industry group bill,Food processing,usd_m,95055.9
+agfeds,2023,Food-away-from-home,Industry group bill,Food retail,cents,3.2
+agfeds,2023,Food-away-from-home,Industry group bill,Food retail,usd_m,34660.2
+agfeds,2023,Food-away-from-home,Industry group bill,Food services,cents,62.5
+agfeds,2023,Food-away-from-home,Industry group bill,Food services,usd_m,676549.2
+agfeds,2023,Food-away-from-home,Industry group bill,Food wholesale,cents,3.0
+agfeds,2023,Food-away-from-home,Industry group bill,Food wholesale,usd_m,32938.1
+agfeds,2023,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.7
+agfeds,2023,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7239.0
+agfeds,2023,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2023,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,15205.3
+agfeds,2023,Food-away-from-home,Industry group bill,Livestock,cents,2.2
+agfeds,2023,Food-away-from-home,Industry group bill,Livestock,usd_m,23541.0
+agfeds,2023,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.8
+agfeds,2023,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,30250.7
+agfeds,2023,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2023,Food-away-from-home,Industry group total,Industry group total,usd_m,1081652.3
+agfeds,2023,Food-away-from-home,Marketing bill,Farm share,cents,8.0
+agfeds,2023,Food-away-from-home,Marketing bill,Farm value,usd_m,86203.8
+agfeds,2023,Food-away-from-home,Marketing bill,Marketing share,cents,92.0
+agfeds,2023,Food-away-from-home,Marketing bill,Marketing value,usd_m,995478.9
+agfeds,2023,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2023,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,1081682.7
+agfeds,2023,Food-away-from-home,Total spending by production source,Imported food dollars,cents,18.8
+agfeds,2023,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,203324.5
+agfeds,2024,All,Industry group bill,Advertising,cents,2.3
+agfeds,2024,All,Industry group bill,Advertising,usd_m,45614.3
+agfeds,2024,All,Industry group bill,Agribusiness,cents,3.3
+agfeds,2024,All,Industry group bill,Agribusiness,usd_m,65873.5
+agfeds,2024,All,Industry group bill,Crops,cents,2.8
+agfeds,2024,All,Industry group bill,Crops,usd_m,56203.8
+agfeds,2024,All,Industry group bill,Energy,cents,3.2
+agfeds,2024,All,Industry group bill,Energy,usd_m,65531.3
+agfeds,2024,All,Industry group bill,Finance and insurance,cents,4.9
+agfeds,2024,All,Industry group bill,Finance and insurance,usd_m,99940.4
+agfeds,2024,All,Industry group bill,Food processing,cents,17.5
+agfeds,2024,All,Industry group bill,Food processing,usd_m,353937.5
+agfeds,2024,All,Industry group bill,Food retail,cents,14.5
+agfeds,2024,All,Industry group bill,Food retail,usd_m,293273.5
+agfeds,2024,All,Industry group bill,Food services,cents,35.0
+agfeds,2024,All,Industry group bill,Food services,usd_m,707833.1
+agfeds,2024,All,Industry group bill,Food wholesale,cents,6.8
+agfeds,2024,All,Industry group bill,Food wholesale,usd_m,136391.4
+agfeds,2024,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.0
+agfeds,2024,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,19459.7
+agfeds,2024,All,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2024,All,Industry group bill,Legal and accounting,usd_m,28031.9
+agfeds,2024,All,Industry group bill,Livestock,cents,3.0
+agfeds,2024,All,Industry group bill,Livestock,usd_m,61100.9
+agfeds,2024,All,Industry group bill,Transportation and storage,cents,4.3
+agfeds,2024,All,Industry group bill,Transportation and storage,usd_m,86689.2
+agfeds,2024,All,Industry group total,Industry group total,cents,100.0
+agfeds,2024,All,Industry group total,Industry group total,usd_m,2019880.5
+agfeds,2024,All,Marketing bill,Farm share,cents,12.4
+agfeds,2024,All,Marketing bill,Farm value,usd_m,250661.6
+agfeds,2024,All,Marketing bill,Marketing share,cents,87.6
+agfeds,2024,All,Marketing bill,Marketing value,usd_m,1769246.1
+agfeds,2024,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2024,All,Total spending by production source,Domestic food dollars,usd_m,2019907.7
+agfeds,2024,All,Total spending by production source,Imported food dollars,cents,19.7
+agfeds,2024,All,Total spending by production source,Imported food dollars,usd_m,397244.7
+agfeds,2024,Food-at-home,Industry group bill,Advertising,cents,1.8
+agfeds,2024,Food-at-home,Industry group bill,Advertising,usd_m,16280.9
+agfeds,2024,Food-at-home,Industry group bill,Agribusiness,cents,5.0
+agfeds,2024,Food-at-home,Industry group bill,Agribusiness,usd_m,44789.3
+agfeds,2024,Food-at-home,Industry group bill,Crops,cents,4.2
+agfeds,2024,Food-at-home,Industry group bill,Crops,usd_m,37673.4
+agfeds,2024,Food-at-home,Industry group bill,Energy,cents,3.2
+agfeds,2024,Food-at-home,Industry group bill,Energy,usd_m,28641.7
+agfeds,2024,Food-at-home,Industry group bill,Finance and insurance,cents,4.3
+agfeds,2024,Food-at-home,Industry group bill,Finance and insurance,usd_m,38411.9
+agfeds,2024,Food-at-home,Industry group bill,Food processing,cents,27.9
+agfeds,2024,Food-at-home,Industry group bill,Food processing,usd_m,252048.7
+agfeds,2024,Food-at-home,Industry group bill,Food retail,cents,28.6
+agfeds,2024,Food-at-home,Industry group bill,Food retail,usd_m,257882.9
+agfeds,2024,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2024,Food-at-home,Industry group bill,Food services,usd_m,4145.9
+agfeds,2024,Food-at-home,Industry group bill,Food wholesale,cents,11.4
+agfeds,2024,Food-at-home,Industry group bill,Food wholesale,usd_m,102690.5
+agfeds,2024,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2024,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11983.7
+agfeds,2024,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2024,Food-at-home,Industry group bill,Legal and accounting,usd_m,12228.0
+agfeds,2024,Food-at-home,Industry group bill,Livestock,cents,4.4
+agfeds,2024,Food-at-home,Industry group bill,Livestock,usd_m,39535.8
+agfeds,2024,Food-at-home,Industry group bill,Transportation and storage,cents,6.3
+agfeds,2024,Food-at-home,Industry group bill,Transportation and storage,usd_m,56486.1
+agfeds,2024,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2024,Food-at-home,Industry group total,Industry group total,usd_m,902798.6
+agfeds,2024,Food-at-home,Marketing bill,Farm share,cents,18.5
+agfeds,2024,Food-at-home,Marketing bill,Farm value,usd_m,166627.5
+agfeds,2024,Food-at-home,Marketing bill,Marketing share,cents,81.5
+agfeds,2024,Food-at-home,Marketing bill,Marketing value,usd_m,736183.8
+agfeds,2024,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2024,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,902811.3
+agfeds,2024,Food-at-home,Total spending by production source,Imported food dollars,cents,18.2
+agfeds,2024,Food-at-home,Total spending by production source,Imported food dollars,usd_m,164150.2
+agfeds,2024,Food-away-from-home,Industry group bill,Advertising,cents,2.6
+agfeds,2024,Food-away-from-home,Industry group bill,Advertising,usd_m,29333.4
+agfeds,2024,Food-away-from-home,Industry group bill,Agribusiness,cents,1.9
+agfeds,2024,Food-away-from-home,Industry group bill,Agribusiness,usd_m,21084.2
+agfeds,2024,Food-away-from-home,Industry group bill,Crops,cents,1.7
+agfeds,2024,Food-away-from-home,Industry group bill,Crops,usd_m,18530.4
+agfeds,2024,Food-away-from-home,Industry group bill,Energy,cents,3.3
+agfeds,2024,Food-away-from-home,Industry group bill,Energy,usd_m,36889.6
+agfeds,2024,Food-away-from-home,Industry group bill,Finance and insurance,cents,5.5
+agfeds,2024,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,61528.5
+agfeds,2024,Food-away-from-home,Industry group bill,Food processing,cents,9.1
+agfeds,2024,Food-away-from-home,Industry group bill,Food processing,usd_m,101888.9
+agfeds,2024,Food-away-from-home,Industry group bill,Food retail,cents,3.2
+agfeds,2024,Food-away-from-home,Industry group bill,Food retail,usd_m,35390.7
+agfeds,2024,Food-away-from-home,Industry group bill,Food services,cents,63.0
+agfeds,2024,Food-away-from-home,Industry group bill,Food services,usd_m,703687.2
+agfeds,2024,Food-away-from-home,Industry group bill,Food wholesale,cents,3.0
+agfeds,2024,Food-away-from-home,Industry group bill,Food wholesale,usd_m,33701.0
+agfeds,2024,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.7
+agfeds,2024,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7475.9
+agfeds,2024,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2024,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,15803.9
+agfeds,2024,Food-away-from-home,Industry group bill,Livestock,cents,1.9
+agfeds,2024,Food-away-from-home,Industry group bill,Livestock,usd_m,21565.1
+agfeds,2024,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.7
+agfeds,2024,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,30203.1
+agfeds,2024,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2024,Food-away-from-home,Industry group total,Industry group total,usd_m,1117081.9
+agfeds,2024,Food-away-from-home,Marketing bill,Farm share,cents,7.5
+agfeds,2024,Food-away-from-home,Marketing bill,Farm value,usd_m,84034.1
+agfeds,2024,Food-away-from-home,Marketing bill,Marketing share,cents,92.5
+agfeds,2024,Food-away-from-home,Marketing bill,Marketing value,usd_m,1033062.3
+agfeds,2024,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2024,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,1117096.3
+agfeds,2024,Food-away-from-home,Total spending by production source,Imported food dollars,cents,20.9
+agfeds,2024,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,233094.6
+agfeds,2025,All,Industry group bill,Advertising,cents,2.4
+agfeds,2025,All,Industry group bill,Advertising,usd_m,48977.4
+agfeds,2025,All,Industry group bill,Agribusiness,cents,3.3
+agfeds,2025,All,Industry group bill,Agribusiness,usd_m,68507.2
+agfeds,2025,All,Industry group bill,Crops,cents,2.4
+agfeds,2025,All,Industry group bill,Crops,usd_m,49547.0
+agfeds,2025,All,Industry group bill,Energy,cents,3.2
+agfeds,2025,All,Industry group bill,Energy,usd_m,65781.1
+agfeds,2025,All,Industry group bill,Finance and insurance,cents,5.3
+agfeds,2025,All,Industry group bill,Finance and insurance,usd_m,110168.9
+agfeds,2025,All,Industry group bill,Food processing,cents,17.2
+agfeds,2025,All,Industry group bill,Food processing,usd_m,357924.6
+agfeds,2025,All,Industry group bill,Food retail,cents,14.3
+agfeds,2025,All,Industry group bill,Food retail,usd_m,298703.8
+agfeds,2025,All,Industry group bill,Food services,cents,35.5
+agfeds,2025,All,Industry group bill,Food services,usd_m,740047.2
+agfeds,2025,All,Industry group bill,Food wholesale,cents,6.3
+agfeds,2025,All,Industry group bill,Food wholesale,usd_m,131134.3
+agfeds,2025,All,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.9
+agfeds,2025,All,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,19261.4
+agfeds,2025,All,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2025,All,Industry group bill,Legal and accounting,usd_m,30246.9
+agfeds,2025,All,Industry group bill,Livestock,cents,3.5
+agfeds,2025,All,Industry group bill,Livestock,usd_m,73670.4
+agfeds,2025,All,Industry group bill,Transportation and storage,cents,4.3
+agfeds,2025,All,Industry group bill,Transportation and storage,usd_m,89248.5
+agfeds,2025,All,Industry group total,Industry group total,cents,100.0
+agfeds,2025,All,Industry group total,Industry group total,usd_m,2083218.7
+agfeds,2025,All,Marketing bill,Farm share,cents,12.6
+agfeds,2025,All,Marketing bill,Farm value,usd_m,261527.3
+agfeds,2025,All,Marketing bill,Marketing share,cents,87.4
+agfeds,2025,All,Marketing bill,Marketing value,usd_m,1821770.2
+agfeds,2025,All,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2025,All,Total spending by production source,Domestic food dollars,usd_m,2083297.5
+agfeds,2025,All,Total spending by production source,Imported food dollars,cents,20.6
+agfeds,2025,All,Total spending by production source,Imported food dollars,usd_m,428457.4
+agfeds,2025,Food-at-home,Industry group bill,Advertising,cents,1.9
+agfeds,2025,Food-at-home,Industry group bill,Advertising,usd_m,17206.8
+agfeds,2025,Food-at-home,Industry group bill,Agribusiness,cents,5.1
+agfeds,2025,Food-at-home,Industry group bill,Agribusiness,usd_m,46698.8
+agfeds,2025,Food-at-home,Industry group bill,Crops,cents,3.6
+agfeds,2025,Food-at-home,Industry group bill,Crops,usd_m,33316.8
+agfeds,2025,Food-at-home,Industry group bill,Energy,cents,3.2
+agfeds,2025,Food-at-home,Industry group bill,Energy,usd_m,29095.8
+agfeds,2025,Food-at-home,Industry group bill,Finance and insurance,cents,4.5
+agfeds,2025,Food-at-home,Industry group bill,Finance and insurance,usd_m,41643.9
+agfeds,2025,Food-at-home,Industry group bill,Food processing,cents,27.9
+agfeds,2025,Food-at-home,Industry group bill,Food processing,usd_m,257519.7
+agfeds,2025,Food-at-home,Industry group bill,Food retail,cents,28.4
+agfeds,2025,Food-at-home,Industry group bill,Food retail,usd_m,261953.4
+agfeds,2025,Food-at-home,Industry group bill,Food services,cents,0.5
+agfeds,2025,Food-at-home,Industry group bill,Food services,usd_m,4247.6
+agfeds,2025,Food-at-home,Industry group bill,Food wholesale,cents,10.8
+agfeds,2025,Food-at-home,Industry group bill,Food wholesale,usd_m,99266.2
+agfeds,2025,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,1.3
+agfeds,2025,Food-at-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,11912.4
+agfeds,2025,Food-at-home,Industry group bill,Legal and accounting,cents,1.4
+agfeds,2025,Food-at-home,Industry group bill,Legal and accounting,usd_m,12911.3
+agfeds,2025,Food-at-home,Industry group bill,Livestock,cents,5.2
+agfeds,2025,Food-at-home,Industry group bill,Livestock,usd_m,47599.5
+agfeds,2025,Food-at-home,Industry group bill,Transportation and storage,cents,6.3
+agfeds,2025,Food-at-home,Industry group bill,Transportation and storage,usd_m,58380.3
+agfeds,2025,Food-at-home,Industry group total,Industry group total,cents,100.0
+agfeds,2025,Food-at-home,Industry group total,Industry group total,usd_m,921752.4
+agfeds,2025,Food-at-home,Marketing bill,Farm share,cents,18.9
+agfeds,2025,Food-at-home,Marketing bill,Farm value,usd_m,173982.5
+agfeds,2025,Food-at-home,Marketing bill,Marketing share,cents,81.1
+agfeds,2025,Food-at-home,Marketing bill,Marketing value,usd_m,747813.9
+agfeds,2025,Food-at-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2025,Food-at-home,Total spending by production source,Domestic food dollars,usd_m,921796.5
+agfeds,2025,Food-at-home,Total spending by production source,Imported food dollars,cents,19.0
+agfeds,2025,Food-at-home,Total spending by production source,Imported food dollars,usd_m,174991.4
+agfeds,2025,Food-away-from-home,Industry group bill,Advertising,cents,2.7
+agfeds,2025,Food-away-from-home,Industry group bill,Advertising,usd_m,31770.7
+agfeds,2025,Food-away-from-home,Industry group bill,Agribusiness,cents,1.9
+agfeds,2025,Food-away-from-home,Industry group bill,Agribusiness,usd_m,21808.5
+agfeds,2025,Food-away-from-home,Industry group bill,Crops,cents,1.4
+agfeds,2025,Food-away-from-home,Industry group bill,Crops,usd_m,16230.2
+agfeds,2025,Food-away-from-home,Industry group bill,Energy,cents,3.2
+agfeds,2025,Food-away-from-home,Industry group bill,Energy,usd_m,36685.3
+agfeds,2025,Food-away-from-home,Industry group bill,Finance and insurance,cents,5.9
+agfeds,2025,Food-away-from-home,Industry group bill,Finance and insurance,usd_m,68525.0
+agfeds,2025,Food-away-from-home,Industry group bill,Food processing,cents,8.6
+agfeds,2025,Food-away-from-home,Industry group bill,Food processing,usd_m,100404.9
+agfeds,2025,Food-away-from-home,Industry group bill,Food retail,cents,3.2
+agfeds,2025,Food-away-from-home,Industry group bill,Food retail,usd_m,36750.4
+agfeds,2025,Food-away-from-home,Industry group bill,Food services,cents,63.3
+agfeds,2025,Food-away-from-home,Industry group bill,Food services,usd_m,735799.6
+agfeds,2025,Food-away-from-home,Industry group bill,Food wholesale,cents,2.7
+agfeds,2025,Food-away-from-home,Industry group bill,Food wholesale,usd_m,31868.0
+agfeds,2025,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",cents,0.6
+agfeds,2025,Food-away-from-home,Industry group bill,"Forestry, fishing, and agricultural services",usd_m,7349.0
+agfeds,2025,Food-away-from-home,Industry group bill,Legal and accounting,cents,1.5
+agfeds,2025,Food-away-from-home,Industry group bill,Legal and accounting,usd_m,17335.6
+agfeds,2025,Food-away-from-home,Industry group bill,Livestock,cents,2.2
+agfeds,2025,Food-away-from-home,Industry group bill,Livestock,usd_m,26071.0
+agfeds,2025,Food-away-from-home,Industry group bill,Transportation and storage,cents,2.7
+agfeds,2025,Food-away-from-home,Industry group bill,Transportation and storage,usd_m,30868.2
+agfeds,2025,Food-away-from-home,Industry group total,Industry group total,cents,100.0
+agfeds,2025,Food-away-from-home,Industry group total,Industry group total,usd_m,1161466.3
+agfeds,2025,Food-away-from-home,Marketing bill,Farm share,cents,7.5
+agfeds,2025,Food-away-from-home,Marketing bill,Farm value,usd_m,87544.7
+agfeds,2025,Food-away-from-home,Marketing bill,Marketing share,cents,92.5
+agfeds,2025,Food-away-from-home,Marketing bill,Marketing value,usd_m,1073956.3
+agfeds,2025,Food-away-from-home,Total spending by production source,Domestic food dollars,cents,100.0
+agfeds,2025,Food-away-from-home,Total spending by production source,Domestic food dollars,usd_m,1161501.0
+agfeds,2025,Food-away-from-home,Total spending by production source,Imported food dollars,cents,21.8
+agfeds,2025,Food-away-from-home,Total spending by production source,Imported food dollars,usd_m,253466.0
+model2011,1993,All,Industry group bill,Farm production,cents,8.6
+model2011,1993,All,Industry group bill,Total,cents,100.0
+model2011,1994,All,Industry group bill,Farm production,cents,8.6
+model2011,1994,All,Industry group bill,Total,cents,100.0
+model2011,1995,All,Industry group bill,Farm production,cents,8.7
+model2011,1995,All,Industry group bill,Total,cents,100.0
+model2011,1996,All,Industry group bill,Farm production,cents,8.8
+model2011,1996,All,Industry group bill,Total,cents,100.0
+model2011,1997,All,Industry group bill,Farm production,cents,8.9
+model2011,1997,All,Industry group bill,Total,cents,100.0
+model2011,1998,All,Industry group bill,Farm production,cents,8.4
+model2011,1998,All,Industry group bill,Total,cents,100.0
+model2011,1999,All,Industry group bill,Farm production,cents,7.5
+model2011,1999,All,Industry group bill,Total,cents,100.0
+model2011,2000,All,Industry group bill,Farm production,cents,7.6
+model2011,2000,All,Industry group bill,Total,cents,100.0
+model2011,2001,All,Industry group bill,Farm production,cents,7.6
+model2011,2001,All,Industry group bill,Total,cents,100.0
+model2011,2002,All,Industry group bill,Farm production,cents,7.4
+model2011,2002,All,Industry group bill,Total,cents,100.0
+model2011,2003,All,Industry group bill,Farm production,cents,8.6
+model2011,2003,All,Industry group bill,Total,cents,100.0
+model2011,2004,All,Industry group bill,Farm production,cents,9.8
+model2011,2004,All,Industry group bill,Total,cents,100.0
+model2011,2005,All,Industry group bill,Farm production,cents,8.7
+model2011,2005,All,Industry group bill,Total,cents,100.0
+model2011,2006,All,Industry group bill,Farm production,cents,8.3
+model2011,2006,All,Industry group bill,Total,cents,100.0
+model2011,2007,All,Industry group bill,Farm production,cents,9.2
+model2011,2007,All,Industry group bill,Total,cents,100.0
+model2011,2008,All,Industry group bill,Farm production,cents,8.8
+model2011,2008,All,Industry group bill,Total,cents,100.0
+model2011,2009,All,Industry group bill,Farm production,cents,8.1
+model2011,2009,All,Industry group bill,Total,cents,100.0
+model2011,2010,All,Industry group bill,Farm production,cents,8.6
+model2011,2010,All,Industry group bill,Total,cents,100.0
+model2011,2011,All,Industry group bill,Farm production,cents,9.8
+model2011,2011,All,Industry group bill,Total,cents,100.0
+model2011,2012,All,Industry group bill,Farm production,cents,9.3
+model2011,2012,All,Industry group bill,Total,cents,100.0
+model2011,2013,All,Industry group bill,Farm production,cents,10.1
+model2011,2013,All,Industry group bill,Total,cents,100.0
+model2011,2014,All,Industry group bill,Farm production,cents,9.3
+model2011,2014,All,Industry group bill,Total,cents,100.0
+model2011,2015,All,Industry group bill,Farm production,cents,8.3
+model2011,2015,All,Industry group bill,Total,cents,100.0
+model2011,2016,All,Industry group bill,Farm production,cents,7.6
+model2011,2016,All,Industry group bill,Total,cents,100.0
+model2011,2017,All,Industry group bill,Farm production,cents,7.8
+model2011,2017,All,Industry group bill,Total,cents,100.0
+model2011,2018,All,Industry group bill,Farm production,cents,7.6
+model2011,2018,All,Industry group bill,Total,cents,100.0
+model2011,2019,All,Industry group bill,Farm production,cents,6.9
+model2011,2019,All,Industry group bill,Total,cents,100.0
+model2011,2020,All,Industry group bill,Farm production,cents,6.7
+model2011,2020,All,Industry group bill,Total,cents,100.0
+model2011,2021,All,Industry group bill,Farm production,cents,7.9
+model2011,2021,All,Industry group bill,Total,cents,100.0
+model2011,2022,All,Industry group bill,Farm production,cents,9.3
+model2011,2022,All,Industry group bill,Total,cents,100.0
+model2011,2023,All,Industry group bill,Farm production,cents,9.1
+model2011,2023,All,Industry group bill,Total,cents,100.0

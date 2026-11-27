@@ -1,0 +1,3778 @@
+# source: https://ourworldindata.org/grapher/wheat-yields
+# source: https://ourworldindata.org/grapher/maize-yields
+# source: https://ourworldindata.org/grapher/rice-yields
+# source: https://ourworldindata.org/grapher/daily-per-capita-caloric-supply
+# source: https://ourworldindata.org/grapher/cereal-production
+# retrieved: 2026-11-27
+series,entity,year,value
+wheat-yields,Africa,1961,0.6929824
+wheat-yields,Africa,1962,0.9235801
+wheat-yields,Africa,1963,0.89896965
+wheat-yields,Africa,1964,0.87364256
+wheat-yields,Africa,1965,0.8286706
+wheat-yields,Africa,1966,0.7604273
+wheat-yields,Africa,1967,0.84226596
+wheat-yields,Africa,1968,0.992187
+wheat-yields,Africa,1969,0.81034726
+wheat-yields,Africa,1970,0.87034416
+wheat-yields,Africa,1971,0.98275036
+wheat-yields,Africa,1972,0.9918382
+wheat-yields,Africa,1973,0.94019485
+wheat-yields,Africa,1974,0.97112334
+wheat-yields,Africa,1975,1.1004364
+wheat-yields,Africa,1976,1.117727
+wheat-yields,Africa,1977,0.9269387
+wheat-yields,Africa,1978,1.0459137
+wheat-yields,Africa,1979,1.0458215
+wheat-yields,Africa,1980,1.098791
+wheat-yields,Africa,1981,1.1340243
+wheat-yields,Africa,1982,1.2749557
+wheat-yields,Africa,1983,1.1230675
+wheat-yields,Africa,1984,1.1438055
+wheat-yields,Africa,1985,1.2476212
+wheat-yields,Africa,1986,1.4427772
+wheat-yields,Africa,1987,1.5012807
+wheat-yields,Africa,1988,1.7497356
+wheat-yields,Africa,1989,1.4811363
+wheat-yields,Africa,1990,1.5981054
+wheat-yields,Africa,1991,1.8941562
+wheat-yields,Africa,1992,1.6494831
+wheat-yields,Africa,1993,1.6275635
+wheat-yields,Africa,1994,1.9151169
+wheat-yields,Africa,1995,1.6212035
+wheat-yields,Africa,1996,2.0284464
+wheat-yields,Africa,1997,1.7976098
+wheat-yields,Africa,1998,1.8641545
+wheat-yields,Africa,1999,1.8099173
+wheat-yields,Africa,2000,1.751963
+wheat-yields,Africa,2001,2.024544
+wheat-yields,Africa,2002,2.1282947
+wheat-yields,Africa,2003,2.2131207
+wheat-yields,Africa,2004,2.2136872
+wheat-yields,Africa,2005,2.1353052
+wheat-yields,Africa,2006,2.4582982
+wheat-yields,Africa,2007,2.040909
+wheat-yields,Africa,2008,2.2847455
+wheat-yields,Africa,2009,2.5227864
+wheat-yields,Africa,2010,2.2841587
+wheat-yields,Africa,2011,2.5336885
+wheat-yields,Africa,2012,2.3930354
+wheat-yields,Africa,2013,2.7918887
+wheat-yields,Africa,2014,2.5699294
+wheat-yields,Africa,2015,2.8455842
+wheat-yields,Africa,2016,2.416796
+wheat-yields,Africa,2017,2.5538855
+wheat-yields,Africa,2018,2.9174192
+wheat-yields,Africa,2019,2.724889
+wheat-yields,Africa,2020,2.5313272
+wheat-yields,Africa,2021,3.1837223
+wheat-yields,Africa,2022,2.7435443
+wheat-yields,Africa,2023,2.7889767
+wheat-yields,Africa,2024,2.9367337
+wheat-yields,Bangladesh,1961,0.5738
+wheat-yields,Bangladesh,1962,0.6753
+wheat-yields,Bangladesh,1963,0.60690004
+wheat-yields,Bangladesh,1964,0.6011
+wheat-yields,Bangladesh,1965,0.6467
+wheat-yields,Bangladesh,1966,0.6473
+wheat-yields,Bangladesh,1967,0.79260004
+wheat-yields,Bangladesh,1968,0.758
+wheat-yields,Bangladesh,1969,0.79640007
+wheat-yields,Bangladesh,1970,0.874
+wheat-yields,Bangladesh,1971,0.8880001
+wheat-yields,Bangladesh,1972,0.9038
+wheat-yields,Bangladesh,1973,0.75720006
+wheat-yields,Bangladesh,1974,0.89870006
+wheat-yields,Bangladesh,1975,0.92600006
+wheat-yields,Bangladesh,1976,1.4535
+wheat-yields,Bangladesh,1977,1.6211001
+wheat-yields,Bangladesh,1978,1.8419001
+wheat-yields,Bangladesh,1979,1.866
+wheat-yields,Bangladesh,1980,1.899
+wheat-yields,Bangladesh,1981,1.8479002
+wheat-yields,Bangladesh,1982,1.8114
+wheat-yields,Bangladesh,1983,2.1090002
+wheat-yields,Bangladesh,1984,2.3021002
+wheat-yields,Bangladesh,1985,2.1647
+wheat-yields,Bangladesh,1986,1.9282
+wheat-yields,Bangladesh,1987,1.8657
+wheat-yields,Bangladesh,1988,1.7542
+wheat-yields,Bangladesh,1989,1.8246001
+wheat-yields,Bangladesh,1990,1.5034001
+wheat-yields,Bangladesh,1991,1.6767
+wheat-yields,Bangladesh,1992,1.8534001
+wheat-yields,Bangladesh,1993,1.8457
+wheat-yields,Bangladesh,1994,1.8390001
+wheat-yields,Bangladesh,1995,1.9483001
+wheat-yields,Bangladesh,1996,1.9531001
+wheat-yields,Bangladesh,1997,2.0544
+wheat-yields,Bangladesh,1998,2.2408001
+wheat-yields,Bangladesh,1999,2.1627
+wheat-yields,Bangladesh,2000,2.2104
+wheat-yields,Bangladesh,2001,2.1643002
+wheat-yields,Bangladesh,2002,2.1644
+wheat-yields,Bangladesh,2003,2.1327
+wheat-yields,Bangladesh,2004,1.9527
+wheat-yields,Bangladesh,2005,1.7478001
+wheat-yields,Bangladesh,2006,1.5344001
+wheat-yields,Bangladesh,2007,1.8471
+wheat-yields,Bangladesh,2008,2.1753001
+wheat-yields,Bangladesh,2009,2.1516001
+wheat-yields,Bangladesh,2010,2.3959
+wheat-yields,Bangladesh,2011,2.6012
+wheat-yields,Bangladesh,2012,2.7789001
+wheat-yields,Bangladesh,2013,3.0138001
+wheat-yields,Bangladesh,2014,3.0319
+wheat-yields,Bangladesh,2015,3.0860002
+wheat-yields,Bangladesh,2016,3.0310001
+wheat-yields,Bangladesh,2017,3.1576002
+wheat-yields,Bangladesh,2018,3.1302001
+wheat-yields,Bangladesh,2019,3.078
+wheat-yields,Bangladesh,2020,3.0970001
+wheat-yields,Bangladesh,2021,3.2996004
+wheat-yields,Bangladesh,2022,3.45
+wheat-yields,Bangladesh,2023,3.4946003
+wheat-yields,Bangladesh,2024,3.7611003
+wheat-yields,Brazil,1961,0.53300005
+wheat-yields,Brazil,1962,0.9491
+wheat-yields,Brazil,1963,0.4945
+wheat-yields,Brazil,1964,0.87650007
+wheat-yields,Brazil,1965,0.7636
+wheat-yields,Brazil,1966,0.85730004
+wheat-yields,Brazil,1967,0.75740004
+wheat-yields,Brazil,1968,0.88250005
+wheat-yields,Brazil,1969,0.97620004
+wheat-yields,Brazil,1970,0.9731
+wheat-yields,Brazil,1971,0.88650006
+wheat-yields,Brazil,1972,0.42370003
+wheat-yields,Brazil,1973,1.1044
+wheat-yields,Brazil,1974,1.1568002
+wheat-yields,Brazil,1975,0.61
+wheat-yields,Brazil,1976,0.90840006
+wheat-yields,Brazil,1977,0.65520006
+wheat-yields,Brazil,1978,0.95720005
+wheat-yields,Brazil,1979,0.7641
+wheat-yields,Brazil,1980,0.8653
+wheat-yields,Brazil,1981,1.1508001
+wheat-yields,Brazil,1982,0.646
+wheat-yields,Brazil,1983,1.1903001
+wheat-yields,Brazil,1984,1.1387
+wheat-yields,Brazil,1985,1.6140001
+wheat-yields,Brazil,1986,1.4466001
+wheat-yields,Brazil,1987,1.7654
+wheat-yields,Brazil,1988,1.6528001
+wheat-yields,Brazil,1989,1.6925001
+wheat-yields,Brazil,1990,1.154
+wheat-yields,Brazil,1991,1.4232
+wheat-yields,Brazil,1992,1.4295001
+wheat-yields,Brazil,1993,1.4825001
+wheat-yields,Brazil,1994,1.5541
+wheat-yields,Brazil,1995,1.542
+wheat-yields,Brazil,1996,1.8334001
+wheat-yields,Brazil,1997,1.6359001
+wheat-yields,Brazil,1998,1.6111001
+wheat-yields,Brazil,1999,1.9699001
+wheat-yields,Brazil,2000,1.5156001
+wheat-yields,Brazil,2001,1.9488001
+wheat-yields,Brazil,2002,1.4754001
+wheat-yields,Brazil,2003,2.4035
+wheat-yields,Brazil,2004,2.0728002
+wheat-yields,Brazil,2005,1.9735001
+wheat-yields,Brazil,2006,1.5927
+wheat-yields,Brazil,2007,2.2199
+wheat-yields,Brazil,2008,2.5497
+wheat-yields,Brazil,2009,2.0802
+wheat-yields,Brazil,2010,2.8288002
+wheat-yields,Brazil,2011,2.6602
+wheat-yields,Brazil,2012,2.3100002
+wheat-yields,Brazil,2013,2.7491002
+wheat-yields,Brazil,2014,2.2088
+wheat-yields,Brazil,2015,2.2278001
+wheat-yields,Brazil,2016,3.1551003
+wheat-yields,Brazil,2017,2.279
+wheat-yields,Brazil,2018,2.6292
+wheat-yields,Brazil,2019,2.6578002
+wheat-yields,Brazil,2020,2.6079001
+wheat-yields,Brazil,2021,2.8621001
+wheat-yields,Brazil,2022,3.2658002
+wheat-yields,Brazil,2023,2.3212001
+wheat-yields,Brazil,2024,2.6127
+wheat-yields,China,1961,0.5578
+wheat-yields,China,1962,0.69290006
+wheat-yields,China,1963,0.77800006
+wheat-yields,China,1964,0.8211
+wheat-yields,China,1965,1.0217
+wheat-yields,China,1966,1.0580001
+wheat-yields,China,1967,1.1270001
+wheat-yields,China,1968,1.1146001
+wheat-yields,China,1969,1.0855
+wheat-yields,China,1970,1.1475
+wheat-yields,China,1971,1.2718002
+wheat-yields,China,1972,1.3695
+wheat-yields,China,1973,1.3337001
+wheat-yields,China,1974,1.5116
+wheat-yields,China,1975,1.6397
+wheat-yields,China,1976,1.7754002
+wheat-yields,China,1977,1.465
+wheat-yields,China,1978,1.8449001
+wheat-yields,China,1979,2.1395001
+wheat-yields,China,1980,1.8914001
+wheat-yields,China,1981,2.1091
+wheat-yields,China,1982,2.4517
+wheat-yields,China,1983,2.8017
+wheat-yields,China,1984,2.9691002
+wheat-yields,China,1985,2.9367
+wheat-yields,China,1986,3.0402
+wheat-yields,China,1987,2.9829001
+wheat-yields,China,1988,2.9679
+wheat-yields,China,1989,3.0430002
+wheat-yields,China,1990,3.1941001
+wheat-yields,China,1991,3.1004
+wheat-yields,China,1992,3.3312001
+wheat-yields,China,1993,3.5188003
+wheat-yields,China,1994,3.4263003
+wheat-yields,China,1995,3.5415
+wheat-yields,China,1996,3.7341003
+wheat-yields,China,1997,4.1019
+wheat-yields,China,1998,3.6852002
+wheat-yields,China,1999,3.9466002
+wheat-yields,China,2000,3.7382002
+wheat-yields,China,2001,3.8061004
+wheat-yields,China,2002,3.7766004
+wheat-yields,China,2003,3.9318001
+wheat-yields,China,2004,4.2519
+wheat-yields,China,2005,4.2753
+wheat-yields,China,2006,4.5935
+wheat-yields,China,2007,4.6076
+wheat-yields,China,2008,4.762
+wheat-yields,China,2009,4.7390003
+wheat-yields,China,2010,4.7486005
+wheat-yields,China,2011,4.8376
+wheat-yields,China,2012,4.9869003
+wheat-yields,China,2013,5.0556
+wheat-yields,China,2014,5.2435
+wheat-yields,China,2015,5.3927007
+wheat-yields,China,2016,5.3965
+wheat-yields,China,2017,5.4841003
+wheat-yields,China,2018,5.4166
+wheat-yields,China,2019,5.6298
+wheat-yields,China,2020,5.7421002
+wheat-yields,China,2021,5.8106003
+wheat-yields,China,2022,5.8554
+wheat-yields,China,2023,5.7811003
+wheat-yields,China,2024,5.9396005
+wheat-yields,Ethiopia,1993,1.5487
+wheat-yields,Ethiopia,1994,1.0749
+wheat-yields,Ethiopia,1995,1.3106
+wheat-yields,Ethiopia,1996,1.2114
+wheat-yields,Ethiopia,1997,1.2917
+wheat-yields,Ethiopia,1998,1.3738002
+wheat-yields,Ethiopia,1999,1.115
+wheat-yields,Ethiopia,2000,1.1631
+wheat-yields,Ethiopia,2001,1.3259001
+wheat-yields,Ethiopia,2002,1.4354001
+wheat-yields,Ethiopia,2003,1.3874
+wheat-yields,Ethiopia,2004,1.4691
+wheat-yields,Ethiopia,2005,1.5567
+wheat-yields,Ethiopia,2006,1.5204
+wheat-yields,Ethiopia,2007,1.6711
+wheat-yields,Ethiopia,2008,1.6245
+wheat-yields,Ethiopia,2009,1.8269001
+wheat-yields,Ethiopia,2010,1.8209001
+wheat-yields,Ethiopia,2011,1.8225001
+wheat-yields,Ethiopia,2012,2.1102002
+wheat-yields,Ethiopia,2013,2.4446
+wheat-yields,Ethiopia,2014,2.5433002
+wheat-yields,Ethiopia,2015,2.7941003
+wheat-yields,Ethiopia,2016,2.4971
+wheat-yields,Ethiopia,2017,2.6681
+wheat-yields,Ethiopia,2018,2.7088
+wheat-yields,Ethiopia,2019,2.8216002
+wheat-yields,Ethiopia,2020,2.9036002
+wheat-yields,Ethiopia,2021,2.9223
+wheat-yields,Ethiopia,2022,2.9791002
+wheat-yields,Ethiopia,2023,2.8134
+wheat-yields,Ethiopia,2024,2.904
+wheat-yields,India,1961,0.8507001
+wheat-yields,India,1962,0.88960004
+wheat-yields,India,1963,0.7929001
+wheat-yields,India,1964,0.72990006
+wheat-yields,India,1965,0.9132001
+wheat-yields,India,1966,0.82680005
+wheat-yields,India,1967,0.8874001
+wheat-yields,India,1968,1.1028001
+wheat-yields,India,1969,1.1688001
+wheat-yields,India,1970,1.2086
+wheat-yields,India,1971,1.3066001
+wheat-yields,India,1972,1.3799001
+wheat-yields,India,1973,1.2708001
+wheat-yields,India,1974,1.1719
+wheat-yields,India,1975,1.3384001
+wheat-yields,India,1976,1.4103001
+wheat-yields,India,1977,1.3866
+wheat-yields,India,1978,1.4798001
+wheat-yields,India,1979,1.5683001
+wheat-yields,India,1980,1.4356
+wheat-yields,India,1981,1.6299001
+wheat-yields,India,1982,1.6913002
+wheat-yields,India,1983,1.8158002
+wheat-yields,India,1984,1.8432001
+wheat-yields,India,1985,1.8701
+wheat-yields,India,1986,2.046
+wheat-yields,India,1987,1.9162
+wheat-yields,India,1988,2.0019002
+wheat-yields,India,1989,2.2444
+wheat-yields,India,1990,2.1211002
+wheat-yields,India,1991,2.2814
+wheat-yields,India,1992,2.394
+wheat-yields,India,1993,2.3267
+wheat-yields,India,1994,2.3796003
+wheat-yields,India,1995,2.559
+wheat-yields,India,1996,2.4828002
+wheat-yields,India,1997,2.6789
+wheat-yields,India,1998,2.4852002
+wheat-yields,India,1999,2.5901003
+wheat-yields,India,2000,2.7785
+wheat-yields,India,2001,2.7081003
+wheat-yields,India,2002,2.7621002
+wheat-yields,India,2003,2.6100001
+wheat-yields,India,2004,2.7132
+wheat-yields,India,2005,2.6016002
+wheat-yields,India,2006,2.6188002
+wheat-yields,India,2007,2.7079
+wheat-yields,India,2008,2.8022
+wheat-yields,India,2009,2.9071002
+wheat-yields,India,2010,2.8395002
+wheat-yields,India,2011,2.9886003
+wheat-yields,India,2012,3.1775002
+wheat-yields,India,2013,3.1538002
+wheat-yields,India,2014,3.1457002
+wheat-yields,India,2015,2.7496002
+wheat-yields,India,2016,3.0339
+wheat-yields,India,2017,3.1999002
+wheat-yields,India,2018,3.3682
+wheat-yields,India,2019,3.5334
+wheat-yields,India,2020,3.4398003
+wheat-yields,India,2021,3.5208
+wheat-yields,India,2022,3.5373
+wheat-yields,India,2023,3.5207002
+wheat-yields,India,2024,3.5590003
+wheat-yields,Mexico,1961,1.6758001
+wheat-yields,Mexico,1962,1.9462
+wheat-yields,Mexico,1963,2.0788002
+wheat-yields,Mexico,1964,2.6922002
+wheat-yields,Mexico,1965,2.5055
+wheat-yields,Mexico,1966,2.2542
+wheat-yields,Mexico,1967,2.7267
+wheat-yields,Mexico,1968,2.6317
+wheat-yields,Mexico,1969,2.7649
+wheat-yields,Mexico,1970,3.0202
+wheat-yields,Mexico,1971,2.9810002
+wheat-yields,Mexico,1972,2.6345
+wheat-yields,Mexico,1973,3.2646003
+wheat-yields,Mexico,1974,3.6022
+wheat-yields,Mexico,1975,3.5956004
+wheat-yields,Mexico,1976,3.7615001
+wheat-yields,Mexico,1977,3.4644
+wheat-yields,Mexico,1978,3.6663003
+wheat-yields,Mexico,1979,3.9138002
+wheat-yields,Mexico,1980,3.8476002
+wheat-yields,Mexico,1981,3.7141004
+wheat-yields,Mexico,1982,4.3563
+wheat-yields,Mexico,1983,4.0410004
+wheat-yields,Mexico,1984,4.3577003
+wheat-yields,Mexico,1985,4.2843
+wheat-yields,Mexico,1986,3.9671004
+wheat-yields,Mexico,1987,4.4686003
+wheat-yields,Mexico,1988,4.0154
+wheat-yields,Mexico,1989,3.8235002
+wheat-yields,Mexico,1990,4.2143
+wheat-yields,Mexico,1991,4.1272006
+wheat-yields,Mexico,1992,3.953
+wheat-yields,Mexico,1993,4.0821004
+wheat-yields,Mexico,1994,4.3034
+wheat-yields,Mexico,1995,3.732
+wheat-yields,Mexico,1996,4.1706004
+wheat-yields,Mexico,1997,4.7347
+wheat-yields,Mexico,1998,4.2077003
+wheat-yields,Mexico,1999,4.631
+wheat-yields,Mexico,2000,4.9355
+wheat-yields,Mexico,2001,4.7661004
+wheat-yields,Mexico,2002,5.0999002
+wheat-yields,Mexico,2003,4.4912004
+wheat-yields,Mexico,2004,4.4871
+wheat-yields,Mexico,2005,4.7517004
+wheat-yields,Mexico,2006,5.2274003
+wheat-yields,Mexico,2007,5.0824003
+wheat-yields,Mexico,2008,5.0134
+wheat-yields,Mexico,2009,4.9688
+wheat-yields,Mexico,2010,5.4185004
+wheat-yields,Mexico,2011,5.4778
+wheat-yields,Mexico,2012,5.6568003
+wheat-yields,Mexico,2013,5.2934003
+wheat-yields,Mexico,2014,5.1935
+wheat-yields,Mexico,2015,4.5256004
+wheat-yields,Mexico,2016,5.3388
+wheat-yields,Mexico,2017,5.2967005
+wheat-yields,Mexico,2018,5.4373
+wheat-yields,Mexico,2019,5.5308
+wheat-yields,Mexico,2020,5.3212004
+wheat-yields,Mexico,2021,5.9944
+wheat-yields,Mexico,2022,6.0603
+wheat-yields,Mexico,2023,6.2031
+wheat-yields,Mexico,2024,5.6585
+wheat-yields,Nigeria,1961,1.7778001
+wheat-yields,Nigeria,1962,1.7778001
+wheat-yields,Nigeria,1963,1.7778001
+wheat-yields,Nigeria,1964,1.8182
+wheat-yields,Nigeria,1965,1.8182
+wheat-yields,Nigeria,1966,1.8182
+wheat-yields,Nigeria,1967,1.9091
+wheat-yields,Nigeria,1968,1.8182
+wheat-yields,Nigeria,1969,1.8182
+wheat-yields,Nigeria,1970,1.7273002
+wheat-yields,Nigeria,1971,1.7391001
+wheat-yields,Nigeria,1972,1.7391001
+wheat-yields,Nigeria,1973,1.4286001
+wheat-yields,Nigeria,1974,1.5000001
+wheat-yields,Nigeria,1975,1.6364001
+wheat-yields,Nigeria,1976,1.8000001
+wheat-yields,Nigeria,1977,2.0
+wheat-yields,Nigeria,1978,2.0
+wheat-yields,Nigeria,1979,2.2
+wheat-yields,Nigeria,1980,2.4
+wheat-yields,Nigeria,1981,2.6000001
+wheat-yields,Nigeria,1982,2.6000001
+wheat-yields,Nigeria,1983,1.8571
+wheat-yields,Nigeria,1984,1.6875001
+wheat-yields,Nigeria,1985,2.0545
+wheat-yields,Nigeria,1986,1.9701
+wheat-yields,Nigeria,1987,1.9306
+wheat-yields,Nigeria,1988,1.25
+wheat-yields,Nigeria,1989,1.2
+wheat-yields,Nigeria,1990,0.83330005
+wheat-yields,Nigeria,1991,1.2
+wheat-yields,Nigeria,1992,1.3333001
+wheat-yields,Nigeria,1993,2.3286002
+wheat-yields,Nigeria,1994,2.3467
+wheat-yields,Nigeria,1995,2.18
+wheat-yields,Nigeria,1996,2.0435002
+wheat-yields,Nigeria,1997,2.64
+wheat-yields,Nigeria,1998,2.0
+wheat-yields,Nigeria,1999,2.012
+wheat-yields,Nigeria,2000,1.4038001
+wheat-yields,Nigeria,2001,0.98080003
+wheat-yields,Nigeria,2002,0.9818
+wheat-yields,Nigeria,2003,1.0357
+wheat-yields,Nigeria,2004,1.069
+wheat-yields,Nigeria,2005,1.1
+wheat-yields,Nigeria,2006,1.1270001
+wheat-yields,Nigeria,2007,1.6923001
+wheat-yields,Nigeria,2008,1.6563001
+wheat-yields,Nigeria,2009,1.6667
+wheat-yields,Nigeria,2010,1.4844002
+wheat-yields,Nigeria,2011,1.2791001
+wheat-yields,Nigeria,2012,1.0189
+wheat-yields,Nigeria,2013,1.0
+wheat-yields,Nigeria,2014,1.3043001
+wheat-yields,Nigeria,2015,1.0
+wheat-yields,Nigeria,2016,1.0
+wheat-yields,Nigeria,2017,1.6779001
+wheat-yields,Nigeria,2018,1.7142
+wheat-yields,Nigeria,2019,1.6826
+wheat-yields,Nigeria,2020,1.1
+wheat-yields,Nigeria,2021,3.1255002
+wheat-yields,Nigeria,2022,2.1827002
+wheat-yields,Nigeria,2023,1.5866001
+wheat-yields,Nigeria,2024,1.5741
+wheat-yields,Pakistan,1961,0.82220006
+wheat-yields,Pakistan,1962,0.81780005
+wheat-yields,Pakistan,1963,0.83030003
+wheat-yields,Pakistan,1964,0.8292
+wheat-yields,Pakistan,1965,0.8631
+wheat-yields,Pakistan,1966,0.75970006
+wheat-yields,Pakistan,1967,0.81100005
+wheat-yields,Pakistan,1968,1.0727
+wheat-yields,Pakistan,1969,1.0744001
+wheat-yields,Pakistan,1970,1.171
+wheat-yields,Pakistan,1971,1.0833001
+wheat-yields,Pakistan,1972,1.1887
+wheat-yields,Pakistan,1973,1.2465
+wheat-yields,Pakistan,1974,1.248
+wheat-yields,Pakistan,1975,1.3202
+wheat-yields,Pakistan,1976,1.4222
+wheat-yields,Pakistan,1977,1.4310001
+wheat-yields,Pakistan,1978,1.3156
+wheat-yields,Pakistan,1979,1.4879001
+wheat-yields,Pakistan,1980,1.5680001
+wheat-yields,Pakistan,1981,1.6431
+wheat-yields,Pakistan,1982,1.5651001
+wheat-yields,Pakistan,1983,1.6781001
+wheat-yields,Pakistan,1984,1.4819001
+wheat-yields,Pakistan,1985,1.6123002
+wheat-yields,Pakistan,1986,1.8806001
+wheat-yields,Pakistan,1987,1.5593001
+wheat-yields,Pakistan,1988,1.7343001
+wheat-yields,Pakistan,1989,1.8655001
+wheat-yields,Pakistan,1990,1.8249002
+wheat-yields,Pakistan,1991,1.8410001
+wheat-yields,Pakistan,1992,1.991
+wheat-yields,Pakistan,1993,1.9466001
+wheat-yields,Pakistan,1994,1.8935001
+wheat-yields,Pakistan,1995,2.0811002
+wheat-yields,Pakistan,1996,2.0184002
+wheat-yields,Pakistan,1997,2.0533001
+wheat-yields,Pakistan,1998,2.2376
+wheat-yields,Pakistan,1999,2.1698
+wheat-yields,Pakistan,2000,2.4907
+wheat-yields,Pakistan,2001,2.3254
+wheat-yields,Pakistan,2002,2.2621002
+wheat-yields,Pakistan,2003,2.3878002
+wheat-yields,Pakistan,2004,2.3733
+wheat-yields,Pakistan,2005,2.5858002
+wheat-yields,Pakistan,2006,2.5186002
+wheat-yields,Pakistan,2007,2.7156003
+wheat-yields,Pakistan,2008,2.4514
+wheat-yields,Pakistan,2009,2.6568003
+wheat-yields,Pakistan,2010,2.5528002
+wheat-yields,Pakistan,2011,2.8328001
+wheat-yields,Pakistan,2012,2.7138002
+wheat-yields,Pakistan,2013,2.7957
+wheat-yields,Pakistan,2014,2.8241003
+wheat-yields,Pakistan,2015,2.7256002
+wheat-yields,Pakistan,2016,2.779
+wheat-yields,Pakistan,2017,2.9729002
+wheat-yields,Pakistan,2018,2.8505
+wheat-yields,Pakistan,2019,2.8059
+wheat-yields,Pakistan,2020,2.8675
+wheat-yields,Pakistan,2021,2.9956002
+wheat-yields,Pakistan,2022,2.9196002
+wheat-yields,Pakistan,2023,3.1176002
+wheat-yields,Pakistan,2024,3.2683003
+wheat-yields,United States,1961,1.6070001
+wheat-yields,United States,1962,1.6809001
+wheat-yields,United States,1963,1.6949002
+wheat-yields,United States,1964,1.7344002
+wheat-yields,United States,1965,1.7853001
+wheat-yields,United States,1966,1.7688001
+wheat-yields,United States,1967,1.7375001
+wheat-yields,United States,1968,1.9116001
+wheat-yields,United States,1969,2.058
+wheat-yields,United States,1970,2.0865002
+wheat-yields,United States,1971,2.2829
+wheat-yields,United States,1972,2.1983001
+wheat-yields,United States,1973,2.1248002
+wheat-yields,United States,1974,1.8333001
+wheat-yields,United States,1975,2.0582001
+wheat-yields,United States,1976,2.0375001
+wheat-yields,United States,1977,2.0629
+wheat-yields,United States,1978,2.1136003
+wheat-yields,United States,1979,2.298
+wheat-yields,United States,1980,2.2513
+wheat-yields,United States,1981,2.3229
+wheat-yields,United States,1982,2.3859
+wheat-yields,United States,1983,2.6509001
+wheat-yields,United States,1984,2.6073003
+wheat-yields,United States,1985,2.5197
+wheat-yields,United States,1986,2.3167
+wheat-yields,United States,1987,2.5330002
+wheat-yields,United States,1988,2.2913
+wheat-yields,United States,1989,2.2024
+wheat-yields,United States,1990,2.6567001
+wheat-yields,United States,1991,2.3038
+wheat-yields,United States,1992,2.6433
+wheat-yields,United States,1993,2.5699
+wheat-yields,United States,1994,2.5270002
+wheat-yields,United States,1995,2.4065
+wheat-yields,United States,1996,2.4389
+wheat-yields,United States,1997,2.6574001
+wheat-yields,United States,1998,2.9034
+wheat-yields,United States,1999,2.8726003
+wheat-yields,United States,2000,2.8238
+wheat-yields,United States,2001,2.7018
+wheat-yields,United States,2002,2.3567002
+wheat-yields,United States,2003,2.9712
+wheat-yields,United States,2004,2.9026003
+wheat-yields,United States,2005,2.8231003
+wheat-yields,United States,2006,2.5986001
+wheat-yields,United States,2007,2.7046003
+wheat-yields,United States,2008,3.0175002
+wheat-yields,United States,2009,2.9897
+wheat-yields,United States,2010,3.1167002
+wheat-yields,United States,2011,2.9422002
+wheat-yields,United States,2012,3.1154
+wheat-yields,United States,2013,3.1673002
+wheat-yields,United States,2014,2.9378002
+wheat-yields,United States,2015,2.9299
+wheat-yields,United States,2016,3.5408003
+wheat-yields,United States,2017,3.1175
+wheat-yields,United States,2018,3.2005002
+wheat-yields,United States,2019,3.4746003
+wheat-yields,United States,2020,3.3417
+wheat-yields,United States,2021,2.9805002
+wheat-yields,United States,2022,3.1265001
+wheat-yields,United States,2023,3.2694001
+wheat-yields,United States,2024,3.4462001
+wheat-yields,World,1961,1.0889001
+wheat-yields,World,1962,1.2060001
+wheat-yields,World,1963,1.1320001
+wheat-yields,World,1964,1.2413001
+wheat-yields,World,1965,1.2151
+wheat-yields,World,1966,1.4079001
+wheat-yields,World,1967,1.3392
+wheat-yields,World,1968,1.4534001
+wheat-yields,World,1969,1.4174001
+wheat-yields,World,1970,1.4941001
+wheat-yields,World,1971,1.6245
+wheat-yields,World,1972,1.6046001
+wheat-yields,World,1973,1.6836001
+wheat-yields,World,1974,1.6155001
+wheat-yields,World,1975,1.5701001
+wheat-yields,World,1976,1.7911
+wheat-yields,World,1977,1.6724001
+wheat-yields,World,1978,1.9328002
+wheat-yields,World,1979,1.8522
+wheat-yields,World,1980,1.8554001
+wheat-yields,World,1981,1.8800001
+wheat-yields,World,1982,1.9992001
+wheat-yields,World,1983,2.1258001
+wheat-yields,World,1984,2.2201002
+wheat-yields,World,1985,2.1719
+wheat-yields,World,1986,2.3213003
+wheat-yields,World,1987,2.2900002
+wheat-yields,World,1988,2.2926002
+wheat-yields,World,1989,2.3732002
+wheat-yields,World,1990,2.5626001
+wheat-yields,World,1991,2.4522002
+wheat-yields,World,1992,2.5436003
+wheat-yields,World,1993,2.5366
+wheat-yields,World,1994,2.4510002
+wheat-yields,World,1995,2.5107
+wheat-yields,World,1996,2.5765002
+wheat-yields,World,1997,2.7139
+wheat-yields,World,1998,2.6956003
+wheat-yields,World,1999,2.7553003
+wheat-yields,World,2000,2.7217002
+wheat-yields,World,2001,2.7511003
+wheat-yields,World,2002,2.6896002
+wheat-yields,World,2003,2.7187002
+wheat-yields,World,2004,2.9204001
+wheat-yields,World,2005,2.8544
+wheat-yields,World,2006,2.8334
+wheat-yields,World,2007,2.8231003
+wheat-yields,World,2008,3.0695002
+wheat-yields,World,2009,3.0491002
+wheat-yields,World,2010,3.0166001
+wheat-yields,World,2011,3.1607
+wheat-yields,World,2012,3.0652
+wheat-yields,World,2013,3.2669
+wheat-yields,World,2014,3.3147001
+wheat-yields,World,2015,3.3404
+wheat-yields,World,2016,3.4525
+wheat-yields,World,2017,3.5232
+wheat-yields,World,2018,3.4366002
+wheat-yields,World,2019,3.5575001
+wheat-yields,World,2020,3.5288002
+wheat-yields,World,2021,3.5703
+wheat-yields,World,2022,3.7141004
+wheat-yields,World,2023,3.6325002
+wheat-yields,World,2024,3.6374002
+maize-yields,Africa,1961,1.044379
+maize-yields,Africa,1962,1.1111689
+maize-yields,Africa,1963,1.1093851
+maize-yields,Africa,1964,0.9796274
+maize-yields,Africa,1965,1.0272174
+maize-yields,Africa,1966,1.0728608
+maize-yields,Africa,1967,1.3685412
+maize-yields,Africa,1968,1.0753323
+maize-yields,Africa,1969,1.141232
+maize-yields,Africa,1970,1.138214
+maize-yields,Africa,1971,1.3476732
+maize-yields,Africa,1972,1.3790939
+maize-yields,Africa,1973,1.0653592
+maize-yields,Africa,1974,1.460527
+maize-yields,Africa,1975,1.4205558
+maize-yields,Africa,1976,1.3860685
+maize-yields,Africa,1977,1.5092945
+maize-yields,Africa,1978,1.5377105
+maize-yields,Africa,1979,1.3985182
+maize-yields,Africa,1980,1.5579107
+maize-yields,Africa,1981,1.8503281
+maize-yields,Africa,1982,1.4668893
+maize-yields,Africa,1983,1.1567289
+maize-yields,Africa,1984,1.2021037
+maize-yields,Africa,1985,1.4991443
+maize-yields,Africa,1986,1.4492595
+maize-yields,Africa,1987,1.3412173
+maize-yields,Africa,1988,1.5070975
+maize-yields,Africa,1989,1.6926906
+maize-yields,Africa,1990,1.5132146
+maize-yields,Africa,1991,1.492688
+maize-yields,Africa,1992,1.1359539
+maize-yields,Africa,1993,1.5569904
+maize-yields,Africa,1994,1.6023508
+maize-yields,Africa,1995,1.3933525
+maize-yields,Africa,1996,1.71521
+maize-yields,Africa,1997,1.6209304
+maize-yields,Africa,1998,1.5910225
+maize-yields,Africa,1999,1.7457585
+maize-yields,Africa,2000,1.8062387
+maize-yields,Africa,2001,1.7286527
+maize-yields,Africa,2002,1.7577416
+maize-yields,Africa,2003,1.6127423
+maize-yields,Africa,2004,1.7380594
+maize-yields,Africa,2005,1.7018687
+maize-yields,Africa,2006,1.7822644
+maize-yields,Africa,2007,1.7284044
+maize-yields,Africa,2008,1.8743075
+maize-yields,Africa,2009,2.004817
+maize-yields,Africa,2010,2.023272
+maize-yields,Africa,2011,1.8735206
+maize-yields,Africa,2012,1.9869872
+maize-yields,Africa,2013,1.9013484
+maize-yields,Africa,2014,2.086478
+maize-yields,Africa,2015,1.9534067
+maize-yields,Africa,2016,1.8848375
+maize-yields,Africa,2017,2.1533194
+maize-yields,Africa,2018,1.9839029
+maize-yields,Africa,2019,2.0182087
+maize-yields,Africa,2020,2.1669354
+maize-yields,Africa,2021,2.2192137
+maize-yields,Africa,2022,2.188455
+maize-yields,Africa,2023,2.1437035
+maize-yields,Africa,2024,2.0696664
+maize-yields,Bangladesh,1961,0.79880005
+maize-yields,Bangladesh,1962,0.73840004
+maize-yields,Bangladesh,1963,0.77250004
+maize-yields,Bangladesh,1964,0.75320005
+maize-yields,Bangladesh,1965,0.75320005
+maize-yields,Bangladesh,1966,0.83330005
+maize-yields,Bangladesh,1967,0.93750006
+maize-yields,Bangladesh,1968,0.93750006
+maize-yields,Bangladesh,1969,0.93750006
+maize-yields,Bangladesh,1970,0.93750006
+maize-yields,Bangladesh,1971,0.71430004
+maize-yields,Bangladesh,1972,0.71430004
+maize-yields,Bangladesh,1973,0.8744001
+maize-yields,Bangladesh,1974,0.88780004
+maize-yields,Bangladesh,1975,0.90250003
+maize-yields,Bangladesh,1976,0.8974001
+maize-yields,Bangladesh,1977,0.84050006
+maize-yields,Bangladesh,1978,0.79910004
+maize-yields,Bangladesh,1979,0.72650003
+maize-yields,Bangladesh,1980,0.7146
+maize-yields,Bangladesh,1981,0.73
+maize-yields,Bangladesh,1982,0.73870003
+maize-yields,Bangladesh,1983,0.78290004
+maize-yields,Bangladesh,1984,0.81790006
+maize-yields,Bangladesh,1985,0.8669001
+maize-yields,Bangladesh,1986,0.9246
+maize-yields,Bangladesh,1987,0.9458
+maize-yields,Bangladesh,1988,0.9118
+maize-yields,Bangladesh,1989,0.94170004
+maize-yields,Bangladesh,1990,1.0015
+maize-yields,Bangladesh,1991,0.9781
+maize-yields,Bangladesh,1992,0.9319001
+maize-yields,Bangladesh,1993,0.9351
+maize-yields,Bangladesh,1994,0.9042001
+maize-yields,Bangladesh,1995,1.07
+maize-yields,Bangladesh,1996,1.0166
+maize-yields,Bangladesh,1997,1.0914
+maize-yields,Bangladesh,1998,0.73390007
+maize-yields,Bangladesh,1999,1.2346001
+maize-yields,Bangladesh,2000,2.0597
+maize-yields,Bangladesh,2001,3.2216003
+maize-yields,Bangladesh,2002,4.0349
+maize-yields,Bangladesh,2003,4.0334
+maize-yields,Bangladesh,2004,4.8243
+maize-yields,Bangladesh,2005,5.3311005
+maize-yields,Bangladesh,2006,5.2998
+maize-yields,Bangladesh,2007,5.9812007
+maize-yields,Bangladesh,2008,6.0172005
+maize-yields,Bangladesh,2009,5.6831
+maize-yields,Bangladesh,2010,5.8378
+maize-yields,Bangladesh,2011,6.1512003
+maize-yields,Bangladesh,2012,6.5838003
+maize-yields,Bangladesh,2013,6.5953
+maize-yields,Bangladesh,2014,6.9151006
+maize-yields,Bangladesh,2015,6.9841003
+maize-yields,Bangladesh,2016,7.3008003
+maize-yields,Bangladesh,2017,7.7598
+maize-yields,Bangladesh,2018,8.210401
+maize-yields,Bangladesh,2019,8.0192
+maize-yields,Bangladesh,2020,8.5123005
+maize-yields,Bangladesh,2021,8.579
+maize-yields,Bangladesh,2022,8.9118
+maize-yields,Bangladesh,2023,9.242701
+maize-yields,Bangladesh,2024,9.246401
+maize-yields,Brazil,1961,1.3123001
+maize-yields,Brazil,1962,1.3048002
+maize-yields,Brazil,1963,1.3092
+maize-yields,Brazil,1964,1.1606001
+maize-yields,Brazil,1965,1.3809001
+maize-yields,Brazil,1966,1.3066001
+maize-yields,Brazil,1967,1.3828001
+maize-yields,Brazil,1968,1.3369001
+maize-yields,Brazil,1969,1.3149
+maize-yields,Brazil,1970,1.4421
+maize-yields,Brazil,1971,1.3393002
+maize-yields,Brazil,1972,1.4130001
+maize-yields,Brazil,1973,1.4295001
+maize-yields,Brazil,1974,1.5248001
+maize-yields,Brazil,1975,1.5048001
+maize-yields,Brazil,1976,1.5967001
+maize-yields,Brazil,1977,1.6322
+maize-yields,Brazil,1978,1.2197
+maize-yields,Brazil,1979,1.4406
+maize-yields,Brazil,1980,1.779
+maize-yields,Brazil,1981,1.8330001
+maize-yields,Brazil,1982,1.7308002
+maize-yields,Brazil,1983,1.7496
+maize-yields,Brazil,1984,1.761
+maize-yields,Brazil,1985,1.8662001
+maize-yields,Brazil,1986,1.6486001
+maize-yields,Brazil,1987,1.9843001
+maize-yields,Brazil,1988,1.8775
+maize-yields,Brazil,1989,2.0582001
+maize-yields,Brazil,1990,1.8735001
+maize-yields,Brazil,1991,1.8084002
+maize-yields,Brazil,1992,2.2828002
+maize-yields,Brazil,1993,2.5321002
+maize-yields,Brazil,1994,2.3629
+maize-yields,Brazil,1995,2.6005
+maize-yields,Brazil,1996,2.4761002
+maize-yields,Brazil,1997,2.6228
+maize-yields,Brazil,1998,2.7964
+maize-yields,Brazil,1999,2.7765002
+maize-yields,Brazil,2000,2.7182
+maize-yields,Brazil,2001,3.4019
+maize-yields,Brazil,2002,3.0559
+maize-yields,Brazil,2003,3.7273002
+maize-yields,Brazil,2004,3.3671002
+maize-yields,Brazil,2005,3.0403001
+maize-yields,Brazil,2006,3.3823001
+maize-yields,Brazil,2007,3.7852
+maize-yields,Brazil,2008,4.0800004
+maize-yields,Brazil,2009,3.7145002
+maize-yields,Brazil,2010,4.3667
+maize-yields,Brazil,2011,4.2107005
+maize-yields,Brazil,2012,5.0057006
+maize-yields,Brazil,2013,5.2536
+maize-yields,Brazil,2014,5.1761003
+maize-yields,Brazil,2015,5.5353003
+maize-yields,Brazil,2016,4.2877
+maize-yields,Brazil,2017,5.6183
+maize-yields,Brazil,2018,5.1076
+maize-yields,Brazil,2019,5.7734003
+maize-yields,Brazil,2020,5.6953
+maize-yields,Brazil,2021,4.6497006
+maize-yields,Brazil,2022,5.2093
+maize-yields,Brazil,2023,5.913
+maize-yields,Brazil,2024,5.4257007
+maize-yields,China,1961,1.1842
+maize-yields,China,1962,1.2695
+maize-yields,China,1963,1.3398001
+maize-yields,China,1964,1.4784001
+maize-yields,China,1965,1.5107
+maize-yields,China,1966,1.7135
+maize-yields,China,1967,1.9344001
+maize-yields,China,1968,1.8169001
+maize-yields,China,1969,1.7763002
+maize-yields,China,1970,2.0885
+maize-yields,China,1971,2.1456
+maize-yields,China,1972,1.9238001
+maize-yields,China,1973,2.3336003
+maize-yields,China,1974,2.4677
+maize-yields,China,1975,2.5416002
+maize-yields,China,1976,2.5066001
+maize-yields,China,1977,2.5155
+maize-yields,China,1978,2.8030002
+maize-yields,China,1979,2.9852002
+maize-yields,China,1980,3.0789
+maize-yields,China,1981,3.0513003
+maize-yields,China,1982,3.2691002
+maize-yields,China,1983,3.6235
+maize-yields,China,1984,3.9602
+maize-yields,China,1985,3.6072001
+maize-yields,China,1986,3.7051003
+maize-yields,China,1987,3.9205003
+maize-yields,China,1988,3.9281003
+maize-yields,China,1989,3.8781004
+maize-yields,China,1990,4.524
+maize-yields,China,1991,4.5783
+maize-yields,China,1992,4.5327005
+maize-yields,China,1993,4.9630003
+maize-yields,China,1994,4.6935
+maize-yields,China,1995,4.9169
+maize-yields,China,1996,5.2033
+maize-yields,China,1997,4.3874
+maize-yields,China,1998,5.2678
+maize-yields,China,1999,4.9447002
+maize-yields,China,2000,4.5975003
+maize-yields,China,2001,4.6985
+maize-yields,China,2002,4.8714004
+maize-yields,China,2003,4.8126
+maize-yields,China,2004,5.1203
+maize-yields,China,2005,5.2873
+maize-yields,China,2006,5.3263
+maize-yields,China,2007,5.1667004
+maize-yields,China,2008,5.5557003
+maize-yields,China,2009,5.2585
+maize-yields,China,2010,5.4592004
+maize-yields,China,2011,5.7475004
+maize-yields,China,2012,5.8697004
+maize-yields,China,2013,6.0159
+maize-yields,China,2014,5.8089004
+maize-yields,China,2015,5.8929
+maize-yields,China,2016,5.9671
+maize-yields,China,2017,6.1103
+maize-yields,China,2018,6.1043
+maize-yields,China,2019,6.3173003
+maize-yields,China,2020,6.3177004
+maize-yields,China,2021,6.2910004
+maize-yields,China,2022,6.4361005
+maize-yields,China,2023,6.5321
+maize-yields,China,2024,6.5918
+maize-yields,Ethiopia,1993,1.7364001
+maize-yields,Ethiopia,1994,1.1235001
+maize-yields,Ethiopia,1995,1.3590001
+maize-yields,Ethiopia,1996,1.6826
+maize-yields,Ethiopia,1997,1.7381
+maize-yields,Ethiopia,1998,1.6175001
+maize-yields,Ethiopia,1999,1.715
+maize-yields,Ethiopia,2000,1.6204001
+maize-yields,Ethiopia,2001,1.7427
+maize-yields,Ethiopia,2002,1.8753002
+maize-yields,Ethiopia,2003,1.5319
+maize-yields,Ethiopia,2004,1.6132001
+maize-yields,Ethiopia,2005,2.006
+maize-yields,Ethiopia,2006,2.6404
+maize-yields,Ethiopia,2007,1.8232
+maize-yields,Ethiopia,2008,1.8834001
+maize-yields,Ethiopia,2009,1.9849001
+maize-yields,Ethiopia,2010,2.1926003
+maize-yields,Ethiopia,2011,2.2213001
+maize-yields,Ethiopia,2012,2.5933
+maize-yields,Ethiopia,2013,2.7403002
+maize-yields,Ethiopia,2014,2.9502
+maize-yields,Ethiopia,2015,2.7765002
+maize-yields,Ethiopia,2016,2.9468002
+maize-yields,Ethiopia,2017,3.3119001
+maize-yields,Ethiopia,2018,3.3368
+maize-yields,Ethiopia,2019,3.6552002
+maize-yields,Ethiopia,2020,3.7112002
+maize-yields,Ethiopia,2021,3.433
+maize-yields,Ethiopia,2022,3.4885
+maize-yields,Ethiopia,2023,3.4092002
+maize-yields,Ethiopia,2024,3.4436002
+maize-yields,India,1961,0.9567001
+maize-yields,India,1962,0.9922001
+maize-yields,India,1963,0.9954001
+maize-yields,India,1964,1.01
+maize-yields,India,1965,1.005
+maize-yields,India,1966,0.96450007
+maize-yields,India,1967,1.1228001
+maize-yields,India,1968,0.99740005
+maize-yields,India,1969,0.9679001
+maize-yields,India,1970,1.2791001
+maize-yields,India,1971,0.8999001
+maize-yields,India,1972,1.0943002
+maize-yields,India,1973,0.96480006
+maize-yields,India,1974,0.94810003
+maize-yields,India,1975,1.2031001
+maize-yields,India,1976,1.0601001
+maize-yields,India,1977,1.0511
+maize-yields,India,1978,1.0762
+maize-yields,India,1979,0.9794001
+maize-yields,India,1980,1.1586
+maize-yields,India,1981,1.1622
+maize-yields,India,1982,1.1448001
+maize-yields,India,1983,1.3521
+maize-yields,India,1984,1.4556
+maize-yields,India,1985,1.146
+maize-yields,India,1986,1.2819
+maize-yields,India,1987,1.0288001
+maize-yields,India,1988,1.3955001
+maize-yields,India,1989,1.6316
+maize-yields,India,1990,1.5178001
+maize-yields,India,1991,1.3763001
+maize-yields,India,1992,1.6227
+maize-yields,India,1993,1.5866001
+maize-yields,India,1994,1.4716
+maize-yields,India,1995,1.5503001
+maize-yields,India,1996,1.6780001
+maize-yields,India,1997,1.7477
+maize-yields,India,1998,1.7767
+maize-yields,India,1999,1.7848002
+maize-yields,India,2000,1.7992
+maize-yields,India,2001,1.9933002
+maize-yields,India,2002,1.6885
+maize-yields,India,2003,2.0159001
+maize-yields,India,2004,1.8682001
+maize-yields,India,2005,1.9557
+maize-yields,India,2006,1.8111
+maize-yields,India,2007,2.3158002
+maize-yields,India,2008,2.2765002
+maize-yields,India,2009,2.1461003
+maize-yields,India,2010,2.4838002
+maize-yields,India,2011,2.4935002
+maize-yields,India,2012,2.493
+maize-yields,India,2013,2.6459
+maize-yields,India,2014,2.5888002
+maize-yields,India,2015,2.6372
+maize-yields,India,2016,2.6863003
+maize-yields,India,2017,2.9375002
+maize-yields,India,2018,3.0234
+maize-yields,India,2019,2.9981003
+maize-yields,India,2020,3.1614
+maize-yields,India,2021,3.3033001
+maize-yields,India,2022,3.3954
+maize-yields,India,2023,3.3265002
+maize-yields,India,2024,3.5448003
+maize-yields,Indonesia,1961,0.92730004
+maize-yields,Indonesia,1962,1.0214001
+maize-yields,Indonesia,1963,0.92140007
+maize-yields,Indonesia,1964,1.0336
+maize-yields,Indonesia,1965,0.94320005
+maize-yields,Indonesia,1966,0.984
+maize-yields,Indonesia,1967,0.93020004
+maize-yields,Indonesia,1968,0.9832001
+maize-yields,Indonesia,1969,0.94170004
+maize-yields,Indonesia,1970,0.9614001
+maize-yields,Indonesia,1971,0.99230003
+maize-yields,Indonesia,1972,1.0437
+maize-yields,Indonesia,1973,1.0748001
+maize-yields,Indonesia,1974,1.1290001
+maize-yields,Indonesia,1975,1.1873001
+maize-yields,Indonesia,1976,1.2277
+maize-yields,Indonesia,1977,1.2245001
+maize-yields,Indonesia,1978,1.3321
+maize-yields,Indonesia,1979,1.3902
+maize-yields,Indonesia,1980,1.4592
+maize-yields,Indonesia,1981,1.526
+maize-yields,Indonesia,1982,1.5693002
+maize-yields,Indonesia,1983,1.6944001
+maize-yields,Indonesia,1984,1.7134001
+maize-yields,Indonesia,1985,1.7744001
+maize-yields,Indonesia,1986,1.8838001
+maize-yields,Indonesia,1987,1.9633001
+maize-yields,Indonesia,1988,1.9531001
+maize-yields,Indonesia,1989,2.1033
+maize-yields,Indonesia,1990,2.1323001
+maize-yields,Indonesia,1991,2.1505
+maize-yields,Indonesia,1992,2.203
+maize-yields,Indonesia,1993,2.1975
+maize-yields,Indonesia,1994,2.2091002
+maize-yields,Indonesia,1995,2.2580001
+maize-yields,Indonesia,1996,2.4862
+maize-yields,Indonesia,1997,2.6141002
+maize-yields,Indonesia,1998,2.6526003
+maize-yields,Indonesia,1999,2.6629
+maize-yields,Indonesia,2000,2.7649
+maize-yields,Indonesia,2001,2.8446002
+maize-yields,Indonesia,2002,3.0655003
+maize-yields,Indonesia,2003,3.2414
+maize-yields,Indonesia,2004,3.3439
+maize-yields,Indonesia,2005,3.4539
+maize-yields,Indonesia,2006,3.4699001
+maize-yields,Indonesia,2007,3.6601002
+maize-yields,Indonesia,2008,4.0776005
+maize-yields,Indonesia,2009,4.2372003
+maize-yields,Indonesia,2010,4.4359
+maize-yields,Indonesia,2011,4.5652003
+maize-yields,Indonesia,2012,4.8987
+maize-yields,Indonesia,2013,4.8441005
+maize-yields,Indonesia,2014,4.9540005
+maize-yields,Indonesia,2015,5.1784
+maize-yields,Indonesia,2016,5.3052006
+maize-yields,Indonesia,2017,5.2977004
+maize-yields,Indonesia,2018,5.307
+maize-yields,Indonesia,2019,6.1439004
+maize-yields,Indonesia,2020,5.5302005
+maize-yields,Indonesia,2021,5.7623
+maize-yields,Indonesia,2022,5.9787006
+maize-yields,Indonesia,2023,5.9668
+maize-yields,Indonesia,2024,5.94
+maize-yields,Mexico,1961,0.9934001
+maize-yields,Mexico,1962,0.9946
+maize-yields,Mexico,1963,0.98670006
+maize-yields,Mexico,1964,1.1332
+maize-yields,Mexico,1965,1.1578001
+maize-yields,Mexico,1966,1.1188
+maize-yields,Mexico,1967,1.1304001
+maize-yields,Mexico,1968,1.1806
+maize-yields,Mexico,1969,1.184
+maize-yields,Mexico,1970,1.1935
+maize-yields,Mexico,1971,1.2723001
+maize-yields,Mexico,1972,1.2648001
+maize-yields,Mexico,1973,1.1318
+maize-yields,Mexico,1974,1.1683002
+maize-yields,Mexico,1975,1.2621
+maize-yields,Mexico,1976,1.1819
+maize-yields,Mexico,1977,1.3572
+maize-yields,Mexico,1978,1.5199001
+maize-yields,Mexico,1979,1.5154
+maize-yields,Mexico,1980,1.8261001
+maize-yields,Mexico,1981,1.8240001
+maize-yields,Mexico,1982,1.7976
+maize-yields,Mexico,1983,1.7770001
+maize-yields,Mexico,1984,1.8554001
+maize-yields,Mexico,1985,1.8583001
+maize-yields,Mexico,1986,1.8406
+maize-yields,Mexico,1987,1.7058002
+maize-yields,Mexico,1988,1.6289
+maize-yields,Mexico,1989,1.6929001
+maize-yields,Mexico,1990,1.9942
+maize-yields,Mexico,1991,2.0515
+maize-yields,Mexico,1992,2.345
+maize-yields,Mexico,1993,2.4401002
+maize-yields,Mexico,1994,2.2255
+maize-yields,Mexico,1995,2.2883003
+maize-yields,Mexico,1996,2.2387002
+maize-yields,Mexico,1997,2.384
+maize-yields,Mexico,1998,2.3429
+maize-yields,Mexico,1999,2.4720001
+maize-yields,Mexico,2000,2.4620001
+maize-yields,Mexico,2001,2.5777001
+maize-yields,Mexico,2002,2.7105002
+maize-yields,Mexico,2003,2.7525
+maize-yields,Mexico,2004,2.8188002
+maize-yields,Mexico,2005,2.9276001
+maize-yields,Mexico,2006,3.0012002
+maize-yields,Mexico,2007,3.2063003
+maize-yields,Mexico,2008,3.3071003
+maize-yields,Mexico,2009,3.2368002
+maize-yields,Mexico,2010,3.2599
+maize-yields,Mexico,2011,2.9058
+maize-yields,Mexico,2012,3.1874
+maize-yields,Mexico,2013,3.1941001
+maize-yields,Mexico,2014,3.2964
+maize-yields,Mexico,2015,3.4782002
+maize-yields,Mexico,2016,3.7180002
+maize-yields,Mexico,2017,3.7888002
+maize-yields,Mexico,2018,3.8146002
+maize-yields,Mexico,2019,4.0697002
+maize-yields,Mexico,2020,3.8322
+maize-yields,Mexico,2021,3.8522
+maize-yields,Mexico,2022,3.8997002
+maize-yields,Mexico,2023,4.2805004
+maize-yields,Mexico,2024,3.7038002
+maize-yields,Nigeria,1961,0.8051
+maize-yields,Nigeria,1962,0.8848
+maize-yields,Nigeria,1963,1.0237001
+maize-yields,Nigeria,1964,0.76000005
+maize-yields,Nigeria,1965,0.82620007
+maize-yields,Nigeria,1966,0.85150003
+maize-yields,Nigeria,1967,0.8169001
+maize-yields,Nigeria,1968,1.0283
+maize-yields,Nigeria,1969,0.9154001
+maize-yields,Nigeria,1970,0.9959001
+maize-yields,Nigeria,1971,1.046
+maize-yields,Nigeria,1972,0.57310003
+maize-yields,Nigeria,1973,0.6485
+maize-yields,Nigeria,1974,0.91190004
+maize-yields,Nigeria,1975,1.3718001
+maize-yields,Nigeria,1976,1.1973001
+maize-yields,Nigeria,1977,1.0656
+maize-yields,Nigeria,1978,1.2678001
+maize-yields,Nigeria,1979,1.1482
+maize-yields,Nigeria,1980,1.3161
+maize-yields,Nigeria,1981,1.6438001
+maize-yields,Nigeria,1982,1.3777
+maize-yields,Nigeria,1983,0.9707001
+maize-yields,Nigeria,1984,1.139
+maize-yields,Nigeria,1985,1.1735001
+maize-yields,Nigeria,1986,1.2679001
+maize-yields,Nigeria,1987,1.3533001
+maize-yields,Nigeria,1988,1.6401
+maize-yields,Nigeria,1989,1.3950001
+maize-yields,Nigeria,1990,1.1301
+maize-yields,Nigeria,1991,1.1299001
+maize-yields,Nigeria,1992,1.1181
+maize-yields,Nigeria,1993,1.1848001
+maize-yields,Nigeria,1994,1.2720001
+maize-yields,Nigeria,1995,1.2666
+maize-yields,Nigeria,1996,1.3261
+maize-yields,Nigeria,1997,1.251
+maize-yields,Nigeria,1998,1.32
+maize-yields,Nigeria,1999,1.5998001
+maize-yields,Nigeria,2000,1.3001001
+maize-yields,Nigeria,2001,1.3999001
+maize-yields,Nigeria,2002,1.4899001
+maize-yields,Nigeria,2003,1.4999001
+maize-yields,Nigeria,2004,1.6002
+maize-yields,Nigeria,2005,1.6598002
+maize-yields,Nigeria,2006,1.8182
+maize-yields,Nigeria,2007,1.7049001
+maize-yields,Nigeria,2008,1.9571
+maize-yields,Nigeria,2009,2.1961002
+maize-yields,Nigeria,2010,1.8502
+maize-yields,Nigeria,2011,1.6271001
+maize-yields,Nigeria,2012,1.5118002
+maize-yields,Nigeria,2013,1.4616001
+maize-yields,Nigeria,2014,1.7002001
+maize-yields,Nigeria,2015,1.7188002
+maize-yields,Nigeria,2016,1.7837
+maize-yields,Nigeria,2017,1.6641
+maize-yields,Nigeria,2018,1.6716001
+maize-yields,Nigeria,2019,1.8572
+maize-yields,Nigeria,2020,2.0506003
+maize-yields,Nigeria,2021,2.0538
+maize-yields,Nigeria,2022,2.2326002
+maize-yields,Nigeria,2023,1.9391
+maize-yields,Nigeria,2024,2.0298002
+maize-yields,Pakistan,1961,1.0309001
+maize-yields,Pakistan,1962,1.0525
+maize-yields,Pakistan,1963,1.0522
+maize-yields,Pakistan,1964,1.0861
+maize-yields,Pakistan,1965,0.99560004
+maize-yields,Pakistan,1966,1.0608001
+maize-yields,Pakistan,1967,1.3021001
+maize-yields,Pakistan,1968,1.0155001
+maize-yields,Pakistan,1969,1.0309001
+maize-yields,Pakistan,1970,1.1208001
+maize-yields,Pakistan,1971,1.1139001
+maize-yields,Pakistan,1972,1.0945001
+maize-yields,Pakistan,1973,1.2135
+maize-yields,Pakistan,1974,1.2171
+maize-yields,Pakistan,1975,1.2944001
+maize-yields,Pakistan,1976,1.2242
+maize-yields,Pakistan,1977,1.2512
+maize-yields,Pakistan,1978,1.2282
+maize-yields,Pakistan,1979,1.2483001
+maize-yields,Pakistan,1980,1.2619001
+maize-yields,Pakistan,1981,1.2588001
+maize-yields,Pakistan,1982,1.273
+maize-yields,Pakistan,1983,1.2701
+maize-yields,Pakistan,1984,1.2705001
+maize-yields,Pakistan,1985,1.2556001
+maize-yields,Pakistan,1986,1.3614001
+maize-yields,Pakistan,1987,1.3197
+maize-yields,Pakistan,1988,1.3907
+maize-yields,Pakistan,1989,1.3667
+maize-yields,Pakistan,1990,1.4014001
+maize-yields,Pakistan,1991,1.4235001
+maize-yields,Pakistan,1992,1.3966
+maize-yields,Pakistan,1993,1.3983002
+maize-yields,Pakistan,1994,1.5004001
+maize-yields,Pakistan,1995,1.6908001
+maize-yields,Pakistan,1996,1.5884001
+maize-yields,Pakistan,1997,1.6352
+maize-yields,Pakistan,1998,1.7853001
+maize-yields,Pakistan,1999,1.7169001
+maize-yields,Pakistan,2000,1.7086
+maize-yields,Pakistan,2001,1.7631
+maize-yields,Pakistan,2002,1.8448001
+maize-yields,Pakistan,2003,2.0034
+maize-yields,Pakistan,2004,2.8488002
+maize-yields,Pakistan,2005,2.9843001
+maize-yields,Pakistan,2006,3.0368001
+maize-yields,Pakistan,2007,3.4265
+maize-yields,Pakistan,2008,3.4154
+maize-yields,Pakistan,2009,3.4879
+maize-yields,Pakistan,2010,3.8052
+maize-yields,Pakistan,2011,3.9897
+maize-yields,Pakistan,2012,3.9830003
+maize-yields,Pakistan,2013,4.2313
+maize-yields,Pakistan,2014,4.3211
+maize-yields,Pakistan,2015,4.4248
+maize-yields,Pakistan,2016,4.5491004
+maize-yields,Pakistan,2017,4.7182
+maize-yields,Pakistan,2018,4.9685
+maize-yields,Pakistan,2019,5.6140003
+maize-yields,Pakistan,2020,6.3054004
+maize-yields,Pakistan,2021,5.7637005
+maize-yields,Pakistan,2022,6.3886003
+maize-yields,Pakistan,2023,5.9335003
+maize-yields,Pakistan,2024,6.1333003
+maize-yields,United States,1866,1.5251297
+maize-yields,United States,1867,1.5502348
+maize-yields,United States,1868,1.6443785
+maize-yields,United States,1869,1.3682233
+maize-yields,United States,1870,1.8389424
+maize-yields,United States,1871,1.7071412
+maize-yields,United States,1872,1.8452187
+maize-yields,United States,1873,1.4372622
+maize-yields,United States,1874,1.3933284
+maize-yields,United States,1875,1.7385224
+maize-yields,United States,1876,1.6757599
+maize-yields,United States,1877,1.6192735
+maize-yields,United States,1878,1.6443785
+maize-yields,United States,1879,1.7699037
+maize-yields,United States,1880,1.7134173
+maize-yields,United States,1881,1.2426982
+maize-yields,United States,1882,1.6632073
+maize-yields,United States,1883,1.5188535
+maize-yields,United States,1884,1.7761798
+maize-yields,United States,1885,1.7950087
+maize-yields,United States,1886,1.5125773
+maize-yields,United States,1887,1.3744996
+maize-yields,United States,1888,1.8263899
+maize-yields,United States,1889,1.8514949
+maize-yields,United States,1890,1.3870522
+maize-yields,United States,1891,1.8577712
+maize-yields,United States,1892,1.5502348
+maize-yields,United States,1893,1.4937484
+maize-yields,United States,1894,1.2678033
+maize-yields,United States,1895,1.7573512
+maize-yields,United States,1896,1.8828762
+maize-yields,United States,1897,1.5941685
+maize-yields,United States,1898,1.682036
+maize-yields,United States,1899,1.7573512
+maize-yields,United States,1900,1.7636274
+maize-yields,United States,1901,1.1422783
+maize-yields,United States,1902,1.7887324
+maize-yields,United States,1903,1.6883123
+maize-yields,United States,1904,1.7699037
+maize-yields,United States,1905,1.9393625
+maize-yields,United States,1906,1.9895725
+maize-yields,United States,1907,1.7071412
+maize-yields,United States,1908,1.6883123
+maize-yields,United States,1909,1.6381023
+maize-yields,United States,1910,1.7510748
+maize-yields,United States,1911,1.5314059
+maize-yields,United States,1912,1.8263899
+maize-yields,United States,1913,1.4247097
+maize-yields,United States,1914,1.6192735
+maize-yields,United States,1915,1.7636274
+maize-yields,United States,1916,1.5125773
+maize-yields,United States,1917,1.6443785
+maize-yields,United States,1918,1.5000247
+maize-yields,United States,1919,1.682036
+maize-yields,United States,1920,1.8765999
+maize-yields,United States,1921,1.7447985
+maize-yields,United States,1922,1.6506548
+maize-yields,United States,1923,1.7447985
+maize-yields,United States,1924,1.3870522
+maize-yields,United States,1925,1.7196935
+maize-yields,United States,1926,1.6129973
+maize-yields,United States,1927,1.656931
+maize-yields,United States,1928,1.6506548
+maize-yields,United States,1929,1.6129973
+maize-yields,United States,1930,1.2866321
+maize-yields,United States,1931,1.5376822
+maize-yields,United States,1932,1.6632073
+maize-yields,United States,1933,1.4309858
+maize-yields,United States,1934,1.1736596
+maize-yields,United States,1935,1.5188535
+maize-yields,United States,1936,1.1673833
+maize-yields,United States,1937,1.8138374
+maize-yields,United States,1938,1.7447985
+maize-yields,United States,1939,1.8765999
+maize-yields,United States,1940,1.8138374
+maize-yields,United States,1941,1.9581913
+maize-yields,United States,1942,2.2217941
+maize-yields,United States,1943,2.0460587
+maize-yields,United States,1944,2.071164
+maize-yields,United States,1945,2.07744
+maize-yields,United States,1946,2.3347666
+maize-yields,United States,1947,1.7950087
+maize-yields,United States,1948,2.6987891
+maize-yields,United States,1949,2.3975291
+maize-yields,United States,1950,2.3975291
+maize-yields,United States,1951,2.3159378
+maize-yields,United States,1952,2.6234741
+maize-yields,United States,1953,2.5544355
+maize-yields,United States,1954,2.4728441
+maize-yields,United States,1955,2.6360266
+maize-yields,United States,1956,2.9749446
+maize-yields,United States,1957,3.0314307
+maize-yields,United States,1958,3.313862
+maize-yields,United States,1959,3.3326907
+maize-yields,United States,1960,3.433111
+maize-yields,United States,1961,3.9163826
+maize-yields,United States,1962,4.060736
+maize-yields,United States,1963,4.2615767
+maize-yields,United States,1964,3.947764
+maize-yields,United States,1965,4.650704
+maize-yields,United States,1966,4.5879416
+maize-yields,United States,1967,5.0272794
+maize-yields,United States,1968,4.989622
+maize-yields,United States,1969,5.391302
+maize-yields,United States,1970,4.544008
+maize-yields,United States,1971,5.52938
+maize-yields,United States,1972,6.0879664
+maize-yields,United States,1973,5.7302203
+maize-yields,United States,1974,4.5126266
+maize-yields,United States,1975,5.4226837
+maize-yields,United States,1976,5.5231037
+maize-yields,United States,1977,5.6988387
+maize-yields,United States,1978,6.3390164
+maize-yields,United States,1979,6.872498
+maize-yields,United States,1980,5.711391
+maize-yields,United States,1981,6.834841
+maize-yields,United States,1982,7.104719
+maize-yields,United States,1983,5.090042
+maize-yields,United States,1984,6.696763
+maize-yields,United States,1985,7.4059796
+maize-yields,United States,1986,7.4938474
+maize-yields,United States,1987,7.5189524
+maize-yields,United States,1988,5.309711
+maize-yields,United States,1989,7.2992835
+maize-yields,United States,1990,7.4373612
+maize-yields,United States,1991,6.816012
+maize-yields,United States,1992,8.253274
+maize-yields,United States,1993,6.3201876
+maize-yields,United States,1994,8.698889
+maize-yields,United States,1995,7.1235485
+maize-yields,United States,1996,7.977119
+maize-yields,United States,1997,7.9520135
+maize-yields,United States,1998,8.435285
+maize-yields,United States,1999,8.397628
+maize-yields,United States,2000,8.592192
+maize-yields,United States,2001,8.673783
+maize-yields,United States,2002,8.115196
+maize-yields,United States,2003,8.924833
+maize-yields,United States,2004,10.060836
+maize-yields,United States,2005,9.282579
+maize-yields,United States,2006,9.357895
+maize-yields,United States,2007,9.458315
+maize-yields,United States,2008,9.621497
+maize-yields,United States,2009,10.318161
+maize-yields,United States,2010,9.577564
+maize-yields,United States,2011,9.213541
+maize-yields,United States,2012,7.7260685
+maize-yields,United States,2013,9.922758
+maize-yields,United States,2014,10.732394
+maize-yields,United States,2015,10.569211
+maize-yields,United States,2016,10.95834
+maize-yields,United States,2017,11.083865
+maize-yields,United States,2018,11.071312
+maize-yields,United States,2019,10.512726
+maize-yields,United States,2020,10.757499
+maize-yields,United States,2021,11.09014
+maize-yields,United States,2022,10.883024
+maize-yields,United States,2023,11.127799
+maize-yields,United States,2024,11.253324
+maize-yields,United States,2025,11.705214
+maize-yields,World,1961,1.9423002
+maize-yields,World,1962,1.9796001
+maize-yields,World,1963,2.0311
+maize-yields,World,1964,1.9937
+maize-yields,World,1965,2.1237001
+maize-yields,World,1966,2.2078001
+maize-yields,World,1967,2.4236002
+maize-yields,World,1968,2.2894
+maize-yields,World,1969,2.4206002
+maize-yields,World,1970,2.3509
+maize-yields,World,1971,2.6534
+maize-yields,World,1972,2.6867
+maize-yields,World,1973,2.7217002
+maize-yields,World,1974,2.5565002
+maize-yields,World,1975,2.8132
+maize-yields,World,1976,2.8371003
+maize-yields,World,1977,2.9668002
+maize-yields,World,1978,3.1556003
+maize-yields,World,1979,3.3847
+maize-yields,World,1980,3.1534
+maize-yields,World,1981,3.4933002
+maize-yields,World,1982,3.6090002
+maize-yields,World,1983,2.9452002
+maize-yields,World,1984,3.5256002
+maize-yields,World,1985,3.7202
+maize-yields,World,1986,3.6279001
+maize-yields,World,1987,3.4863002
+maize-yields,World,1988,3.1001003
+maize-yields,World,1989,3.6186004
+maize-yields,World,1990,3.6941004
+maize-yields,World,1991,3.7000003
+maize-yields,World,1992,3.9119
+maize-yields,World,1993,3.6295002
+maize-yields,World,1994,4.1174
+maize-yields,World,1995,3.8058002
+maize-yields,World,1996,4.2076
+maize-yields,World,1997,4.1535
+maize-yields,World,1998,4.4362006
+maize-yields,World,1999,4.4272003
+maize-yields,World,2000,4.3216004
+maize-yields,World,2001,4.4779
+maize-yields,World,2002,4.3914003
+maize-yields,World,2003,4.4616003
+maize-yields,World,2004,4.9448
+maize-yields,World,2005,4.8199
+maize-yields,World,2006,4.7735004
+maize-yields,World,2007,4.9814
+maize-yields,World,2008,5.0661
+maize-yields,World,2009,5.1530004
+maize-yields,World,2010,5.1555004
+maize-yields,World,2011,5.137
+maize-yields,World,2012,4.8468
+maize-yields,World,2013,5.4345
+maize-yields,World,2014,5.5816
+maize-yields,World,2015,5.524
+maize-yields,World,2016,5.7744
+maize-yields,World,2017,5.7507005
+maize-yields,World,2018,5.7026005
+maize-yields,World,2019,5.8024
+maize-yields,World,2020,5.7623
+maize-yields,World,2021,5.8303
+maize-yields,World,2022,5.6660004
+maize-yields,World,2023,5.8673
+maize-yields,World,2024,5.8022003
+rice-yields,Africa,1961,1.5520339
+rice-yields,Africa,1962,1.800782
+rice-yields,Africa,1963,1.9112797
+rice-yields,Africa,1964,1.8306481
+rice-yields,Africa,1965,1.7468351
+rice-yields,Africa,1966,1.7178016
+rice-yields,Africa,1967,1.865644
+rice-yields,Africa,1968,1.9009539
+rice-yields,Africa,1969,1.9571339
+rice-yields,Africa,1970,1.9220895
+rice-yields,Africa,1971,1.8835207
+rice-yields,Africa,1972,1.8974302
+rice-yields,Africa,1973,1.8490603
+rice-yields,Africa,1974,1.8937104
+rice-yields,Africa,1975,1.8960998
+rice-yields,Africa,1976,1.822438
+rice-yields,Africa,1977,1.7803812
+rice-yields,Africa,1978,1.8102832
+rice-yields,Africa,1979,1.7832553
+rice-yields,Africa,1980,1.8291286
+rice-yields,Africa,1981,1.7849859
+rice-yields,Africa,1982,1.8130891
+rice-yields,Africa,1983,1.8812354
+rice-yields,Africa,1984,1.8742231
+rice-yields,Africa,1985,1.9393816
+rice-yields,Africa,1986,1.955973
+rice-yields,Africa,1987,2.0111732
+rice-yields,Africa,1988,1.913255
+rice-yields,Africa,1989,2.0124383
+rice-yields,Africa,1990,2.104117
+rice-yields,Africa,1991,2.0816739
+rice-yields,Africa,1992,2.0945656
+rice-yields,Africa,1993,2.1916232
+rice-yields,Africa,1994,2.0530932
+rice-yields,Africa,1995,2.1309018
+rice-yields,Africa,1996,2.2584896
+rice-yields,Africa,1997,2.2037504
+rice-yields,Africa,1998,2.097513
+rice-yields,Africa,1999,2.3228233
+rice-yields,Africa,2000,2.3132563
+rice-yields,Africa,2001,2.2077396
+rice-yields,Africa,2002,2.1941762
+rice-yields,Africa,2003,2.267672
+rice-yields,Africa,2004,2.2714872
+rice-yields,Africa,2005,2.274214
+rice-yields,Africa,2006,2.3555512
+rice-yields,Africa,2007,2.4061053
+rice-yields,Africa,2008,2.5866868
+rice-yields,Africa,2009,2.5889206
+rice-yields,Africa,2010,2.2945104
+rice-yields,Africa,2011,2.4185145
+rice-yields,Africa,2012,2.4028406
+rice-yields,Africa,2013,2.3673964
+rice-yields,Africa,2014,2.3648784
+rice-yields,Africa,2015,2.3014016
+rice-yields,Africa,2016,2.3101544
+rice-yields,Africa,2017,2.2428133
+rice-yields,Africa,2018,2.1851275
+rice-yields,Africa,2019,2.3342183
+rice-yields,Africa,2020,2.399605
+rice-yields,Africa,2021,2.3654037
+rice-yields,Africa,2022,2.3288326
+rice-yields,Africa,2023,2.3521068
+rice-yields,Africa,2024,2.3714612
+rice-yields,Bangladesh,1961,1.7005001
+rice-yields,Bangladesh,1962,1.5302
+rice-yields,Bangladesh,1963,1.769
+rice-yields,Bangladesh,1964,1.7070001
+rice-yields,Bangladesh,1965,1.6827
+rice-yields,Bangladesh,1966,1.5827
+rice-yields,Bangladesh,1967,1.6944001
+rice-yields,Bangladesh,1968,1.7466
+rice-yields,Bangladesh,1969,1.7459002
+rice-yields,Bangladesh,1970,1.6862
+rice-yields,Bangladesh,1971,1.6022
+rice-yields,Bangladesh,1972,1.5716001
+rice-yields,Bangladesh,1973,1.8083001
+rice-yields,Bangladesh,1974,1.7289001
+rice-yields,Bangladesh,1975,1.8531001
+rice-yields,Bangladesh,1976,1.7839001
+rice-yields,Bangladesh,1977,1.9398001
+rice-yields,Bangladesh,1978,1.9385
+rice-yields,Bangladesh,1979,1.8809001
+rice-yields,Bangladesh,1980,2.0197
+rice-yields,Bangladesh,1981,1.9545001
+rice-yields,Bangladesh,1982,2.0145001
+rice-yields,Bangladesh,1983,2.2345002
+rice-yields,Bangladesh,1984,2.1454
+rice-yields,Bangladesh,1985,2.1693
+rice-yields,Bangladesh,1986,2.1783001
+rice-yields,Bangladesh,1987,2.2399
+rice-yields,Bangladesh,1988,2.2805002
+rice-yields,Bangladesh,1989,2.5562
+rice-yields,Bangladesh,1990,2.5661001
+rice-yields,Bangladesh,1991,2.6277
+rice-yields,Bangladesh,1992,2.7253
+rice-yields,Bangladesh,1993,2.7247
+rice-yields,Bangladesh,1994,2.6032
+rice-yields,Bangladesh,1995,2.5858002
+rice-yields,Bangladesh,1996,2.7557
+rice-yields,Bangladesh,1997,2.6859
+rice-yields,Bangladesh,1998,2.7683003
+rice-yields,Bangladesh,1999,3.2024
+rice-yields,Bangladesh,2000,3.3959
+rice-yields,Bangladesh,2001,3.4470003
+rice-yields,Bangladesh,2002,3.4683
+rice-yields,Bangladesh,2003,3.5773003
+rice-yields,Bangladesh,2004,3.5359
+rice-yields,Bangladesh,2005,3.7623003
+rice-yields,Bangladesh,2006,3.8021002
+rice-yields,Bangladesh,2007,3.8342001
+rice-yields,Bangladesh,2008,4.1992006
+rice-yields,Bangladesh,2009,4.1884003
+rice-yields,Bangladesh,2010,4.3154
+rice-yields,Bangladesh,2011,4.4068
+rice-yields,Bangladesh,2012,4.4213
+rice-yields,Bangladesh,2013,4.5142
+rice-yields,Bangladesh,2014,4.5572004
+rice-yields,Bangladesh,2015,4.5815
+rice-yields,Bangladesh,2016,4.6113
+rice-yields,Bangladesh,2017,4.6374
+rice-yields,Bangladesh,2018,4.7136
+rice-yields,Bangladesh,2019,4.7874002
+rice-yields,Bangladesh,2020,4.7939
+rice-yields,Bangladesh,2021,4.8664002
+rice-yields,Bangladesh,2022,4.9804
+rice-yields,Bangladesh,2023,5.2072005
+rice-yields,Bangladesh,2024,5.2906003
+rice-yields,Brazil,1961,1.6989001
+rice-yields,Brazil,1962,1.6589001
+rice-yields,Brazil,1963,1.5423001
+rice-yields,Brazil,1964,1.5171001
+rice-yields,Brazil,1965,1.641
+rice-yields,Brazil,1966,1.4487001
+rice-yields,Brazil,1967,1.5828001
+rice-yields,Brazil,1968,1.4919001
+rice-yields,Brazil,1969,1.3838001
+rice-yields,Brazil,1970,1.5169001
+rice-yields,Brazil,1971,1.3840001
+rice-yields,Brazil,1972,1.4914001
+rice-yields,Brazil,1973,1.4933001
+rice-yields,Brazil,1974,1.45
+rice-yields,Brazil,1975,1.4665
+rice-yields,Brazil,1976,1.4658002
+rice-yields,Brazil,1977,1.5009001
+rice-yields,Brazil,1978,1.2974001
+rice-yields,Brazil,1979,1.3931
+rice-yields,Brazil,1980,1.5658001
+rice-yields,Brazil,1981,1.3485
+rice-yields,Brazil,1982,1.6158001
+rice-yields,Brazil,1983,1.5155001
+rice-yields,Brazil,1984,1.6869001
+rice-yields,Brazil,1985,1.8980001
+rice-yields,Brazil,1986,1.8610001
+rice-yields,Brazil,1987,1.7375001
+rice-yields,Brazil,1988,1.9806001
+rice-yields,Brazil,1989,2.0993001
+rice-yields,Brazil,1990,1.8803002
+rice-yields,Brazil,1991,2.302
+rice-yields,Brazil,1992,2.1349
+rice-yields,Brazil,1993,2.2912002
+rice-yields,Brazil,1994,2.3876002
+rice-yields,Brazil,1995,2.5668
+rice-yields,Brazil,1996,2.6578002
+rice-yields,Brazil,1997,2.7310002
+rice-yields,Brazil,1998,2.5198002
+rice-yields,Brazil,1999,3.0708003
+rice-yields,Brazil,2000,3.0382001
+rice-yields,Brazil,2001,3.2405002
+rice-yields,Brazil,2002,3.3246002
+rice-yields,Brazil,2003,3.249
+rice-yields,Brazil,2004,3.5565002
+rice-yields,Brazil,2005,3.3691003
+rice-yields,Brazil,2006,3.8798003
+rice-yields,Brazil,2007,3.8260002
+rice-yields,Brazil,2008,4.2311
+rice-yields,Brazil,2009,4.4049
+rice-yields,Brazil,2010,4.1271005
+rice-yields,Brazil,2011,4.8956003
+rice-yields,Brazil,2012,4.7860003
+rice-yields,Brazil,2013,5.0071
+rice-yields,Brazil,2014,5.2013
+rice-yields,Brazil,2015,5.7525
+rice-yields,Brazil,2016,5.4643
+rice-yields,Brazil,2017,6.2131004
+rice-yields,Brazil,2018,6.3074
+rice-yields,Brazil,2019,6.0633
+rice-yields,Brazil,2020,6.6108003
+rice-yields,Brazil,2021,6.9031005
+rice-yields,Brazil,2022,6.6384
+rice-yields,Brazil,2023,6.9369
+rice-yields,Brazil,2024,6.7281003
+rice-yields,China,1961,2.0434
+rice-yields,China,1962,2.3408
+rice-yields,China,1963,2.6642
+rice-yields,China,1964,2.8062
+rice-yields,China,1965,2.9441001
+rice-yields,China,1966,3.1277
+rice-yields,China,1967,3.0811002
+rice-yields,China,1968,3.1653001
+rice-yields,China,1969,3.1269
+rice-yields,China,1970,3.4025002
+rice-yields,China,1971,3.3026001
+rice-yields,China,1972,3.2288003
+rice-yields,China,1973,3.4727
+rice-yields,China,1974,3.4926002
+rice-yields,China,1975,3.5178003
+rice-yields,China,1976,3.4771004
+rice-yields,China,1977,3.6226003
+rice-yields,China,1978,3.9781003
+rice-yields,China,1979,4.2481003
+rice-yields,China,1980,4.1338
+rice-yields,China,1981,4.328
+rice-yields,China,1982,4.8913
+rice-yields,China,1983,5.0961003
+rice-yields,China,1984,5.3726006
+rice-yields,China,1985,5.2563
+rice-yields,China,1986,5.3376
+rice-yields,China,1987,5.413
+rice-yields,China,1988,5.2868
+rice-yields,China,1989,5.5085
+rice-yields,China,1990,5.7261004
+rice-yields,China,1991,5.6402006
+rice-yields,China,1992,5.8031006
+rice-yields,China,1993,5.8479004
+rice-yields,China,1994,5.8311005
+rice-yields,China,1995,6.0248003
+rice-yields,China,1996,6.2122006
+rice-yields,China,1997,6.3192005
+rice-yields,China,1998,6.3662004
+rice-yields,China,1999,6.3447003
+rice-yields,China,2000,6.2716002
+rice-yields,China,2001,6.1633
+rice-yields,China,2002,6.189
+rice-yields,China,2003,6.0607004
+rice-yields,China,2004,6.3106003
+rice-yields,China,2005,6.2602005
+rice-yields,China,2006,6.2796006
+rice-yields,China,2007,6.433
+rice-yields,China,2008,6.5625005
+rice-yields,China,2009,6.5853
+rice-yields,China,2010,6.5530005
+rice-yields,China,2011,6.6873
+rice-yields,China,2012,6.7769003
+rice-yields,China,2013,6.7173
+rice-yields,China,2014,6.8132005
+rice-yields,China,2015,6.8913
+rice-yields,China,2016,6.8657007
+rice-yields,China,2017,6.9169
+rice-yields,China,2018,7.0266004
+rice-yields,China,2019,7.0601006
+rice-yields,China,2020,7.0432005
+rice-yields,China,2021,7.1135
+rice-yields,China,2022,7.0796003
+rice-yields,China,2023,7.1368003
+rice-yields,China,2024,7.1545005
+rice-yields,Ethiopia,2007,2.9187
+rice-yields,Ethiopia,2008,2.0347002
+rice-yields,Ethiopia,2009,2.1602
+rice-yields,Ethiopia,2010,2.0307
+rice-yields,Ethiopia,2011,2.8456001
+rice-yields,Ethiopia,2012,2.8950002
+rice-yields,Ethiopia,2013,2.7210002
+rice-yields,Ethiopia,2014,2.8148003
+rice-yields,Ethiopia,2015,2.6462002
+rice-yields,Ethiopia,2016,2.6227
+rice-yields,Ethiopia,2017,2.8437002
+rice-yields,Ethiopia,2018,2.5704
+rice-yields,Ethiopia,2019,2.6824
+rice-yields,Ethiopia,2020,3.1449
+rice-yields,Ethiopia,2021,2.9390001
+rice-yields,Ethiopia,2022,3.0140002
+rice-yields,Ethiopia,2023,3.0287
+rice-yields,Ethiopia,2024,2.9937
+rice-yields,India,1961,1.5419
+rice-yields,India,1962,1.3959001
+rice-yields,India,1963,1.5498002
+rice-yields,India,1964,1.6171
+rice-yields,India,1965,1.2936001
+rice-yields,India,1966,1.2952
+rice-yields,India,1967,1.5484
+rice-yields,India,1968,1.6134001
+rice-yields,India,1969,1.6094002
+rice-yields,India,1970,1.6849
+rice-yields,India,1971,1.7110001
+rice-yields,India,1972,1.6046001
+rice-yields,India,1973,1.7259
+rice-yields,India,1974,1.5744001
+rice-yields,India,1975,1.8582001
+rice-yields,India,1976,1.6372
+rice-yields,India,1977,1.9613001
+rice-yields,India,1978,1.9912001
+rice-yields,India,1979,1.6105001
+rice-yields,India,1980,2.0002
+rice-yields,India,1981,1.9623002
+rice-yields,India,1982,1.8497001
+rice-yields,India,1983,2.1833003
+rice-yields,India,1984,2.1272001
+rice-yields,India,1985,2.3292
+rice-yields,India,1986,2.2052
+rice-yields,India,1987,2.1991003
+rice-yields,India,1988,2.5486002
+rice-yields,India,1989,2.6160002
+rice-yields,India,1990,2.6125002
+rice-yields,India,1991,2.6190002
+rice-yields,India,1992,2.6297002
+rice-yields,India,1993,2.7972002
+rice-yields,India,1994,2.8773003
+rice-yields,India,1995,2.7009
+rice-yields,India,1996,2.5236
+rice-yields,India,1997,2.8276002
+rice-yields,India,1998,2.8155
+rice-yields,India,1999,3.0081003
+rice-yields,India,2000,2.838
+rice-yields,India,2001,3.1164
+rice-yields,India,2002,2.6901002
+rice-yields,India,2003,3.0926003
+rice-yields,India,2004,2.9527001
+rice-yields,India,2005,3.1196003
+rice-yields,India,2006,3.1995
+rice-yields,India,2007,3.2925003
+rice-yields,India,2008,3.2797
+rice-yields,India,2009,3.1941001
+rice-yields,India,2010,3.3230002
+rice-yields,India,2011,3.6060002
+rice-yields,India,2012,3.6774
+rice-yields,India,2013,3.6165001
+rice-yields,India,2014,3.5900002
+rice-yields,India,2015,3.6018002
+rice-yields,India,2016,3.7526002
+rice-yields,India,2017,3.8117
+rice-yields,India,2018,3.9761002
+rice-yields,India,2019,4.0521
+rice-yields,India,2020,4.0594
+rice-yields,India,2021,4.2033
+rice-yields,India,2022,4.2388
+rice-yields,India,2023,4.3135004
+rice-yields,India,2024,4.3132005
+rice-yields,Indonesia,1961,1.7623001
+rice-yields,Indonesia,1962,1.7855
+rice-yields,Indonesia,1963,1.7226001
+rice-yields,Indonesia,1964,1.7630001
+rice-yields,Indonesia,1965,1.7708001
+rice-yields,Indonesia,1966,1.7748002
+rice-yields,Indonesia,1967,1.7592
+rice-yields,Indonesia,1968,2.1398
+rice-yields,Indonesia,1969,2.2487001
+rice-yields,Indonesia,1970,2.3763
+rice-yields,Indonesia,1971,2.4254
+rice-yields,Indonesia,1972,2.4556003
+rice-yields,Indonesia,1973,2.5572
+rice-yields,Indonesia,1974,2.6412
+rice-yields,Indonesia,1975,2.6297002
+rice-yields,Indonesia,1976,2.7843
+rice-yields,Indonesia,1977,2.7929
+rice-yields,Indonesia,1978,2.8862002
+rice-yields,Indonesia,1979,2.9855
+rice-yields,Indonesia,1980,3.2928002
+rice-yields,Indonesia,1981,3.4934
+rice-yields,Indonesia,1982,3.7363002
+rice-yields,Indonesia,1983,3.8530002
+rice-yields,Indonesia,1984,3.9060001
+rice-yields,Indonesia,1985,3.9418
+rice-yields,Indonesia,1986,3.9773002
+rice-yields,Indonesia,1987,4.0391
+rice-yields,Indonesia,1988,4.1108
+rice-yields,Indonesia,1989,4.247
+rice-yields,Indonesia,1990,4.3018
+rice-yields,Indonesia,1991,4.3465004
+rice-yields,Indonesia,1992,4.3446
+rice-yields,Indonesia,1993,4.375
+rice-yields,Indonesia,1994,4.3453
+rice-yields,Indonesia,1995,4.3487005
+rice-yields,Indonesia,1996,4.4168
+rice-yields,Indonesia,1997,4.4322004
+rice-yields,Indonesia,1998,4.1974
+rice-yields,Indonesia,1999,4.2519
+rice-yields,Indonesia,2000,4.4007006
+rice-yields,Indonesia,2001,4.3879
+rice-yields,Indonesia,2002,4.4691005
+rice-yields,Indonesia,2003,4.5426
+rice-yields,Indonesia,2004,4.5365
+rice-yields,Indonesia,2005,4.5739
+rice-yields,Indonesia,2006,4.6201005
+rice-yields,Indonesia,2007,4.6468
+rice-yields,Indonesia,2008,4.9165
+rice-yields,Indonesia,2009,5.0105004
+rice-yields,Indonesia,2010,5.0253
+rice-yields,Indonesia,2011,4.9995003
+rice-yields,Indonesia,2012,5.151
+rice-yields,Indonesia,2013,5.1668
+rice-yields,Indonesia,2014,5.1477003
+rice-yields,Indonesia,2015,5.3588
+rice-yields,Indonesia,2016,5.0973
+rice-yields,Indonesia,2017,5.0690002
+rice-yields,Indonesia,2018,5.2031
+rice-yields,Indonesia,2019,5.1137004
+rice-yields,Indonesia,2020,5.1279
+rice-yields,Indonesia,2021,5.2263002
+rice-yields,Indonesia,2022,5.2378
+rice-yields,Indonesia,2023,5.2852006
+rice-yields,Indonesia,2024,5.2899003
+rice-yields,Mexico,1961,2.2751002
+rice-yields,Mexico,1962,2.1581001
+rice-yields,Mexico,1963,2.1993
+rice-yields,Mexico,1964,2.0697
+rice-yields,Mexico,1965,2.7344
+rice-yields,Mexico,1966,2.4386003
+rice-yields,Mexico,1967,2.4821002
+rice-yields,Mexico,1968,2.5034
+rice-yields,Mexico,1969,2.5816002
+rice-yields,Mexico,1970,2.7031002
+rice-yields,Mexico,1971,2.4039
+rice-yields,Mexico,1972,2.5822
+rice-yields,Mexico,1973,2.9958003
+rice-yields,Mexico,1974,2.8425002
+rice-yields,Mexico,1975,2.7921002
+rice-yields,Mexico,1976,2.9072
+rice-yields,Mexico,1977,3.1438003
+rice-yields,Mexico,1978,3.3119001
+rice-yields,Mexico,1979,3.2652001
+rice-yields,Mexico,1980,3.4937
+rice-yields,Mexico,1981,4.0597
+rice-yields,Mexico,1982,3.2890003
+rice-yields,Mexico,1983,3.1580002
+rice-yields,Mexico,1984,3.8693001
+rice-yields,Mexico,1985,3.7305002
+rice-yields,Mexico,1986,3.4595
+rice-yields,Mexico,1987,3.8175
+rice-yields,Mexico,1988,3.6042001
+rice-yields,Mexico,1989,3.4803002
+rice-yields,Mexico,1990,3.7418003
+rice-yields,Mexico,1991,4.0954003
+rice-yields,Mexico,1992,4.3577003
+rice-yields,Mexico,1993,4.8725004
+rice-yields,Mexico,1994,4.2555003
+rice-yields,Mexico,1995,4.6792006
+rice-yields,Mexico,1996,4.5412006
+rice-yields,Mexico,1997,4.1365004
+rice-yields,Mexico,1998,4.5108
+rice-yields,Mexico,1999,4.7762003
+rice-yields,Mexico,2000,4.1805
+rice-yields,Mexico,2001,4.2576003
+rice-yields,Mexico,2002,4.5027003
+rice-yields,Mexico,2003,4.5550003
+rice-yields,Mexico,2004,4.4631004
+rice-yields,Mexico,2005,5.0653
+rice-yields,Mexico,2006,4.7857003
+rice-yields,Mexico,2007,4.1536
+rice-yields,Mexico,2008,4.4619
+rice-yields,Mexico,2009,4.8502007
+rice-yields,Mexico,2010,5.1901
+rice-yields,Mexico,2011,5.0962005
+rice-yields,Mexico,2012,5.6231003
+rice-yields,Mexico,2013,5.4252005
+rice-yields,Mexico,2014,5.7122006
+rice-yields,Mexico,2015,5.8079
+rice-yields,Mexico,2016,6.1346
+rice-yields,Mexico,2017,6.3900003
+rice-yields,Mexico,2018,6.2848
+rice-yields,Mexico,2019,6.3662004
+rice-yields,Mexico,2020,6.2107005
+rice-yields,Mexico,2021,6.3813
+rice-yields,Mexico,2022,6.5001006
+rice-yields,Mexico,2023,6.8705006
+rice-yields,Mexico,2024,7.0052004
+rice-yields,Nigeria,1961,0.8926
+rice-yields,Nigeria,1962,1.1789001
+rice-yields,Nigeria,1963,1.2037001
+rice-yields,Nigeria,1964,1.2291
+rice-yields,Nigeria,1965,1.2287
+rice-yields,Nigeria,1966,1.2438002
+rice-yields,Nigeria,1967,1.4695001
+rice-yields,Nigeria,1968,1.5021
+rice-yields,Nigeria,1969,1.2597001
+rice-yields,Nigeria,1970,1.3451
+rice-yields,Nigeria,1971,1.2763001
+rice-yields,Nigeria,1972,1.8861
+rice-yields,Nigeria,1973,1.3056
+rice-yields,Nigeria,1974,1.9517001
+rice-yields,Nigeria,1975,1.9310001
+rice-yields,Nigeria,1976,1.2674
+rice-yields,Nigeria,1977,1.6585001
+rice-yields,Nigeria,1978,1.7637
+rice-yields,Nigeria,1979,1.8750001
+rice-yields,Nigeria,1980,1.9818002
+rice-yields,Nigeria,1981,2.0683002
+rice-yields,Nigeria,1982,2.0833
+rice-yields,Nigeria,1983,2.0317001
+rice-yields,Nigeria,1984,2.0
+rice-yields,Nigeria,1985,2.1343002
+rice-yields,Nigeria,1986,2.0233002
+rice-yields,Nigeria,1987,2.3893
+rice-yields,Nigeria,1988,1.9990001
+rice-yields,Nigeria,1989,1.9994001
+rice-yields,Nigeria,1990,2.0695002
+rice-yields,Nigeria,1991,1.9528002
+rice-yields,Nigeria,1992,1.9591001
+rice-yields,Nigeria,1993,1.9597
+rice-yields,Nigeria,1994,1.416
+rice-yields,Nigeria,1995,1.6258001
+rice-yields,Nigeria,1996,1.7498001
+rice-yields,Nigeria,1997,1.5957
+rice-yields,Nigeria,1998,1.6023002
+rice-yields,Nigeria,1999,1.4957
+rice-yields,Nigeria,2000,1.4998001
+rice-yields,Nigeria,2001,1.3000001
+rice-yields,Nigeria,2002,1.34
+rice-yields,Nigeria,2003,1.4100001
+rice-yields,Nigeria,2004,1.4199001
+rice-yields,Nigeria,2005,1.4302
+rice-yields,Nigeria,2006,1.4833001
+rice-yields,Nigeria,2007,1.2999
+rice-yields,Nigeria,2008,1.7544001
+rice-yields,Nigeria,2009,1.9306
+rice-yields,Nigeria,2010,1.8386
+rice-yields,Nigeria,2011,2.0325
+rice-yields,Nigeria,2012,1.8971001
+rice-yields,Nigeria,2013,1.9845
+rice-yields,Nigeria,2014,2.1609
+rice-yields,Nigeria,2015,2.0742002
+rice-yields,Nigeria,2016,2.0037
+rice-yields,Nigeria,2017,2.081
+rice-yields,Nigeria,2018,2.0670002
+rice-yields,Nigeria,2019,2.0441
+rice-yields,Nigeria,2020,1.9479002
+rice-yields,Nigeria,2021,1.9310001
+rice-yields,Nigeria,2022,1.8563001
+rice-yields,Nigeria,2023,1.9740001
+rice-yields,Nigeria,2024,1.9965001
+rice-yields,Pakistan,1961,1.3915001
+rice-yields,Pakistan,1962,1.3856001
+rice-yields,Pakistan,1963,1.3902
+rice-yields,Pakistan,1964,1.4937
+rice-yields,Pakistan,1965,1.4174001
+rice-yields,Pakistan,1966,1.4523001
+rice-yields,Pakistan,1967,1.5835
+rice-yields,Pakistan,1968,1.9604001
+rice-yields,Pakistan,1969,2.2201002
+rice-yields,Pakistan,1970,2.1939
+rice-yields,Pakistan,1971,2.3293002
+rice-yields,Pakistan,1972,2.3624
+rice-yields,Pakistan,1973,2.4353
+rice-yields,Pakistan,1974,2.1632001
+rice-yields,Pakistan,1975,2.2964
+rice-yields,Pakistan,1976,2.3472002
+rice-yields,Pakistan,1977,2.3297
+rice-yields,Pakistan,1978,2.423
+rice-yields,Pakistan,1979,2.371
+rice-yields,Pakistan,1980,2.4235
+rice-yields,Pakistan,1981,2.6035001
+rice-yields,Pakistan,1982,2.6121001
+rice-yields,Pakistan,1983,2.5065
+rice-yields,Pakistan,1984,2.4883
+rice-yields,Pakistan,1985,2.3499
+rice-yields,Pakistan,1986,2.532
+rice-yields,Pakistan,1987,2.4765
+rice-yields,Pakistan,1988,2.3511002
+rice-yields,Pakistan,1989,2.2925
+rice-yields,Pakistan,1990,2.3151002
+rice-yields,Pakistan,1991,2.3199
+rice-yields,Pakistan,1992,2.3686001
+rice-yields,Pakistan,1993,2.7397
+rice-yields,Pakistan,1994,2.4333003
+rice-yields,Pakistan,1995,2.7522001
+rice-yields,Pakistan,1996,2.8685002
+rice-yields,Pakistan,1997,2.8048003
+rice-yields,Pakistan,1998,2.8930001
+rice-yields,Pakistan,1999,3.0744
+rice-yields,Pakistan,2000,3.0312002
+rice-yields,Pakistan,2001,2.7542
+rice-yields,Pakistan,2002,3.0192
+rice-yields,Pakistan,2003,2.9551003
+rice-yields,Pakistan,2004,2.9914
+rice-yields,Pakistan,2005,3.1742
+rice-yields,Pakistan,2006,3.1604002
+rice-yields,Pakistan,2007,3.3176003
+rice-yields,Pakistan,2008,3.5199
+rice-yields,Pakistan,2009,3.5809
+rice-yields,Pakistan,2010,3.0588002
+rice-yields,Pakistan,2011,3.5939
+rice-yields,Pakistan,2012,3.5966003
+rice-yields,Pakistan,2013,3.7528002
+rice-yields,Pakistan,2014,3.6339002
+rice-yields,Pakistan,2015,3.7240002
+rice-yields,Pakistan,2016,3.7716002
+rice-yields,Pakistan,2017,3.8526003
+rice-yields,Pakistan,2018,3.8427002
+rice-yields,Pakistan,2019,3.6653001
+rice-yields,Pakistan,2020,3.7863002
+rice-yields,Pakistan,2021,3.9532
+rice-yields,Pakistan,2022,3.6903002
+rice-yields,Pakistan,2023,4.0662003
+rice-yields,Pakistan,2024,3.7406003
+rice-yields,United States,1961,3.8227
+rice-yields,United States,1962,4.1785
+rice-yields,United States,1963,4.4449
+rice-yields,United States,1964,4.5906005
+rice-yields,United States,1965,4.7693
+rice-yields,United States,1966,4.8442006
+rice-yields,United States,1967,5.0851
+rice-yields,United States,1968,4.96
+rice-yields,United States,1969,4.8399
+rice-yields,United States,1970,5.1763
+rice-yields,United States,1971,5.2882004
+rice-yields,United States,1972,5.2679
+rice-yields,United States,1973,4.7911005
+rice-yields,United States,1974,4.977
+rice-yields,United States,1975,5.1086
+rice-yields,United States,1976,5.2268
+rice-yields,United States,1977,4.945
+rice-yields,United States,1978,5.0257006
+rice-yields,United States,1979,5.1548
+rice-yields,United States,1980,4.9461
+rice-yields,United States,1981,5.4015
+rice-yields,United States,1982,5.2791004
+rice-yields,United States,1983,5.1532006
+rice-yields,United States,1984,5.5523
+rice-yields,United States,1985,6.0704
+rice-yields,United States,1986,6.334
+rice-yields,United States,1987,6.2271004
+rice-yields,United States,1988,6.1801004
+rice-yields,United States,1989,6.4466004
+rice-yields,United States,1990,6.1975
+rice-yields,United States,1991,6.4231005
+rice-yields,United States,1992,6.4294004
+rice-yields,United States,1993,6.1763
+rice-yields,United States,1994,6.6851006
+rice-yields,United States,1995,6.3007007
+rice-yields,United States,1996,6.8593
+rice-yields,United States,1997,6.6099
+rice-yields,United States,1998,6.3473
+rice-yields,United States,1999,6.5753
+rice-yields,United States,2000,7.0397005
+rice-yields,United States,2001,7.2807007
+rice-yields,United States,2002,7.373
+rice-yields,United States,2003,7.4759
+rice-yields,United States,2004,7.8328004
+rice-yields,United States,2005,7.4245005
+rice-yields,United States,2006,7.7313004
+rice-yields,United States,2007,8.091701
+rice-yields,United States,2008,7.6731005
+rice-yields,United States,2009,7.9413004
+rice-yields,United States,2010,7.5375004
+rice-yields,United States,2011,7.9209003
+rice-yields,United States,2012,8.3651
+rice-yields,United States,2013,8.6232
+rice-yields,United States,2014,8.4919
+rice-yields,United States,2015,8.372201
+rice-yields,United States,2016,8.112101
+rice-yields,United States,2017,8.4147005
+rice-yields,United States,2018,8.6213
+rice-yields,United States,2019,8.375901
+rice-yields,United States,2020,8.5401
+rice-yields,United States,2021,8.6416
+rice-yields,United States,2022,8.277801
+rice-yields,United States,2023,8.572801
+rice-yields,United States,2024,8.6841
+rice-yields,World,1961,1.8693001
+rice-yields,World,1962,1.8958001
+rice-yields,World,1963,2.0567
+rice-yields,World,1964,2.1025002
+rice-yields,World,1965,2.0353003
+rice-yields,World,1966,2.0781002
+rice-yields,World,1967,2.1749
+rice-yields,World,1968,2.2328002
+rice-yields,World,1969,2.2540002
+rice-yields,World,1970,2.3808002
+rice-yields,World,1971,2.3619
+rice-yields,World,1972,2.3245
+rice-yields,World,1973,2.4524
+rice-yields,World,1974,2.4251003
+rice-yields,World,1975,2.5186002
+rice-yields,World,1976,2.4509
+rice-yields,World,1977,2.5718002
+rice-yields,World,1978,2.6843002
+rice-yields,World,1979,2.6591003
+rice-yields,World,1980,2.7482002
+rice-yields,World,1981,2.8272002
+rice-yields,World,1982,2.9804
+rice-yields,World,1983,3.1367002
+rice-yields,World,1984,3.2261002
+rice-yields,World,1985,3.2570002
+rice-yields,World,1986,3.2441003
+rice-yields,World,1987,3.2651002
+rice-yields,World,1988,3.3296003
+rice-yields,World,1989,3.4541004
+rice-yields,World,1990,3.5286002
+rice-yields,World,1991,3.5321002
+rice-yields,World,1992,3.5954
+rice-yields,World,1993,3.6235
+rice-yields,World,1994,3.6683002
+rice-yields,World,1995,3.6553001
+rice-yields,World,1996,3.7008002
+rice-yields,World,1997,3.8119001
+rice-yields,World,1998,3.7968001
+rice-yields,World,1999,3.9067001
+rice-yields,World,2000,3.8783002
+rice-yields,World,2001,3.9512002
+rice-yields,World,2002,3.8746002
+rice-yields,World,2003,3.9453003
+rice-yields,World,2004,4.0222
+rice-yields,World,2005,4.0806003
+rice-yields,World,2006,4.1253
+rice-yields,World,2007,4.2114
+rice-yields,World,2008,4.3127003
+rice-yields,World,2009,4.3327003
+rice-yields,World,2010,4.3091
+rice-yields,World,2011,4.4523
+rice-yields,World,2012,4.5251
+rice-yields,World,2013,4.5129004
+rice-yields,World,2014,4.5252004
+rice-yields,World,2015,4.5556
+rice-yields,World,2016,4.5532002
+rice-yields,World,2017,4.585
+rice-yields,World,2018,4.6538
+rice-yields,World,2019,4.6874003
+rice-yields,World,2020,4.6916003
+rice-yields,World,2021,4.7445
+rice-yields,World,2022,4.7181005
+rice-yields,World,2023,4.7640004
+rice-yields,World,2024,4.7573
+daily-per-capita-caloric-supply,Africa,1961,1995.4633
+daily-per-capita-caloric-supply,Africa,1962,2028.8835
+daily-per-capita-caloric-supply,Africa,1963,2032.6647
+daily-per-capita-caloric-supply,Africa,1964,2043.5122
+daily-per-capita-caloric-supply,Africa,1965,2049.3389
+daily-per-capita-caloric-supply,Africa,1966,2017.5548
+daily-per-capita-caloric-supply,Africa,1967,2050.3435
+daily-per-capita-caloric-supply,Africa,1968,2061.8208
+daily-per-capita-caloric-supply,Africa,1969,2094.2568
+daily-per-capita-caloric-supply,Africa,1970,2113.82
+daily-per-capita-caloric-supply,Africa,1971,2095.8452
+daily-per-capita-caloric-supply,Africa,1972,2057.618
+daily-per-capita-caloric-supply,Africa,1973,2086.514
+daily-per-capita-caloric-supply,Africa,1974,2124.4521
+daily-per-capita-caloric-supply,Africa,1975,2128.4265
+daily-per-capita-caloric-supply,Africa,1976,2122.4016
+daily-per-capita-caloric-supply,Africa,1977,2133.8276
+daily-per-capita-caloric-supply,Africa,1978,2157.3245
+daily-per-capita-caloric-supply,Africa,1979,2183.409
+daily-per-capita-caloric-supply,Africa,1980,2216.3318
+daily-per-capita-caloric-supply,Africa,1981,2219.9897
+daily-per-capita-caloric-supply,Africa,1982,2221.7842
+daily-per-capita-caloric-supply,Africa,1983,2184.414
+daily-per-capita-caloric-supply,Africa,1984,2157.8335
+daily-per-capita-caloric-supply,Africa,1985,2209.2688
+daily-per-capita-caloric-supply,Africa,1986,2243.4763
+daily-per-capita-caloric-supply,Africa,1987,2228.7288
+daily-per-capita-caloric-supply,Africa,1988,2247.134
+daily-per-capita-caloric-supply,Africa,1989,2247.6846
+daily-per-capita-caloric-supply,Africa,1990,2258.3032
+daily-per-capita-caloric-supply,Africa,1991,2283.976
+daily-per-capita-caloric-supply,Africa,1992,2279.3557
+daily-per-capita-caloric-supply,Africa,1993,2288.852
+daily-per-capita-caloric-supply,Africa,1994,2305.5056
+daily-per-capita-caloric-supply,Africa,1995,2327.7334
+daily-per-capita-caloric-supply,Africa,1996,2338.2415
+daily-per-capita-caloric-supply,Africa,1997,2348.079
+daily-per-capita-caloric-supply,Africa,1998,2366.1318
+daily-per-capita-caloric-supply,Africa,1999,2374.1497
+daily-per-capita-caloric-supply,Africa,2000,2372.8755
+daily-per-capita-caloric-supply,Africa,2001,2393.8254
+daily-per-capita-caloric-supply,Africa,2002,2405.6504
+daily-per-capita-caloric-supply,Africa,2003,2409.1196
+daily-per-capita-caloric-supply,Africa,2004,2418.0444
+daily-per-capita-caloric-supply,Africa,2005,2446.2446
+daily-per-capita-caloric-supply,Africa,2006,2463.2727
+daily-per-capita-caloric-supply,Africa,2007,2464.1545
+daily-per-capita-caloric-supply,Africa,2008,2477.2153
+daily-per-capita-caloric-supply,Africa,2009,2482.6284
+daily-per-capita-caloric-supply,Africa,2010,2541.5156
+daily-per-capita-caloric-supply,Africa,2011,2540.9695
+daily-per-capita-caloric-supply,Africa,2012,2558.9978
+daily-per-capita-caloric-supply,Africa,2013,2559.6218
+daily-per-capita-caloric-supply,Africa,2014,2572.0112
+daily-per-capita-caloric-supply,Africa,2015,2566.8904
+daily-per-capita-caloric-supply,Africa,2016,2552.5984
+daily-per-capita-caloric-supply,Africa,2017,2568.4424
+daily-per-capita-caloric-supply,Africa,2018,2574.7883
+daily-per-capita-caloric-supply,Africa,2019,2575.0222
+daily-per-capita-caloric-supply,Africa,2020,2587.3923
+daily-per-capita-caloric-supply,Africa,2021,2588.4094
+daily-per-capita-caloric-supply,Africa,2022,2588.9194
+daily-per-capita-caloric-supply,Africa,2023,2587.5344
+daily-per-capita-caloric-supply,Africa,2024,2587.9788
+daily-per-capita-caloric-supply,Bangladesh,1961,2059.1362
+daily-per-capita-caloric-supply,Bangladesh,1962,2031.9103
+daily-per-capita-caloric-supply,Bangladesh,1963,2073.961
+daily-per-capita-caloric-supply,Bangladesh,1964,2059.116
+daily-per-capita-caloric-supply,Bangladesh,1965,2025.9501
+daily-per-capita-caloric-supply,Bangladesh,1966,2020.494
+daily-per-capita-caloric-supply,Bangladesh,1967,1890.6884
+daily-per-capita-caloric-supply,Bangladesh,1968,1994.0013
+daily-per-capita-caloric-supply,Bangladesh,1969,2046.1094
+daily-per-capita-caloric-supply,Bangladesh,1970,2112.0322
+daily-per-capita-caloric-supply,Bangladesh,1971,1957.1454
+daily-per-capita-caloric-supply,Bangladesh,1972,1800.939
+daily-per-capita-caloric-supply,Bangladesh,1973,1870.0767
+daily-per-capita-caloric-supply,Bangladesh,1974,1919.9886
+daily-per-capita-caloric-supply,Bangladesh,1975,1806.3198
+daily-per-capita-caloric-supply,Bangladesh,1976,1935.7947
+daily-per-capita-caloric-supply,Bangladesh,1977,1759.7295
+daily-per-capita-caloric-supply,Bangladesh,1978,1889.174
+daily-per-capita-caloric-supply,Bangladesh,1979,1945.7047
+daily-per-capita-caloric-supply,Bangladesh,1980,1896.2094
+daily-per-capita-caloric-supply,Bangladesh,1981,1875.013
+daily-per-capita-caloric-supply,Bangladesh,1982,1904.6213
+daily-per-capita-caloric-supply,Bangladesh,1983,1924.3917
+daily-per-capita-caloric-supply,Bangladesh,1984,1904.2098
+daily-per-capita-caloric-supply,Bangladesh,1985,1945.0895
+daily-per-capita-caloric-supply,Bangladesh,1986,1949.7684
+daily-per-capita-caloric-supply,Bangladesh,1987,2024.6873
+daily-per-capita-caloric-supply,Bangladesh,1988,2007.633
+daily-per-capita-caloric-supply,Bangladesh,1989,1996.649
+daily-per-capita-caloric-supply,Bangladesh,1990,2030.3099
+daily-per-capita-caloric-supply,Bangladesh,1991,2043.9502
+daily-per-capita-caloric-supply,Bangladesh,1992,2046.6515
+daily-per-capita-caloric-supply,Bangladesh,1993,1955.0944
+daily-per-capita-caloric-supply,Bangladesh,1994,1953.0099
+daily-per-capita-caloric-supply,Bangladesh,1995,1997.2765
+daily-per-capita-caloric-supply,Bangladesh,1996,2007.3961
+daily-per-capita-caloric-supply,Bangladesh,1997,2058.7751
+daily-per-capita-caloric-supply,Bangladesh,1998,2124.9822
+daily-per-capita-caloric-supply,Bangladesh,1999,2229.462
+daily-per-capita-caloric-supply,Bangladesh,2000,2221.295
+daily-per-capita-caloric-supply,Bangladesh,2001,2295.1975
+daily-per-capita-caloric-supply,Bangladesh,2002,2281.3022
+daily-per-capita-caloric-supply,Bangladesh,2003,2320.5803
+daily-per-capita-caloric-supply,Bangladesh,2004,2354.367
+daily-per-capita-caloric-supply,Bangladesh,2005,2346.436
+daily-per-capita-caloric-supply,Bangladesh,2006,2347.0688
+daily-per-capita-caloric-supply,Bangladesh,2007,2391.8162
+daily-per-capita-caloric-supply,Bangladesh,2008,2361.7603
+daily-per-capita-caloric-supply,Bangladesh,2009,2403.0479
+daily-per-capita-caloric-supply,Bangladesh,2010,2328.29
+daily-per-capita-caloric-supply,Bangladesh,2011,2365.53
+daily-per-capita-caloric-supply,Bangladesh,2012,2383.6296
+daily-per-capita-caloric-supply,Bangladesh,2013,2384.76
+daily-per-capita-caloric-supply,Bangladesh,2014,2410.23
+daily-per-capita-caloric-supply,Bangladesh,2015,2481.0303
+daily-per-capita-caloric-supply,Bangladesh,2016,2425.98
+daily-per-capita-caloric-supply,Bangladesh,2017,2488.0503
+daily-per-capita-caloric-supply,Bangladesh,2018,2566.9497
+daily-per-capita-caloric-supply,Bangladesh,2019,2522.8896
+daily-per-capita-caloric-supply,Bangladesh,2020,2589.3499
+daily-per-capita-caloric-supply,Bangladesh,2021,2595.7598
+daily-per-capita-caloric-supply,Bangladesh,2022,2620.0503
+daily-per-capita-caloric-supply,Bangladesh,2023,2603.66
+daily-per-capita-caloric-supply,Bangladesh,2024,2633.47
+daily-per-capita-caloric-supply,Brazil,1937,2150.0
+daily-per-capita-caloric-supply,Brazil,1947,2340.0
+daily-per-capita-caloric-supply,Brazil,1961,2220.4678
+daily-per-capita-caloric-supply,Brazil,1962,2283.328
+daily-per-capita-caloric-supply,Brazil,1963,2256.1326
+daily-per-capita-caloric-supply,Brazil,1964,2321.7883
+daily-per-capita-caloric-supply,Brazil,1965,2347.499
+daily-per-capita-caloric-supply,Brazil,1966,2344.3608
+daily-per-capita-caloric-supply,Brazil,1967,2389.1953
+daily-per-capita-caloric-supply,Brazil,1968,2474.164
+daily-per-capita-caloric-supply,Brazil,1969,2450.6104
+daily-per-capita-caloric-supply,Brazil,1970,2422.468
+daily-per-capita-caloric-supply,Brazil,1971,2443.4575
+daily-per-capita-caloric-supply,Brazil,1972,2412.6636
+daily-per-capita-caloric-supply,Brazil,1973,2399.136
+daily-per-capita-caloric-supply,Brazil,1974,2493.6646
+daily-per-capita-caloric-supply,Brazil,1975,2503.1782
+daily-per-capita-caloric-supply,Brazil,1976,2532.6414
+daily-per-capita-caloric-supply,Brazil,1977,2567.2878
+daily-per-capita-caloric-supply,Brazil,1978,2607.8132
+daily-per-capita-caloric-supply,Brazil,1979,2714.9102
+daily-per-capita-caloric-supply,Brazil,1980,2709.3923
+daily-per-capita-caloric-supply,Brazil,1981,2612.577
+daily-per-capita-caloric-supply,Brazil,1982,2655.9546
+daily-per-capita-caloric-supply,Brazil,1983,2610.385
+daily-per-capita-caloric-supply,Brazil,1984,2611.2163
+daily-per-capita-caloric-supply,Brazil,1985,2642.5027
+daily-per-capita-caloric-supply,Brazil,1986,2697.6235
+daily-per-capita-caloric-supply,Brazil,1987,2703.2932
+daily-per-capita-caloric-supply,Brazil,1988,2699.3398
+daily-per-capita-caloric-supply,Brazil,1989,2746.5366
+daily-per-capita-caloric-supply,Brazil,1990,2727.8813
+daily-per-capita-caloric-supply,Brazil,1991,2785.2666
+daily-per-capita-caloric-supply,Brazil,1992,2776.5396
+daily-per-capita-caloric-supply,Brazil,1993,2777.7188
+daily-per-capita-caloric-supply,Brazil,1994,2821.0825
+daily-per-capita-caloric-supply,Brazil,1995,2814.801
+daily-per-capita-caloric-supply,Brazil,1996,2843.7673
+daily-per-capita-caloric-supply,Brazil,1997,2858.79
+daily-per-capita-caloric-supply,Brazil,1998,2857.9673
+daily-per-capita-caloric-supply,Brazil,1999,2871.4941
+daily-per-capita-caloric-supply,Brazil,2000,2888.0051
+daily-per-capita-caloric-supply,Brazil,2001,2902.9883
+daily-per-capita-caloric-supply,Brazil,2002,2941.0996
+daily-per-capita-caloric-supply,Brazil,2003,3086.525
+daily-per-capita-caloric-supply,Brazil,2004,3104.511
+daily-per-capita-caloric-supply,Brazil,2005,3102.1802
+daily-per-capita-caloric-supply,Brazil,2006,3121.017
+daily-per-capita-caloric-supply,Brazil,2007,3129.375
+daily-per-capita-caloric-supply,Brazil,2008,3200.9473
+daily-per-capita-caloric-supply,Brazil,2009,3189.7615
+daily-per-capita-caloric-supply,Brazil,2010,3302.99
+daily-per-capita-caloric-supply,Brazil,2011,3348.85
+daily-per-capita-caloric-supply,Brazil,2012,3300.03
+daily-per-capita-caloric-supply,Brazil,2013,3311.13
+daily-per-capita-caloric-supply,Brazil,2014,3354.31
+daily-per-capita-caloric-supply,Brazil,2015,3299.99
+daily-per-capita-caloric-supply,Brazil,2016,3280.27
+daily-per-capita-caloric-supply,Brazil,2017,3296.8203
+daily-per-capita-caloric-supply,Brazil,2018,3339.51
+daily-per-capita-caloric-supply,Brazil,2019,3350.08
+daily-per-capita-caloric-supply,Brazil,2020,3323.03
+daily-per-capita-caloric-supply,Brazil,2021,3374.04
+daily-per-capita-caloric-supply,Brazil,2022,3393.84
+daily-per-capita-caloric-supply,Brazil,2023,3366.64
+daily-per-capita-caloric-supply,Brazil,2024,3395.82
+daily-per-capita-caloric-supply,China,1934,2230.0
+daily-per-capita-caloric-supply,China,1949,2030.0
+daily-per-capita-caloric-supply,China,1961,1426.0812
+daily-per-capita-caloric-supply,China,1962,1540.991
+daily-per-capita-caloric-supply,China,1963,1590.5405
+daily-per-capita-caloric-supply,China,1964,1645.8793
+daily-per-capita-caloric-supply,China,1965,1767.5077
+daily-per-capita-caloric-supply,China,1966,1832.682
+daily-per-capita-caloric-supply,China,1967,1789.0037
+daily-per-capita-caloric-supply,China,1968,1735.1166
+daily-per-capita-caloric-supply,China,1969,1710.7266
+daily-per-capita-caloric-supply,China,1970,1820.436
+daily-per-capita-caloric-supply,China,1971,1826.534
+daily-per-capita-caloric-supply,China,1972,1813.5011
+daily-per-capita-caloric-supply,China,1973,1885.3046
+daily-per-capita-caloric-supply,China,1974,1883.9235
+daily-per-capita-caloric-supply,China,1975,1903.4537
+daily-per-capita-caloric-supply,China,1976,1873.3951
+daily-per-capita-caloric-supply,China,1977,1914.3931
+daily-per-capita-caloric-supply,China,1978,2064.7002
+daily-per-capita-caloric-supply,China,1979,2079.6501
+daily-per-capita-caloric-supply,China,1980,2147.951
+daily-per-capita-caloric-supply,China,1981,2164.8076
+daily-per-capita-caloric-supply,China,1982,2325.8486
+daily-per-capita-caloric-supply,China,1983,2395.5737
+daily-per-capita-caloric-supply,China,1984,2434.2434
+daily-per-capita-caloric-supply,China,1985,2434.89
+daily-per-capita-caloric-supply,China,1986,2434.939
+daily-per-capita-caloric-supply,China,1987,2454.3086
+daily-per-capita-caloric-supply,China,1988,2436.918
+daily-per-capita-caloric-supply,China,1989,2429.2861
+daily-per-capita-caloric-supply,China,1990,2529.431
+daily-per-capita-caloric-supply,China,1991,2456.6855
+daily-per-capita-caloric-supply,China,1992,2485.316
+daily-per-capita-caloric-supply,China,1993,2571.9282
+daily-per-capita-caloric-supply,China,1994,2640.116
+daily-per-capita-caloric-supply,China,1995,2729.7446
+daily-per-capita-caloric-supply,China,1996,2731.618
+daily-per-capita-caloric-supply,China,1997,2759.9822
+daily-per-capita-caloric-supply,China,1998,2801.5723
+daily-per-capita-caloric-supply,China,1999,2791.1619
+daily-per-capita-caloric-supply,China,2000,2831.549
+daily-per-capita-caloric-supply,China,2001,2836.2534
+daily-per-capita-caloric-supply,China,2002,2850.5972
+daily-per-capita-caloric-supply,China,2003,2851.3696
+daily-per-capita-caloric-supply,China,2004,2875.1306
+daily-per-capita-caloric-supply,China,2005,2897.3333
+daily-per-capita-caloric-supply,China,2006,2900.5889
+daily-per-capita-caloric-supply,China,2007,2937.741
+daily-per-capita-caloric-supply,China,2008,2996.6091
+daily-per-capita-caloric-supply,China,2009,3013.8408
+daily-per-capita-caloric-supply,China,2010,3041.44
+daily-per-capita-caloric-supply,China,2011,3088.33
+daily-per-capita-caloric-supply,China,2012,3103.46
+daily-per-capita-caloric-supply,China,2013,3100.17
+daily-per-capita-caloric-supply,China,2014,3200.27
+daily-per-capita-caloric-supply,China,2015,3236.34
+daily-per-capita-caloric-supply,China,2016,3228.1
+daily-per-capita-caloric-supply,China,2017,3265.02
+daily-per-capita-caloric-supply,China,2018,3281.05
+daily-per-capita-caloric-supply,China,2019,3308.88
+daily-per-capita-caloric-supply,China,2020,3338.17
+daily-per-capita-caloric-supply,China,2021,3422.56
+daily-per-capita-caloric-supply,China,2022,3473.1204
+daily-per-capita-caloric-supply,China,2023,3496.4497
+daily-per-capita-caloric-supply,China,2024,3495.89
+daily-per-capita-caloric-supply,Ethiopia,1947,1770.0
+daily-per-capita-caloric-supply,Ethiopia,1993,1497.9094
+daily-per-capita-caloric-supply,Ethiopia,1994,1533.3589
+daily-per-capita-caloric-supply,Ethiopia,1995,1557.2117
+daily-per-capita-caloric-supply,Ethiopia,1996,1636.8369
+daily-per-capita-caloric-supply,Ethiopia,1997,1661.2009
+daily-per-capita-caloric-supply,Ethiopia,1998,1657.5736
+daily-per-capita-caloric-supply,Ethiopia,1999,1694.4568
+daily-per-capita-caloric-supply,Ethiopia,2000,1748.8871
+daily-per-capita-caloric-supply,Ethiopia,2001,1788.5616
+daily-per-capita-caloric-supply,Ethiopia,2002,1800.7366
+daily-per-capita-caloric-supply,Ethiopia,2003,1836.9316
+daily-per-capita-caloric-supply,Ethiopia,2004,1832.0227
+daily-per-capita-caloric-supply,Ethiopia,2005,1922.7417
+daily-per-capita-caloric-supply,Ethiopia,2006,1908.0543
+daily-per-capita-caloric-supply,Ethiopia,2007,1894.6267
+daily-per-capita-caloric-supply,Ethiopia,2008,1948.7539
+daily-per-capita-caloric-supply,Ethiopia,2009,1978.3757
+daily-per-capita-caloric-supply,Ethiopia,2010,2167.5598
+daily-per-capita-caloric-supply,Ethiopia,2011,2182.1697
+daily-per-capita-caloric-supply,Ethiopia,2012,2234.3
+daily-per-capita-caloric-supply,Ethiopia,2013,2292.08
+daily-per-capita-caloric-supply,Ethiopia,2014,2372.6497
+daily-per-capita-caloric-supply,Ethiopia,2015,2474.9397
+daily-per-capita-caloric-supply,Ethiopia,2016,2452.5498
+daily-per-capita-caloric-supply,Ethiopia,2017,2494.8796
+daily-per-capita-caloric-supply,Ethiopia,2018,2494.7798
+daily-per-capita-caloric-supply,Ethiopia,2019,2458.71
+daily-per-capita-caloric-supply,Ethiopia,2020,2548.49
+daily-per-capita-caloric-supply,Ethiopia,2021,2554.08
+daily-per-capita-caloric-supply,Ethiopia,2022,2561.77
+daily-per-capita-caloric-supply,Ethiopia,2023,2551.4597
+daily-per-capita-caloric-supply,Ethiopia,2024,2537.53
+daily-per-capita-caloric-supply,India,1948,1570.0
+daily-per-capita-caloric-supply,India,1949,1700.0
+daily-per-capita-caloric-supply,India,1961,2064.2925
+daily-per-capita-caloric-supply,India,1962,2099.91
+daily-per-capita-caloric-supply,India,1963,2012.9534
+daily-per-capita-caloric-supply,India,1964,2029.8745
+daily-per-capita-caloric-supply,India,1965,1961.6951
+daily-per-capita-caloric-supply,India,1966,1969.3369
+daily-per-capita-caloric-supply,India,1967,2022.6239
+daily-per-capita-caloric-supply,India,1968,2042.8257
+daily-per-capita-caloric-supply,India,1969,2070.6458
+daily-per-capita-caloric-supply,India,1970,2147.3987
+daily-per-capita-caloric-supply,India,1971,2024.7502
+daily-per-capita-caloric-supply,India,1972,2021.366
+daily-per-capita-caloric-supply,India,1973,2083.5356
+daily-per-capita-caloric-supply,India,1974,1973.3269
+daily-per-capita-caloric-supply,India,1975,2096.868
+daily-per-capita-caloric-supply,India,1976,1957.2223
+daily-per-capita-caloric-supply,India,1977,2142.8665
+daily-per-capita-caloric-supply,India,1978,2186.1052
+daily-per-capita-caloric-supply,India,1979,2060.3677
+daily-per-capita-caloric-supply,India,1980,2027.2488
+daily-per-capita-caloric-supply,India,1981,2089.1096
+daily-per-capita-caloric-supply,India,1982,2060.5356
+daily-per-capita-caloric-supply,India,1983,2239.4358
+daily-per-capita-caloric-supply,India,1984,2243.5564
+daily-per-capita-caloric-supply,India,1985,2182.8801
+daily-per-capita-caloric-supply,India,1986,2182.9773
+daily-per-capita-caloric-supply,India,1987,2192.8115
+daily-per-capita-caloric-supply,India,1988,2293.6953
+daily-per-capita-caloric-supply,India,1989,2381.6252
+daily-per-capita-caloric-supply,India,1990,2215.4016
+daily-per-capita-caloric-supply,India,1991,2303.1719
+daily-per-capita-caloric-supply,India,1992,2334.8286
+daily-per-capita-caloric-supply,India,1993,2266.4739
+daily-per-capita-caloric-supply,India,1994,2285.269
+daily-per-capita-caloric-supply,India,1995,2312.898
+daily-per-capita-caloric-supply,India,1996,2327.9878
+daily-per-capita-caloric-supply,India,1997,2348.91
+daily-per-capita-caloric-supply,India,1998,2335.4375
+daily-per-capita-caloric-supply,India,1999,2367.161
+daily-per-capita-caloric-supply,India,2000,2344.433
+daily-per-capita-caloric-supply,India,2001,2292.856
+daily-per-capita-caloric-supply,India,2002,2241.5803
+daily-per-capita-caloric-supply,India,2003,2234.951
+daily-per-capita-caloric-supply,India,2004,2205.1958
+daily-per-capita-caloric-supply,India,2005,2215.4639
+daily-per-capita-caloric-supply,India,2006,2274.7854
+daily-per-capita-caloric-supply,India,2007,2336.0317
+daily-per-capita-caloric-supply,India,2008,2359.7761
+daily-per-capita-caloric-supply,India,2009,2344.84
+daily-per-capita-caloric-supply,India,2010,2358.6697
+daily-per-capita-caloric-supply,India,2011,2397.93
+daily-per-capita-caloric-supply,India,2012,2382.64
+daily-per-capita-caloric-supply,India,2013,2434.76
+daily-per-capita-caloric-supply,India,2014,2460.0903
+daily-per-capita-caloric-supply,India,2015,2343.36
+daily-per-capita-caloric-supply,India,2016,2473.77
+daily-per-capita-caloric-supply,India,2017,2513.76
+daily-per-capita-caloric-supply,India,2018,2509.0498
+daily-per-capita-caloric-supply,India,2019,2530.74
+daily-per-capita-caloric-supply,India,2020,2545.55
+daily-per-capita-caloric-supply,India,2021,2562.64
+daily-per-capita-caloric-supply,India,2022,2611.89
+daily-per-capita-caloric-supply,India,2023,2663.21
+daily-per-capita-caloric-supply,India,2024,2716.85
+daily-per-capita-caloric-supply,Indonesia,1961,1825.6414
+daily-per-capita-caloric-supply,Indonesia,1962,1822.1608
+daily-per-capita-caloric-supply,Indonesia,1963,1803.1868
+daily-per-capita-caloric-supply,Indonesia,1964,1842.1006
+daily-per-capita-caloric-supply,Indonesia,1965,1831.2664
+daily-per-capita-caloric-supply,Indonesia,1966,1818.1909
+daily-per-capita-caloric-supply,Indonesia,1967,1824.469
+daily-per-capita-caloric-supply,Indonesia,1968,1841.376
+daily-per-capita-caloric-supply,Indonesia,1969,1871.5096
+daily-per-capita-caloric-supply,Indonesia,1970,1902.7292
+daily-per-capita-caloric-supply,Indonesia,1971,1933.2241
+daily-per-capita-caloric-supply,Indonesia,1972,1960.5413
+daily-per-capita-caloric-supply,Indonesia,1973,2038.9673
+daily-per-capita-caloric-supply,Indonesia,1974,2053.8772
+daily-per-capita-caloric-supply,Indonesia,1975,2038.2224
+daily-per-capita-caloric-supply,Indonesia,1976,2011.2827
+daily-per-capita-caloric-supply,Indonesia,1977,2056.2607
+daily-per-capita-caloric-supply,Indonesia,1978,2092.1165
+daily-per-capita-caloric-supply,Indonesia,1979,2148.7002
+daily-per-capita-caloric-supply,Indonesia,1980,2184.4536
+daily-per-capita-caloric-supply,Indonesia,1981,2260.4893
+daily-per-capita-caloric-supply,Indonesia,1982,2261.2808
+daily-per-capita-caloric-supply,Indonesia,1983,2319.095
+daily-per-capita-caloric-supply,Indonesia,1984,2341.6042
+daily-per-capita-caloric-supply,Indonesia,1985,2356.7517
+daily-per-capita-caloric-supply,Indonesia,1986,2382.2454
+daily-per-capita-caloric-supply,Indonesia,1987,2428.8418
+daily-per-capita-caloric-supply,Indonesia,1988,2520.51
+daily-per-capita-caloric-supply,Indonesia,1989,2535.437
+daily-per-capita-caloric-supply,Indonesia,1990,2276.2869
+daily-per-capita-caloric-supply,Indonesia,1991,2293.184
+daily-per-capita-caloric-supply,Indonesia,1992,2350.7368
+daily-per-capita-caloric-supply,Indonesia,1993,2364.1128
+daily-per-capita-caloric-supply,Indonesia,1994,2402.2627
+daily-per-capita-caloric-supply,Indonesia,1995,2478.0554
+daily-per-capita-caloric-supply,Indonesia,1996,2471.1409
+daily-per-capita-caloric-supply,Indonesia,1997,2419.969
+daily-per-capita-caloric-supply,Indonesia,1998,2404.846
+daily-per-capita-caloric-supply,Indonesia,1999,2385.5972
+daily-per-capita-caloric-supply,Indonesia,2000,2355.906
+daily-per-capita-caloric-supply,Indonesia,2001,2345.4497
+daily-per-capita-caloric-supply,Indonesia,2002,2372.8992
+daily-per-capita-caloric-supply,Indonesia,2003,2392.3865
+daily-per-capita-caloric-supply,Indonesia,2004,2399.3855
+daily-per-capita-caloric-supply,Indonesia,2005,2399.208
+daily-per-capita-caloric-supply,Indonesia,2006,2417.0864
+daily-per-capita-caloric-supply,Indonesia,2007,2457.3157
+daily-per-capita-caloric-supply,Indonesia,2008,2481.0115
+daily-per-capita-caloric-supply,Indonesia,2009,2541.7705
+daily-per-capita-caloric-supply,Indonesia,2010,2608.1897
+daily-per-capita-caloric-supply,Indonesia,2011,2672.15
+daily-per-capita-caloric-supply,Indonesia,2012,2709.96
+daily-per-capita-caloric-supply,Indonesia,2013,2743.55
+daily-per-capita-caloric-supply,Indonesia,2014,2818.1104
+daily-per-capita-caloric-supply,Indonesia,2015,2812.49
+daily-per-capita-caloric-supply,Indonesia,2016,2887.2097
+daily-per-capita-caloric-supply,Indonesia,2017,2950.85
+daily-per-capita-caloric-supply,Indonesia,2018,2907.28
+daily-per-capita-caloric-supply,Indonesia,2019,2898.94
+daily-per-capita-caloric-supply,Indonesia,2020,2880.2102
+daily-per-capita-caloric-supply,Indonesia,2021,2868.96
+daily-per-capita-caloric-supply,Indonesia,2022,2906.76
+daily-per-capita-caloric-supply,Indonesia,2023,2900.05
+daily-per-capita-caloric-supply,Indonesia,2024,2904.16
+daily-per-capita-caloric-supply,Mexico,1936,1800.0
+daily-per-capita-caloric-supply,Mexico,1947,2050.0
+daily-per-capita-caloric-supply,Mexico,1948,2101.0
+daily-per-capita-caloric-supply,Mexico,1961,2424.223
+daily-per-capita-caloric-supply,Mexico,1962,2408.7449
+daily-per-capita-caloric-supply,Mexico,1963,2421.492
+daily-per-capita-caloric-supply,Mexico,1964,2474.255
+daily-per-capita-caloric-supply,Mexico,1965,2487.663
+daily-per-capita-caloric-supply,Mexico,1966,2526.9004
+daily-per-capita-caloric-supply,Mexico,1967,2571.2075
+daily-per-capita-caloric-supply,Mexico,1968,2603.0742
+daily-per-capita-caloric-supply,Mexico,1969,2619.7732
+daily-per-capita-caloric-supply,Mexico,1970,2647.567
+daily-per-capita-caloric-supply,Mexico,1971,2644.3647
+daily-per-capita-caloric-supply,Mexico,1972,2686.99
+daily-per-capita-caloric-supply,Mexico,1973,2731.313
+daily-per-capita-caloric-supply,Mexico,1974,2757.6448
+daily-per-capita-caloric-supply,Mexico,1975,2840.0322
+daily-per-capita-caloric-supply,Mexico,1976,2814.1086
+daily-per-capita-caloric-supply,Mexico,1977,2857.4868
+daily-per-capita-caloric-supply,Mexico,1978,2942.2683
+daily-per-capita-caloric-supply,Mexico,1979,2980.5974
+daily-per-capita-caloric-supply,Mexico,1980,3135.2505
+daily-per-capita-caloric-supply,Mexico,1981,3275.3713
+daily-per-capita-caloric-supply,Mexico,1982,3264.99
+daily-per-capita-caloric-supply,Mexico,1983,3233.9343
+daily-per-capita-caloric-supply,Mexico,1984,3165.228
+daily-per-capita-caloric-supply,Mexico,1985,3215.138
+daily-per-capita-caloric-supply,Mexico,1986,3167.643
+daily-per-capita-caloric-supply,Mexico,1987,3057.1333
+daily-per-capita-caloric-supply,Mexico,1988,3123.1045
+daily-per-capita-caloric-supply,Mexico,1989,3091.0317
+daily-per-capita-caloric-supply,Mexico,1990,3085.6492
+daily-per-capita-caloric-supply,Mexico,1991,3111.8867
+daily-per-capita-caloric-supply,Mexico,1992,3129.734
+daily-per-capita-caloric-supply,Mexico,1993,3145.3992
+daily-per-capita-caloric-supply,Mexico,1994,3149.174
+daily-per-capita-caloric-supply,Mexico,1995,3115.202
+daily-per-capita-caloric-supply,Mexico,1996,3144.6162
+daily-per-capita-caloric-supply,Mexico,1997,3123.5466
+daily-per-capita-caloric-supply,Mexico,1998,3130.0845
+daily-per-capita-caloric-supply,Mexico,1999,3141.8457
+daily-per-capita-caloric-supply,Mexico,2000,3199.0588
+daily-per-capita-caloric-supply,Mexico,2001,3247.0479
+daily-per-capita-caloric-supply,Mexico,2002,3260.8274
+daily-per-capita-caloric-supply,Mexico,2003,3261.9993
+daily-per-capita-caloric-supply,Mexico,2004,3253.606
+daily-per-capita-caloric-supply,Mexico,2005,3207.823
+daily-per-capita-caloric-supply,Mexico,2006,3219.127
+daily-per-capita-caloric-supply,Mexico,2007,3236.3157
+daily-per-capita-caloric-supply,Mexico,2008,3207.1982
+daily-per-capita-caloric-supply,Mexico,2009,3162.7324
+daily-per-capita-caloric-supply,Mexico,2010,3146.43
+daily-per-capita-caloric-supply,Mexico,2011,3121.9
+daily-per-capita-caloric-supply,Mexico,2012,3127.39
+daily-per-capita-caloric-supply,Mexico,2013,3121.47
+daily-per-capita-caloric-supply,Mexico,2014,3157.6797
+daily-per-capita-caloric-supply,Mexico,2015,3170.95
+daily-per-capita-caloric-supply,Mexico,2016,3198.9202
+daily-per-capita-caloric-supply,Mexico,2017,3211.7302
+daily-per-capita-caloric-supply,Mexico,2018,3217.04
+daily-per-capita-caloric-supply,Mexico,2019,3252.4
+daily-per-capita-caloric-supply,Mexico,2020,3250.3398
+daily-per-capita-caloric-supply,Mexico,2021,3267.6
+daily-per-capita-caloric-supply,Mexico,2022,3263.09
+daily-per-capita-caloric-supply,Mexico,2023,3260.73
+daily-per-capita-caloric-supply,Mexico,2024,3308.5803
+daily-per-capita-caloric-supply,Nigeria,1961,1953.3381
+daily-per-capita-caloric-supply,Nigeria,1962,2032.8883
+daily-per-capita-caloric-supply,Nigeria,1963,1990.5769
+daily-per-capita-caloric-supply,Nigeria,1964,1957.76
+daily-per-capita-caloric-supply,Nigeria,1965,1884.5607
+daily-per-capita-caloric-supply,Nigeria,1966,1740.1888
+daily-per-capita-caloric-supply,Nigeria,1967,1838.565
+daily-per-capita-caloric-supply,Nigeria,1968,1832.0212
+daily-per-capita-caloric-supply,Nigeria,1969,1956.5488
+daily-per-capita-caloric-supply,Nigeria,1970,2001.0703
+daily-per-capita-caloric-supply,Nigeria,1971,1874.2467
+daily-per-capita-caloric-supply,Nigeria,1972,1661.3175
+daily-per-capita-caloric-supply,Nigeria,1973,1773.8691
+daily-per-capita-caloric-supply,Nigeria,1974,1884.6687
+daily-per-capita-caloric-supply,Nigeria,1975,1840.503
+daily-per-capita-caloric-supply,Nigeria,1976,1758.7428
+daily-per-capita-caloric-supply,Nigeria,1977,1784.2788
+daily-per-capita-caloric-supply,Nigeria,1978,1790.7881
+daily-per-capita-caloric-supply,Nigeria,1979,1738.922
+daily-per-capita-caloric-supply,Nigeria,1980,1857.5903
+daily-per-capita-caloric-supply,Nigeria,1981,1872.2609
+daily-per-capita-caloric-supply,Nigeria,1982,1860.0865
+daily-per-capita-caloric-supply,Nigeria,1983,1710.9694
+daily-per-capita-caloric-supply,Nigeria,1984,1737.3453
+daily-per-capita-caloric-supply,Nigeria,1985,1841.1345
+daily-per-capita-caloric-supply,Nigeria,1986,1982.6814
+daily-per-capita-caloric-supply,Nigeria,1987,1946.2034
+daily-per-capita-caloric-supply,Nigeria,1988,1990.6635
+daily-per-capita-caloric-supply,Nigeria,1989,2072.688
+daily-per-capita-caloric-supply,Nigeria,1990,2158.214
+daily-per-capita-caloric-supply,Nigeria,1991,2300.9807
+daily-per-capita-caloric-supply,Nigeria,1992,2392.0337
+daily-per-capita-caloric-supply,Nigeria,1993,2476.7754
+daily-per-capita-caloric-supply,Nigeria,1994,2449.8162
+daily-per-capita-caloric-supply,Nigeria,1995,2505.6362
+daily-per-capita-caloric-supply,Nigeria,1996,2497.4312
+daily-per-capita-caloric-supply,Nigeria,1997,2537.288
+daily-per-capita-caloric-supply,Nigeria,1998,2565.1182
+daily-per-capita-caloric-supply,Nigeria,1999,2564.1685
+daily-per-capita-caloric-supply,Nigeria,2000,2537.1296
+daily-per-capita-caloric-supply,Nigeria,2001,2534.9438
+daily-per-capita-caloric-supply,Nigeria,2002,2521.9849
+daily-per-capita-caloric-supply,Nigeria,2003,2519.551
+daily-per-capita-caloric-supply,Nigeria,2004,2559.459
+daily-per-capita-caloric-supply,Nigeria,2005,2603.5564
+daily-per-capita-caloric-supply,Nigeria,2006,2619.333
+daily-per-capita-caloric-supply,Nigeria,2007,2611.7588
+daily-per-capita-caloric-supply,Nigeria,2008,2612.46
+daily-per-capita-caloric-supply,Nigeria,2009,2572.3816
+daily-per-capita-caloric-supply,Nigeria,2010,2561.47
+daily-per-capita-caloric-supply,Nigeria,2011,2526.56
+daily-per-capita-caloric-supply,Nigeria,2012,2506.01
+daily-per-capita-caloric-supply,Nigeria,2013,2497.39
+daily-per-capita-caloric-supply,Nigeria,2014,2557.01
+daily-per-capita-caloric-supply,Nigeria,2015,2558.64
+daily-per-capita-caloric-supply,Nigeria,2016,2561.48
+daily-per-capita-caloric-supply,Nigeria,2017,2560.29
+daily-per-capita-caloric-supply,Nigeria,2018,2524.22
+daily-per-capita-caloric-supply,Nigeria,2019,2543.06
+daily-per-capita-caloric-supply,Nigeria,2020,2511.63
+daily-per-capita-caloric-supply,Nigeria,2021,2538.7302
+daily-per-capita-caloric-supply,Nigeria,2022,2506.84
+daily-per-capita-caloric-supply,Nigeria,2023,2449.19
+daily-per-capita-caloric-supply,Nigeria,2024,2442.76
+daily-per-capita-caloric-supply,Pakistan,1961,1874.1906
+daily-per-capita-caloric-supply,Pakistan,1962,1936.8984
+daily-per-capita-caloric-supply,Pakistan,1963,1951.855
+daily-per-capita-caloric-supply,Pakistan,1964,2091.4685
+daily-per-capita-caloric-supply,Pakistan,1965,2190.1655
+daily-per-capita-caloric-supply,Pakistan,1966,2092.895
+daily-per-capita-caloric-supply,Pakistan,1967,2090.999
+daily-per-capita-caloric-supply,Pakistan,1968,2039.1139
+daily-per-capita-caloric-supply,Pakistan,1969,2342.9
+daily-per-capita-caloric-supply,Pakistan,1970,2334.7444
+daily-per-capita-caloric-supply,Pakistan,1971,2254.8923
+daily-per-capita-caloric-supply,Pakistan,1972,2313.7546
+daily-per-capita-caloric-supply,Pakistan,1973,2292.2031
+daily-per-capita-caloric-supply,Pakistan,1974,2290.9624
+daily-per-capita-caloric-supply,Pakistan,1975,2202.6565
+daily-per-capita-caloric-supply,Pakistan,1976,2219.068
+daily-per-capita-caloric-supply,Pakistan,1977,2231.6956
+daily-per-capita-caloric-supply,Pakistan,1978,2299.4333
+daily-per-capita-caloric-supply,Pakistan,1979,2245.0315
+daily-per-capita-caloric-supply,Pakistan,1980,2143.7666
+daily-per-capita-caloric-supply,Pakistan,1981,2108.5322
+daily-per-capita-caloric-supply,Pakistan,1982,2162.7922
+daily-per-capita-caloric-supply,Pakistan,1983,2150.9102
+daily-per-capita-caloric-supply,Pakistan,1984,2170.611
+daily-per-capita-caloric-supply,Pakistan,1985,2111.4675
+daily-per-capita-caloric-supply,Pakistan,1986,2102.2546
+daily-per-capita-caloric-supply,Pakistan,1987,2154.7415
+daily-per-capita-caloric-supply,Pakistan,1988,2102.419
+daily-per-capita-caloric-supply,Pakistan,1989,2282.1516
+daily-per-capita-caloric-supply,Pakistan,1990,2239.751
+daily-per-capita-caloric-supply,Pakistan,1991,2115.6838
+daily-per-capita-caloric-supply,Pakistan,1992,2207.301
+daily-per-capita-caloric-supply,Pakistan,1993,2225.2473
+daily-per-capita-caloric-supply,Pakistan,1994,2263.7046
+daily-per-capita-caloric-supply,Pakistan,1995,2248.8745
+daily-per-capita-caloric-supply,Pakistan,1996,2258.9521
+daily-per-capita-caloric-supply,Pakistan,1997,2251.1086
+daily-per-capita-caloric-supply,Pakistan,1998,2219.254
+daily-per-capita-caloric-supply,Pakistan,1999,2261.7295
+daily-per-capita-caloric-supply,Pakistan,2000,2227.0498
+daily-per-capita-caloric-supply,Pakistan,2001,2131.678
+daily-per-capita-caloric-supply,Pakistan,2002,2068.5366
+daily-per-capita-caloric-supply,Pakistan,2003,2108.7578
+daily-per-capita-caloric-supply,Pakistan,2004,2119.42
+daily-per-capita-caloric-supply,Pakistan,2005,2123.8674
+daily-per-capita-caloric-supply,Pakistan,2006,2132.0173
+daily-per-capita-caloric-supply,Pakistan,2007,2149.9702
+daily-per-capita-caloric-supply,Pakistan,2008,2134.6982
+daily-per-capita-caloric-supply,Pakistan,2009,2125.4602
+daily-per-capita-caloric-supply,Pakistan,2010,2330.68
+daily-per-capita-caloric-supply,Pakistan,2011,2353.49
+daily-per-capita-caloric-supply,Pakistan,2012,2356.74
+daily-per-capita-caloric-supply,Pakistan,2013,2366.41
+daily-per-capita-caloric-supply,Pakistan,2014,2354.75
+daily-per-capita-caloric-supply,Pakistan,2015,2379.56
+daily-per-capita-caloric-supply,Pakistan,2016,2437.9202
+daily-per-capita-caloric-supply,Pakistan,2017,2523.05
+daily-per-capita-caloric-supply,Pakistan,2018,2369.07
+daily-per-capita-caloric-supply,Pakistan,2019,2526.63
+daily-per-capita-caloric-supply,Pakistan,2020,2521.07
+daily-per-capita-caloric-supply,Pakistan,2021,2589.09
+daily-per-capita-caloric-supply,Pakistan,2022,2467.44
+daily-per-capita-caloric-supply,Pakistan,2023,2517.05
+daily-per-capita-caloric-supply,Pakistan,2024,2517.19
+daily-per-capita-caloric-supply,United States,1800,2952.0
+daily-per-capita-caloric-supply,United States,1810,2935.0
+daily-per-capita-caloric-supply,United States,1820,2904.0
+daily-per-capita-caloric-supply,United States,1830,2888.0
+daily-per-capita-caloric-supply,United States,1840,3013.0
+daily-per-capita-caloric-supply,United States,1850,2585.0
+daily-per-capita-caloric-supply,United States,1860,2826.0
+daily-per-capita-caloric-supply,United States,1870,3029.0
+daily-per-capita-caloric-supply,United States,1880,3237.0
+daily-per-capita-caloric-supply,United States,1890,3134.0
+daily-per-capita-caloric-supply,United States,1900,3212.0
+daily-per-capita-caloric-supply,United States,1909,3400.0
+daily-per-capita-caloric-supply,United States,1910,3400.0
+daily-per-capita-caloric-supply,United States,1911,3400.0
+daily-per-capita-caloric-supply,United States,1912,3400.0
+daily-per-capita-caloric-supply,United States,1913,3400.0
+daily-per-capita-caloric-supply,United States,1914,3400.0
+daily-per-capita-caloric-supply,United States,1915,3300.0
+daily-per-capita-caloric-supply,United States,1916,3300.0
+daily-per-capita-caloric-supply,United States,1917,3200.0
+daily-per-capita-caloric-supply,United States,1918,3300.0
+daily-per-capita-caloric-supply,United States,1919,3300.0
+daily-per-capita-caloric-supply,United States,1920,3200.0
+daily-per-capita-caloric-supply,United States,1921,3100.0
+daily-per-capita-caloric-supply,United States,1922,3400.0
+daily-per-capita-caloric-supply,United States,1923,3400.0
+daily-per-capita-caloric-supply,United States,1924,3400.0
+daily-per-capita-caloric-supply,United States,1925,3400.0
+daily-per-capita-caloric-supply,United States,1926,3400.0
+daily-per-capita-caloric-supply,United States,1927,3400.0
+daily-per-capita-caloric-supply,United States,1928,3500.0
+daily-per-capita-caloric-supply,United States,1929,3400.0
+daily-per-capita-caloric-supply,United States,1930,3400.0
+daily-per-capita-caloric-supply,United States,1931,3400.0
+daily-per-capita-caloric-supply,United States,1932,3300.0
+daily-per-capita-caloric-supply,United States,1933,3200.0
+daily-per-capita-caloric-supply,United States,1934,3200.0
+daily-per-capita-caloric-supply,United States,1935,3200.0
+daily-per-capita-caloric-supply,United States,1936,3300.0
+daily-per-capita-caloric-supply,United States,1937,3200.0
+daily-per-capita-caloric-supply,United States,1938,3200.0
+daily-per-capita-caloric-supply,United States,1939,3300.0
+daily-per-capita-caloric-supply,United States,1940,3300.0
+daily-per-capita-caloric-supply,United States,1941,3400.0
+daily-per-capita-caloric-supply,United States,1942,3300.0
+daily-per-capita-caloric-supply,United States,1943,3400.0
+daily-per-capita-caloric-supply,United States,1944,3400.0
+daily-per-capita-caloric-supply,United States,1945,3300.0
+daily-per-capita-caloric-supply,United States,1946,3300.0
+daily-per-capita-caloric-supply,United States,1947,3300.0
+daily-per-capita-caloric-supply,United States,1948,3200.0
+daily-per-capita-caloric-supply,United States,1949,3200.0
+daily-per-capita-caloric-supply,United States,1950,3200.0
+daily-per-capita-caloric-supply,United States,1951,3200.0
+daily-per-capita-caloric-supply,United States,1952,3200.0
+daily-per-capita-caloric-supply,United States,1953,3200.0
+daily-per-capita-caloric-supply,United States,1954,3100.0
+daily-per-capita-caloric-supply,United States,1955,3200.0
+daily-per-capita-caloric-supply,United States,1956,3200.0
+daily-per-capita-caloric-supply,United States,1957,3100.0
+daily-per-capita-caloric-supply,United States,1958,3100.0
+daily-per-capita-caloric-supply,United States,1959,3100.0
+daily-per-capita-caloric-supply,United States,1960,3100.0
+daily-per-capita-caloric-supply,United States,1961,2970.6172
+daily-per-capita-caloric-supply,United States,1962,2940.124
+daily-per-capita-caloric-supply,United States,1963,2934.6348
+daily-per-capita-caloric-supply,United States,1964,2993.758
+daily-per-capita-caloric-supply,United States,1965,2982.689
+daily-per-capita-caloric-supply,United States,1966,3009.0198
+daily-per-capita-caloric-supply,United States,1967,3027.2578
+daily-per-capita-caloric-supply,United States,1968,3046.2898
+daily-per-capita-caloric-supply,United States,1969,3072.8237
+daily-per-capita-caloric-supply,United States,1970,3059.786
+daily-per-capita-caloric-supply,United States,1971,3071.8623
+daily-per-capita-caloric-supply,United States,1972,3074.107
+daily-per-capita-caloric-supply,United States,1973,3047.6616
+daily-per-capita-caloric-supply,United States,1974,3036.2124
+daily-per-capita-caloric-supply,United States,1975,3037.697
+daily-per-capita-caloric-supply,United States,1976,3167.47
+daily-per-capita-caloric-supply,United States,1977,3139.153
+daily-per-capita-caloric-supply,United States,1978,3159.8699
+daily-per-capita-caloric-supply,United States,1979,3218.8914
+daily-per-capita-caloric-supply,United States,1980,3182.5176
+daily-per-capita-caloric-supply,United States,1981,3221.738
+daily-per-capita-caloric-supply,United States,1982,3192.724
+daily-per-capita-caloric-supply,United States,1983,3230.7761
+daily-per-capita-caloric-supply,United States,1984,3276.316
+daily-per-capita-caloric-supply,United States,1985,3382.4912
+daily-per-capita-caloric-supply,United States,1986,3356.765
+daily-per-capita-caloric-supply,United States,1987,3459.7651
+daily-per-capita-caloric-supply,United States,1988,3471.1301
+daily-per-capita-caloric-supply,United States,1989,3450.3008
+daily-per-capita-caloric-supply,United States,1990,3509.09
+daily-per-capita-caloric-supply,United States,1991,3530.6067
+daily-per-capita-caloric-supply,United States,1992,3559.5803
+daily-per-capita-caloric-supply,United States,1993,3600.3086
+daily-per-capita-caloric-supply,United States,1994,3659.3015
+daily-per-capita-caloric-supply,United States,1995,3577.9568
+daily-per-capita-caloric-supply,United States,1996,3592.3677
+daily-per-capita-caloric-supply,United States,1997,3663.522
+daily-per-capita-caloric-supply,United States,1998,3683.5498
+daily-per-capita-caloric-supply,United States,1999,3707.6965
+daily-per-capita-caloric-supply,United States,2000,3796.324
+daily-per-capita-caloric-supply,United States,2001,3749.616
+daily-per-capita-caloric-supply,United States,2002,3824.9988
+daily-per-capita-caloric-supply,United States,2003,3815.354
+daily-per-capita-caloric-supply,United States,2004,3844.4482
+daily-per-capita-caloric-supply,United States,2005,3859.293
+daily-per-capita-caloric-supply,United States,2006,3811.455
+daily-per-capita-caloric-supply,United States,2007,3780.9097
+daily-per-capita-caloric-supply,United States,2008,3720.1716
+daily-per-capita-caloric-supply,United States,2009,3662.6191
+daily-per-capita-caloric-supply,United States,2010,3731.64
+daily-per-capita-caloric-supply,United States,2011,3724.3503
+daily-per-capita-caloric-supply,United States,2012,3759.91
+daily-per-capita-caloric-supply,United States,2013,3745.57
+daily-per-capita-caloric-supply,United States,2014,3729.39
+daily-per-capita-caloric-supply,United States,2015,3737.07
+daily-per-capita-caloric-supply,United States,2016,3754.7302
+daily-per-capita-caloric-supply,United States,2017,3763.72
+daily-per-capita-caloric-supply,United States,2018,3790.58
+daily-per-capita-caloric-supply,United States,2019,3819.61
+daily-per-capita-caloric-supply,United States,2020,3847.5
+daily-per-capita-caloric-supply,United States,2021,3876.55
+daily-per-capita-caloric-supply,United States,2022,3929.5703
+daily-per-capita-caloric-supply,United States,2023,3931.9902
+daily-per-capita-caloric-supply,United States,2024,3949.73
+daily-per-capita-caloric-supply,World,1961,2183.8296
+daily-per-capita-caloric-supply,World,1962,2229.8306
+daily-per-capita-caloric-supply,World,1963,2233.636
+daily-per-capita-caloric-supply,World,1964,2259.9749
+daily-per-capita-caloric-supply,World,1965,2279.69
+daily-per-capita-caloric-supply,World,1966,2295.2876
+daily-per-capita-caloric-supply,World,1967,2298.9355
+daily-per-capita-caloric-supply,World,1968,2303.4385
+daily-per-capita-caloric-supply,World,1969,2312.0889
+daily-per-capita-caloric-supply,World,1970,2357.8975
+daily-per-capita-caloric-supply,World,1971,2333.742
+daily-per-capita-caloric-supply,World,1972,2321.853
+daily-per-capita-caloric-supply,World,1973,2358.698
+daily-per-capita-caloric-supply,World,1974,2351.176
+daily-per-capita-caloric-supply,World,1975,2366.2756
+daily-per-capita-caloric-supply,World,1976,2359.119
+daily-per-capita-caloric-supply,World,1977,2387.8804
+daily-per-capita-caloric-supply,World,1978,2446.4988
+daily-per-capita-caloric-supply,World,1979,2444.6426
+daily-per-capita-caloric-supply,World,1980,2456.2798
+daily-per-capita-caloric-supply,World,1981,2465.729
+daily-per-capita-caloric-supply,World,1982,2493.7034
+daily-per-capita-caloric-supply,World,1983,2535.101
+daily-per-capita-caloric-supply,World,1984,2543.673
+daily-per-capita-caloric-supply,World,1985,2546.9236
+daily-per-capita-caloric-supply,World,1986,2549.4883
+daily-per-capita-caloric-supply,World,1987,2566.85
+daily-per-capita-caloric-supply,World,1988,2583.4622
+daily-per-capita-caloric-supply,World,1989,2593.9458
+daily-per-capita-caloric-supply,World,1990,2579.395
+daily-per-capita-caloric-supply,World,1991,2557.434
+daily-per-capita-caloric-supply,World,1992,2565.4646
+daily-per-capita-caloric-supply,World,1993,2567.2708
+daily-per-capita-caloric-supply,World,1994,2588.624
+daily-per-capita-caloric-supply,World,1995,2610.5447
+daily-per-capita-caloric-supply,World,1996,2618.1921
+daily-per-capita-caloric-supply,World,1997,2628.575
+daily-per-capita-caloric-supply,World,1998,2640.0715
+daily-per-capita-caloric-supply,World,1999,2650.8147
+daily-per-capita-caloric-supply,World,2000,2659.6462
+daily-per-capita-caloric-supply,World,2001,2654.0505
+daily-per-capita-caloric-supply,World,2002,2654.136
+daily-per-capita-caloric-supply,World,2003,2658.0168
+daily-per-capita-caloric-supply,World,2004,2667.0586
+daily-per-capita-caloric-supply,World,2005,2678.3337
+daily-per-capita-caloric-supply,World,2006,2692.913
+daily-per-capita-caloric-supply,World,2007,2716.9482
+daily-per-capita-caloric-supply,World,2008,2731.2104
+daily-per-capita-caloric-supply,World,2009,2727.8804
+daily-per-capita-caloric-supply,World,2010,2799.3716
+daily-per-capita-caloric-supply,World,2011,2821.4414
+daily-per-capita-caloric-supply,World,2012,2839.2686
+daily-per-capita-caloric-supply,World,2013,2847.119
+daily-per-capita-caloric-supply,World,2014,2877.7712
+daily-per-capita-caloric-supply,World,2015,2862.224
+daily-per-capita-caloric-supply,World,2016,2883.4895
+daily-per-capita-caloric-supply,World,2017,2908.9377
+daily-per-capita-caloric-supply,World,2018,2911.5269
+daily-per-capita-caloric-supply,World,2019,2937.7788
+daily-per-capita-caloric-supply,World,2020,2951.246
+daily-per-capita-caloric-supply,World,2021,2973.1255
+daily-per-capita-caloric-supply,World,2022,2992.6997
+daily-per-capita-caloric-supply,World,2023,3000.2156
+daily-per-capita-caloric-supply,World,2024,3013.3164
+cereal-production,Africa,1961,46310720.0
+cereal-production,Africa,1962,53093044.0
+cereal-production,Africa,1963,54568630.0
+cereal-production,Africa,1964,51412170.0
+cereal-production,Africa,1965,51977920.0
+cereal-production,Africa,1966,48640816.0
+cereal-production,Africa,1967,61377336.0
+cereal-production,Africa,1968,58003430.0
+cereal-production,Africa,1969,59873092.0
+cereal-production,Africa,1970,60470360.0
+cereal-production,Africa,1971,65638656.0
+cereal-production,Africa,1972,64642590.0
+cereal-production,Africa,1973,57484856.0
+cereal-production,Africa,1974,71407250.0
+cereal-production,Africa,1975,68910850.0
+cereal-production,Africa,1976,70656200.0
+cereal-production,Africa,1977,66585880.0
+cereal-production,Africa,1978,69595230.0
+cereal-production,Africa,1979,65900370.0
+cereal-production,Africa,1980,72607864.0
+cereal-production,Africa,1981,77594160.0
+cereal-production,Africa,1982,71883350.0
+cereal-production,Africa,1983,65766260.0
+cereal-production,Africa,1984,66018064.0
+cereal-production,Africa,1985,83302680.0
+cereal-production,Africa,1986,88580030.0
+cereal-production,Africa,1987,83858300.0
+cereal-production,Africa,1988,95875224.0
+cereal-production,Africa,1989,99438140.0
+cereal-production,Africa,1990,93198920.0
+cereal-production,Africa,1991,104845240.0
+cereal-production,Africa,1992,89708456.0
+cereal-production,Africa,1993,100424630.0
+cereal-production,Africa,1994,109639730.0
+cereal-production,Africa,1995,98189740.0
+cereal-production,Africa,1996,124348460.0
+cereal-production,Africa,1997,109416450.0
+cereal-production,Africa,1998,115329784.0
+cereal-production,Africa,1999,113687944.0
+cereal-production,Africa,2000,111115360.0
+cereal-production,Africa,2001,116394970.0
+cereal-production,Africa,2002,119270850.0
+cereal-production,Africa,2003,132762540.0
+cereal-production,Africa,2004,133619976.0
+cereal-production,Africa,2005,141837680.0
+cereal-production,Africa,2006,149688560.0
+cereal-production,Africa,2007,141061220.0
+cereal-production,Africa,2008,156207300.0
+cereal-production,Africa,2009,160699790.0
+cereal-production,Africa,2010,168648510.0
+cereal-production,Africa,2011,164565220.0
+cereal-production,Africa,2012,173839660.0
+cereal-production,Africa,2013,179451090.0
+cereal-production,Africa,2014,191914610.0
+cereal-production,Africa,2015,187909920.0
+cereal-production,Africa,2016,186507500.0
+cereal-production,Africa,2017,204320940.0
+cereal-production,Africa,2018,209212540.0
+cereal-production,Africa,2019,205094100.0
+cereal-production,Africa,2020,214330200.0
+cereal-production,Africa,2021,220284100.0
+cereal-production,Africa,2022,218699040.0
+cereal-production,Africa,2023,220898030.0
+cereal-production,Africa,2024,222720420.0
+cereal-production,Bangladesh,1961,14523696.0
+cereal-production,Bangladesh,1962,13408128.0
+cereal-production,Bangladesh,1963,16042664.0
+cereal-production,Bangladesh,1964,15842004.0
+cereal-production,Bangladesh,1965,15852140.0
+cereal-production,Bangladesh,1966,14464297.0
+cereal-production,Bangladesh,1967,16876448.0
+cereal-production,Bangladesh,1968,17160028.0
+cereal-production,Bangladesh,1969,18187398.0
+cereal-production,Bangladesh,1970,16905216.0
+cereal-production,Bangladesh,1971,15088878.0
+cereal-production,Bangladesh,1972,15323537.0
+cereal-production,Bangladesh,1973,18021512.0
+cereal-production,Bangladesh,1974,17105414.0
+cereal-production,Bangladesh,1975,19322564.0
+cereal-production,Bangladesh,1976,17908126.0
+cereal-production,Bangladesh,1977,19772480.0
+cereal-production,Bangladesh,1978,19984400.0
+cereal-production,Bangladesh,1979,19658592.0
+cereal-production,Bangladesh,1980,21698328.0
+cereal-production,Bangladesh,1981,21591388.0
+cereal-production,Bangladesh,1982,22339648.0
+cereal-production,Bangladesh,1983,22990184.0
+cereal-production,Bangladesh,1984,23256274.0
+cereal-production,Bangladesh,1985,24134964.0
+cereal-production,Bangladesh,1986,24266332.0
+cereal-production,Bangladesh,1987,24304320.0
+cereal-production,Bangladesh,1988,24449928.0
+cereal-production,Bangladesh,1989,27886212.0
+cereal-production,Bangladesh,1990,27746672.0
+cereal-production,Bangladesh,1991,27794902.0
+cereal-production,Bangladesh,1992,28985212.0
+cereal-production,Bangladesh,1993,28036088.0
+cereal-production,Bangladesh,1994,26816542.0
+cereal-production,Bangladesh,1995,26813666.0
+cereal-production,Bangladesh,1996,29405372.0
+cereal-production,Bangladesh,1997,28801744.0
+cereal-production,Bangladesh,1998,28105118.0
+cereal-production,Bangladesh,1999,35864388.0
+cereal-production,Bangladesh,2000,38167130.0
+cereal-production,Bangladesh,2001,38446504.0
+cereal-production,Bangladesh,2002,38848664.0
+cereal-production,Bangladesh,2003,40020196.0
+cereal-production,Bangladesh,2004,37762190.0
+cereal-production,Bangladesh,2005,40956600.0
+cereal-production,Bangladesh,2006,40767636.0
+cereal-production,Bangladesh,2007,40865220.0
+cereal-production,Bangladesh,2008,49114492.0
+cereal-production,Bangladesh,2009,49184110.0
+cereal-production,Bangladesh,2010,51282600.0
+cereal-production,Bangladesh,2011,52627376.0
+cereal-production,Bangladesh,2012,53030388.0
+cereal-production,Bangladesh,2013,54019096.0
+cereal-production,Bangladesh,2014,55227210.0
+cereal-production,Bangladesh,2015,56084460.0
+cereal-production,Bangladesh,2016,55905548.0
+cereal-production,Bangladesh,2017,56427230.0
+cereal-production,Bangladesh,2018,59015236.0
+cereal-production,Bangladesh,2019,59383344.0
+cereal-production,Bangladesh,2020,61113280.0
+cereal-production,Bangladesh,2021,61987000.0
+cereal-production,Bangladesh,2022,63136360.0
+cereal-production,Bangladesh,2023,66313384.0
+cereal-production,Bangladesh,2024,66347852.0
+cereal-production,Brazil,1961,15036353.0
+cereal-production,Brazil,1962,15918336.0
+cereal-production,Brazil,1963,16616892.0
+cereal-production,Brazil,1964,16469226.0
+cereal-production,Brazil,1965,20350792.0
+cereal-production,Brazil,1966,17867924.0
+cereal-production,Brazil,1967,20322328.0
+cereal-production,Brazil,1968,20418800.0
+cereal-production,Brazil,1969,20549860.0
+cereal-production,Brazil,1970,23698316.0
+cereal-production,Brazil,1971,22814264.0
+cereal-production,Brazil,1972,22703928.0
+cereal-production,Brazil,1973,23721606.0
+cereal-production,Brazil,1974,26240014.0
+cereal-production,Brazil,1975,26238420.0
+cereal-production,Brazil,1976,31143200.0
+cereal-production,Brazil,1977,30913834.0
+cereal-production,Brazil,1978,24033646.0
+cereal-production,Brazil,1979,27147322.0
+cereal-production,Brazil,1980,33217492.0
+cereal-production,Brazil,1981,32050568.0
+cereal-production,Brazil,1982,33838264.0
+cereal-production,Brazil,1983,29197566.0
+cereal-production,Brazil,1984,32711288.0
+cereal-production,Brazil,1985,36011140.0
+cereal-production,Brazil,1986,37298400.0
+cereal-production,Brazil,1987,44148400.0
+cereal-production,Brazil,1988,42905036.0
+cereal-production,Brazil,1989,43934410.0
+cereal-production,Brazil,1990,32490390.0
+cereal-production,Brazil,1991,36682064.0
+cereal-production,Brazil,1992,44057990.0
+cereal-production,Brazil,1993,43073468.0
+cereal-production,Brazil,1994,45845332.0
+cereal-production,Brazil,1995,49641824.0
+cereal-production,Brazil,1996,42436960.0
+cereal-production,Brazil,1997,44874820.0
+cereal-production,Brazil,1998,40742024.0
+cereal-production,Brazil,1999,47631964.0
+cereal-production,Brazil,2000,46527200.0
+cereal-production,Brazil,2001,57125390.0
+cereal-production,Brazil,2002,50875590.0
+cereal-production,Brazil,2003,67454330.0
+cereal-production,Brazil,2004,63953364.0
+cereal-production,Brazil,2005,55670924.0
+cereal-production,Brazil,2006,59148976.0
+cereal-production,Brazil,2007,69441630.0
+cereal-production,Brazil,2008,79745464.0
+cereal-production,Brazil,2009,70914790.0
+cereal-production,Brazil,2010,75160150.0
+cereal-production,Brazil,2011,77586270.0
+cereal-production,Brazil,2012,89908240.0
+cereal-production,Brazil,2013,100901730.0
+cereal-production,Brazil,2014,101402184.0
+cereal-production,Brazil,2015,106026690.0
+cereal-production,Brazil,2016,84166680.0
+cereal-production,Brazil,2017,117977040.0
+cereal-production,Brazil,2018,103259700.0
+cereal-production,Brazil,2019,121202030.0
+cereal-production,Brazil,2020,125585150.0
+cereal-production,Brazil,2021,111985320.0
+cereal-production,Brazil,2022,135743840.0
+cereal-production,Brazil,2023,155877090.0
+cereal-production,Brazil,2024,138980900.0
+cereal-production,China,1961,107000000.0
+cereal-production,China,1962,117640010.0
+cereal-production,China,1963,134720020.0
+cereal-production,China,1964,149430000.0
+cereal-production,China,1965,159090000.0
+cereal-production,China,1966,174500000.0
+cereal-production,China,1967,178020020.0
+cereal-production,China,1968,173855000.0
+cereal-production,China,1969,173470020.0
+cereal-production,China,1970,197635000.0
+cereal-production,China,1971,209130020.0
+cereal-production,China,1972,203340020.0
+cereal-production,China,1973,218890020.0
+cereal-production,China,1974,231390020.0
+cereal-production,China,1975,241191200.0
+cereal-production,China,1976,246655330.0
+cereal-production,China,1977,239825140.0
+cereal-production,China,1978,269820580.0
+cereal-production,China,1979,289520580.0
+cereal-production,China,1980,277190200.0
+cereal-production,China,1981,283330300.0
+cereal-production,China,1982,312085300.0
+cereal-production,China,1983,342270050.0
+cereal-production,China,1984,362820030.0
+cereal-production,China,1985,336761060.0
+cereal-production,China,1986,349163840.0
+cereal-production,China,1987,356365900.0
+cereal-production,China,1988,348996930.0
+cereal-production,China,1989,364819680.0
+cereal-production,China,1990,403001400.0
+cereal-production,China,1991,396095000.0
+cereal-production,China,1992,401702620.0
+cereal-production,China,1993,405173950.0
+cereal-production,China,1994,393891040.0
+cereal-production,China,1995,416113700.0
+cereal-production,China,1996,451045060.0
+cereal-production,China,1997,443493440.0
+cereal-production,China,1998,456246880.0
+cereal-production,China,1999,453040320.0
+cereal-production,China,2000,405223840.0
+cereal-production,China,2001,396483170.0
+cereal-production,China,2002,396676260.0
+cereal-production,China,2003,374819300.0
+cereal-production,China,2004,411570400.0
+cereal-production,China,2005,427760500.0
+cereal-production,China,2006,451108160.0
+cereal-production,China,2007,456663400.0
+cereal-production,China,2008,479047900.0
+cereal-production,China,2009,482549000.0
+cereal-production,China,2010,497787400.0
+cereal-production,China,2011,521522100.0
+cereal-production,China,2012,541702000.0
+cereal-production,China,2013,555201400.0
+cereal-production,China,2014,560168400.0
+cereal-production,China,2015,617708740.0
+cereal-production,China,2016,614565250.0
+cereal-production,China,2017,614070140.0
+cereal-production,China,2018,608882200.0
+cereal-production,China,2019,612711500.0
+cereal-production,China,2020,615323970.0
+cereal-production,China,2021,631548540.0
+cereal-production,China,2022,632097500.0
+cereal-production,China,2023,640582700.0
+cereal-production,China,2024,651355700.0
+cereal-production,Ethiopia,1993,5294825.0
+cereal-production,Ethiopia,1994,5244956.0
+cereal-production,Ethiopia,1995,6740322.0
+cereal-production,Ethiopia,1996,9379227.0
+cereal-production,Ethiopia,1997,9472807.0
+cereal-production,Ethiopia,1998,7197329.0
+cereal-production,Ethiopia,1999,8378918.0
+cereal-production,Ethiopia,2000,8004830.0
+cereal-production,Ethiopia,2001,9570341.0
+cereal-production,Ethiopia,2002,8984923.0
+cereal-production,Ethiopia,2003,9519780.0
+cereal-production,Ethiopia,2004,10128082.0
+cereal-production,Ethiopia,2005,12738742.0
+cereal-production,Ethiopia,2006,12661106.0
+cereal-production,Ethiopia,2007,13650996.0
+cereal-production,Ethiopia,2008,14429974.0
+cereal-production,Ethiopia,2009,16855498.0
+cereal-production,Ethiopia,2010,19000252.0
+cereal-production,Ethiopia,2011,19218588.0
+cereal-production,Ethiopia,2012,20825650.0
+cereal-production,Ethiopia,2013,22274392.0
+cereal-production,Ethiopia,2014,24164344.0
+cereal-production,Ethiopia,2015,25859512.0
+cereal-production,Ethiopia,2016,26601252.0
+cereal-production,Ethiopia,2017,29298246.0
+cereal-production,Ethiopia,2018,30344418.0
+cereal-production,Ethiopia,2019,32268582.0
+cereal-production,Ethiopia,2020,32486214.0
+cereal-production,Ethiopia,2021,32459544.0
+cereal-production,Ethiopia,2022,31183280.0
+cereal-production,Ethiopia,2023,31501750.0
+cereal-production,Ethiopia,2024,31763174.0
+cereal-production,India,1961,87376500.0
+cereal-production,India,1962,87257550.0
+cereal-production,India,1963,90373010.0
+cereal-production,India,1964,93706000.0
+cereal-production,India,1965,79699500.0
+cereal-production,India,1966,80137610.0
+cereal-production,India,1967,95453500.0
+cereal-production,India,1968,102443710.0
+cereal-production,India,1969,106291250.0
+cereal-production,India,1970,113909500.0
+cereal-production,India,1971,113238296.0
+cereal-production,India,1972,108615460.0
+cereal-production,India,1973,119648216.0
+cereal-production,India,1974,106793000.0
+cereal-production,India,1975,127807800.0
+cereal-production,India,1976,121625100.0
+cereal-production,India,1977,138062910.0
+cereal-production,India,1978,142964700.0
+cereal-production,India,1979,126470300.0
+cereal-production,India,1980,140490600.0
+cereal-production,India,1981,147583800.0
+cereal-production,India,1982,136101400.0
+cereal-production,India,1983,166781700.0
+cereal-production,India,1984,164477600.0
+cereal-production,India,1985,165682190.0
+cereal-production,India,1986,164955220.0
+cereal-production,India,1987,156114500.0
+cereal-production,India,1988,183867000.0
+cereal-production,India,1989,199413220.0
+cereal-production,India,1990,193919310.0
+cereal-production,India,1991,193537840.0
+cereal-production,India,1992,200710200.0
+cereal-production,India,1993,205022000.0
+cereal-production,India,1994,213439700.0
+cereal-production,India,1995,209620940.0
+cereal-production,India,1996,204181390.0
+cereal-production,India,1997,223945710.0
+cereal-production,India,1998,221085340.0
+cereal-production,India,1999,237080560.0
+cereal-production,India,2000,235956540.0
+cereal-production,India,2001,241697800.0
+cereal-production,India,2002,213289460.0
+cereal-production,India,2003,234990800.0
+cereal-production,India,2004,227157170.0
+cereal-production,India,2005,236175790.0
+cereal-production,India,2006,242864050.0
+cereal-production,India,2007,259682400.0
+cereal-production,India,2008,264426400.0
+cereal-production,India,2009,251252340.0
+cereal-production,India,2010,263964200.0
+cereal-production,India,2011,291776670.0
+cereal-production,India,2012,292416130.0
+cereal-production,India,2013,291510200.0
+cereal-production,India,2014,298698850.0
+cereal-production,India,2015,284850900.0
+cereal-production,India,2016,299053820.0
+cereal-production,India,2017,309663400.0
+cereal-production,India,2018,320692540.0
+cereal-production,India,2019,323957440.0
+cereal-production,India,2020,341446940.0
+cereal-production,India,2021,355529820.0
+cereal-production,India,2022,353766050.0
+cereal-production,India,2023,373583940.0
+cereal-production,India,2024,391123870.0
+cereal-production,Indonesia,1961,14367100.0
+cereal-production,Indonesia,1962,16246900.0
+cereal-production,Indonesia,1963,13952800.0
+cereal-production,Indonesia,1964,16074600.0
+cereal-production,Indonesia,1965,15339500.0
+cereal-production,Indonesia,1966,17367400.0
+cereal-production,Indonesia,1967,15591101.0
+cereal-production,Indonesia,1968,20328850.0
+cereal-production,Indonesia,1969,20313080.0
+cereal-production,Indonesia,1970,22156220.0
+cereal-production,Indonesia,1971,22796490.0
+cereal-production,Indonesia,1972,21647980.0
+cereal-production,Indonesia,1973,25179300.0
+cereal-production,Indonesia,1974,25483788.0
+cereal-production,Indonesia,1975,25242090.0
+cereal-production,Indonesia,1976,25873084.0
+cereal-production,Indonesia,1977,26489786.0
+cereal-production,Indonesia,1978,29800800.0
+cereal-production,Indonesia,1979,29888192.0
+cereal-production,Indonesia,1980,33642844.0
+cereal-production,Indonesia,1981,37283480.0
+cereal-production,Indonesia,1982,36818520.0
+cereal-production,Indonesia,1983,40389884.0
+cereal-production,Indonesia,1984,43424270.0
+cereal-production,Indonesia,1985,43362450.0
+cereal-production,Indonesia,1986,45647144.0
+cereal-production,Indonesia,1987,45233870.0
+cereal-production,Indonesia,1988,48328092.0
+cereal-production,Indonesia,1989,50918096.0
+cereal-production,Indonesia,1990,51912780.0
+cereal-production,Indonesia,1991,50944144.0
+cereal-production,Indonesia,1992,56235468.0
+cereal-production,Indonesia,1993,54640824.0
+cereal-production,Indonesia,1994,53510380.0
+cereal-production,Indonesia,1995,57990040.0
+cereal-production,Indonesia,1996,60408930.0
+cereal-production,Indonesia,1997,58147908.0
+cereal-production,Indonesia,1998,59406188.0
+cereal-production,Indonesia,1999,60070424.0
+cereal-production,Indonesia,2000,61575000.0
+cereal-production,Indonesia,2001,59808000.0
+cereal-production,Indonesia,2002,61074972.0
+cereal-production,Indonesia,2003,63024040.0
+cereal-production,Indonesia,2004,65313710.0
+cereal-production,Indonesia,2005,66674990.0
+cereal-production,Indonesia,2006,66064400.0
+cereal-production,Indonesia,2007,67878530.0
+cereal-production,Indonesia,2008,73984920.0
+cereal-production,Indonesia,2009,76643740.0
+cereal-production,Indonesia,2010,77610640.0
+cereal-production,Indonesia,2011,75902250.0
+cereal-production,Indonesia,2012,79092024.0
+cereal-production,Indonesia,2013,78606856.0
+cereal-production,Indonesia,2014,78067420.0
+cereal-production,Indonesia,2015,80643430.0
+cereal-production,Indonesia,2016,77609416.0
+cereal-production,Indonesia,2017,80416000.0
+cereal-production,Indonesia,2018,78040536.0
+cereal-production,Indonesia,2019,74254030.0
+cereal-production,Indonesia,2020,67578140.0
+cereal-production,Indonesia,2021,67830216.0
+cereal-production,Indonesia,2022,71276250.0
+cereal-production,Indonesia,2023,68755420.0
+cereal-production,Indonesia,2024,68281640.0
+cereal-production,Mexico,1961,8516733.0
+cereal-production,Mexico,1962,8605792.0
+cereal-production,Mexico,1963,9539077.0
+cereal-production,Mexico,1964,11710533.0
+cereal-production,Mexico,1965,12488283.0
+cereal-production,Mexico,1966,12987982.0
+cereal-production,Mexico,1967,13068481.0
+cereal-production,Mexico,1968,13925652.0
+cereal-production,Mexico,1969,13843149.0
+cereal-production,Mexico,1970,15006401.0
+cereal-production,Mexico,1971,14805568.0
+cereal-production,Mexico,1972,14394049.0
+cereal-production,Mexico,1973,14863720.0
+cereal-production,Mexico,1974,14618927.0
+cereal-production,Mexico,1975,16625618.0
+cereal-production,Mexico,1976,16478100.0
+cereal-production,Mexico,1977,17967776.0
+cereal-production,Mexico,1978,18897476.0
+cereal-production,Mexico,1979,15653065.0
+cereal-production,Mexico,1980,20893796.0
+cereal-production,Mexico,1981,24626700.0
+cereal-production,Mexico,1982,20256026.0
+cereal-production,Mexico,1983,22683292.0
+cereal-production,Mexico,1984,23638106.0
+cereal-production,Mexico,1985,27403856.0
+cereal-production,Mexico,1986,22708052.0
+cereal-production,Mexico,1987,23696540.0
+cereal-production,Mexico,1988,21113156.0
+cereal-production,Mexico,1989,21425180.0
+cereal-production,Mexico,1990,25562272.0
+cereal-production,Mexico,1991,23672210.0
+cereal-production,Mexico,1992,26889368.0
+cereal-production,Mexico,1993,25201020.0
+cereal-production,Mexico,1994,26810968.0
+cereal-production,Mexico,1995,26883810.0
+cereal-production,Mexico,1996,29312360.0
+cereal-production,Mexico,1997,28065536.0
+cereal-production,Mexico,1998,29124932.0
+cereal-production,Mexico,1999,27435666.0
+cereal-production,Mexico,2000,27995056.0
+cereal-production,Mexico,2001,31060786.0
+cereal-production,Mexico,2002,28773236.0
+cereal-production,Mexico,2003,31336228.0
+cereal-production,Mexico,2004,32315036.0
+cereal-production,Mexico,2005,29062836.0
+cereal-production,Mexico,2006,32158036.0
+cereal-production,Mexico,2007,34313188.0
+cereal-production,Mexico,2008,36109144.0
+cereal-production,Mexico,2009,31285670.0
+cereal-production,Mexico,2010,34925200.0
+cereal-production,Mexico,2011,28408736.0
+cereal-production,Mexico,2012,33614212.0
+cereal-production,Mexico,2013,33210300.0
+cereal-production,Mexico,2014,36526604.0
+cereal-production,Mexico,2015,34704516.0
+cereal-production,Mexico,2016,38464940.0
+cereal-production,Mexico,2017,37487836.0
+cereal-production,Mexico,2018,36068400.0
+cereal-production,Mexico,2019,36164104.0
+cereal-production,Mexico,2020,36374788.0
+cereal-production,Mexico,2021,36582136.0
+cereal-production,Mexico,2022,36330010.0
+cereal-production,Mexico,2023,37015880.0
+cereal-production,Mexico,2024,32642052.0
+cereal-production,Nigeria,1961,7891000.0
+cereal-production,Nigeria,1962,8324000.0
+cereal-production,Nigeria,1963,8203000.0
+cereal-production,Nigeria,1964,8105000.0
+cereal-production,Nigeria,1965,8413000.0
+cereal-production,Nigeria,1966,6140000.0
+cereal-production,Nigeria,1967,7375000.0
+cereal-production,Nigeria,1968,7408000.0
+cereal-production,Nigeria,1969,8799000.0
+cereal-production,Nigeria,1970,8981000.0
+cereal-production,Nigeria,1971,8328000.0
+cereal-production,Nigeria,1972,5809000.0
+cereal-production,Nigeria,1973,8243000.0
+cereal-production,Nigeria,1974,10285000.0
+cereal-production,Nigeria,1975,8348000.0
+cereal-production,Nigeria,1976,7161000.0
+cereal-production,Nigeria,1977,6957000.0
+cereal-production,Nigeria,1978,6004000.0
+cereal-production,Nigeria,1979,6439000.0
+cereal-production,Nigeria,1980,7788000.0
+cereal-production,Nigeria,1981,8053000.0
+cereal-production,Nigeria,1982,8468000.0
+cereal-production,Nigeria,1983,8828000.0
+cereal-production,Nigeria,1984,10503000.0
+cereal-production,Nigeria,1985,11889000.0
+cereal-production,Nigeria,1986,14661322.0
+cereal-production,Nigeria,1987,15917000.0
+cereal-production,Nigeria,1988,16560000.0
+cereal-production,Nigeria,1989,18007000.0
+cereal-production,Nigeria,1990,17678000.0
+cereal-production,Nigeria,1991,18615000.0
+cereal-production,Nigeria,1992,19597000.0
+cereal-production,Nigeria,1993,20090600.0
+cereal-production,Nigeria,1994,20373200.0
+cereal-production,Nigeria,1995,22512600.0
+cereal-production,Nigeria,1996,21665000.0
+cereal-production,Nigeria,1997,21853000.0
+cereal-production,Nigeria,1998,22040000.0
+cereal-production,Nigeria,1999,22405000.0
+cereal-production,Nigeria,2000,21370000.0
+cereal-production,Nigeria,2001,20090000.0
+cereal-production,Nigeria,2002,21373000.0
+cereal-production,Nigeria,2003,22736000.0
+cereal-production,Nigeria,2004,24321000.0
+cereal-production,Nigeria,2005,26031000.0
+cereal-production,Nigeria,2006,28864000.0
+cereal-production,Nigeria,2007,27171000.0
+cereal-production,Nigeria,2008,30209000.0
+cereal-production,Nigeria,2009,21267630.0
+cereal-production,Nigeria,2010,24650298.0
+cereal-production,Nigeria,2011,20699526.0
+cereal-production,Nigeria,2012,21427122.0
+cereal-production,Nigeria,2013,20612564.0
+cereal-production,Nigeria,2014,26383664.0
+cereal-production,Nigeria,2015,26069496.0
+cereal-production,Nigeria,2016,27531584.0
+cereal-production,Nigeria,2017,27102164.0
+cereal-production,Nigeria,2018,28190606.0
+cereal-production,Nigeria,2019,29797188.0
+cereal-production,Nigeria,2020,29211452.0
+cereal-production,Nigeria,2021,29860718.0
+cereal-production,Nigeria,2022,30314054.0
+cereal-production,Nigeria,2023,28048998.0
+cereal-production,Nigeria,2024,28473080.0
+cereal-production,Pakistan,1961,6729680.0
+cereal-production,Pakistan,1962,6941600.0
+cereal-production,Pakistan,1963,7208300.0
+cereal-production,Pakistan,1964,7565300.0
+cereal-production,Pakistan,1965,7866500.0
+cereal-production,Pakistan,1966,7281250.0
+cereal-production,Pakistan,1967,8166500.0
+cereal-production,Pakistan,1968,10791900.0
+cereal-production,Pakistan,1969,11569500.0
+cereal-production,Pakistan,1970,12097337.0
+cereal-production,Pakistan,1971,11336393.0
+cereal-production,Pakistan,1972,11800886.0
+cereal-production,Pakistan,1973,12730806.0
+cereal-production,Pakistan,1974,12515833.0
+cereal-production,Pakistan,1975,13127967.0
+cereal-production,Pakistan,1976,14262949.0
+cereal-production,Pakistan,1977,15115120.0
+cereal-production,Pakistan,1978,14764206.0
+cereal-production,Pakistan,1979,16304600.0
+cereal-production,Pakistan,1980,17073600.0
+cereal-production,Pakistan,1981,18222050.0
+cereal-production,Pakistan,1982,18075950.0
+cereal-production,Pakistan,1983,19100750.0
+cereal-production,Pakistan,1984,17535900.0
+cereal-production,Pakistan,1985,17699400.0
+cereal-production,Pakistan,1986,20866100.0
+cereal-production,Pakistan,1987,18428100.0
+cereal-production,Pakistan,1988,19240300.0
+cereal-production,Pakistan,1989,21017550.0
+cereal-production,Pakistan,1990,20957200.0
+cereal-production,Pakistan,1991,21137950.0
+cereal-production,Pakistan,1992,22123350.0
+cereal-production,Pakistan,1993,23869650.0
+cereal-production,Pakistan,1994,22338150.0
+cereal-production,Pakistan,1995,25036450.0
+cereal-production,Pakistan,1996,25394800.0
+cereal-production,Pakistan,1997,25259600.0
+cereal-production,Pakistan,1998,27985200.0
+cereal-production,Pakistan,1999,27756416.0
+cereal-production,Pakistan,2000,30460700.0
+cereal-production,Pakistan,2001,27048000.0
+cereal-production,Pakistan,2002,27172850.0
+cereal-production,Pakistan,2003,28963500.0
+cereal-production,Pakistan,2004,30311300.0
+cereal-production,Pakistan,2005,33507800.0
+cereal-production,Pakistan,2006,33027900.0
+cereal-production,Pakistan,2007,35812200.0
+cereal-production,Pakistan,2008,35528100.0
+cereal-production,Pakistan,2009,38147050.0
+cereal-production,Pakistan,2010,34811256.0
+cereal-production,Pakistan,2011,39304580.0
+cereal-production,Pakistan,2012,36496350.0
+cereal-production,Pakistan,2013,40109710.0
+cereal-production,Pakistan,2014,41895812.0
+cereal-production,Pakistan,2015,41081680.0
+cereal-production,Pakistan,2016,42555024.0
+cereal-production,Pakistan,2017,44299996.0
+cereal-production,Pakistan,2018,43254400.0
+cereal-production,Pakistan,2019,43912064.0
+cereal-production,Pakistan,2020,47226052.0
+cereal-production,Pakistan,2021,51304736.0
+cereal-production,Pakistan,2022,48519330.0
+cereal-production,Pakistan,2023,53065396.0
+cereal-production,Pakistan,2024,55933132.0
+cereal-production,United States,1961,163619980.0
+cereal-production,United States,1962,162455780.0
+cereal-production,United States,1963,174812480.0
+cereal-production,United States,1964,160937070.0
+cereal-production,United States,1965,183602620.0
+cereal-production,United States,1966,184444880.0
+cereal-production,United States,1967,208158050.0
+cereal-production,United States,1968,202538420.0
+cereal-production,United States,1969,205288180.0
+cereal-production,United States,1970,186860750.0
+cereal-production,United States,1971,237624460.0
+cereal-production,United States,1972,228117870.0
+cereal-production,United States,1973,237683000.0
+cereal-production,United States,1974,204617500.0
+cereal-production,United States,1975,249283740.0
+cereal-production,United States,1976,258200100.0
+cereal-production,United States,1977,266014460.0
+cereal-production,United States,1978,276602530.0
+cereal-production,United States,1979,302625570.0
+cereal-production,United States,1980,269883970.0
+cereal-production,United States,1981,330889540.0
+cereal-production,United States,1982,333103740.0
+cereal-production,United States,1983,207657600.0
+cereal-production,United States,1984,314749500.0
+cereal-production,United States,1985,347118200.0
+cereal-production,United States,1986,315331200.0
+cereal-production,United States,1987,280494050.0
+cereal-production,United States,1988,206528100.0
+cereal-production,United States,1989,284238050.0
+cereal-production,United States,1990,312410600.0
+cereal-production,United States,1991,280063400.0
+cereal-production,United States,1992,353025150.0
+cereal-production,United States,1993,259105340.0
+cereal-production,United States,1994,355934900.0
+cereal-production,United States,1995,277601200.0
+cereal-production,United States,1996,335780130.0
+cereal-production,United States,1997,336582180.0
+cereal-production,United States,1998,349425760.0
+cereal-production,United States,1999,335364350.0
+cereal-production,United States,2000,342631520.0
+cereal-production,United States,2001,324994620.0
+cereal-production,United States,2002,297143460.0
+cereal-production,United States,2003,348247600.0
+cereal-production,United States,2004,389023780.0
+cereal-production,United States,2005,366436350.0
+cereal-production,United States,2006,338336800.0
+cereal-production,United States,2007,415130850.0
+cereal-production,United States,2008,402399940.0
+cereal-production,United States,2009,418666180.0
+cereal-production,United States,2010,401126340.0
+cereal-production,United States,2011,385545250.0
+cereal-production,United States,2012,356210100.0
+cereal-production,United States,2013,434308450.0
+cereal-production,United States,2014,442849100.0
+cereal-production,United States,2015,431870370.0
+cereal-production,United States,2016,503466140.0
+cereal-production,United States,2017,440271780.0
+cereal-production,United States,2018,439710820.0
+cereal-production,United States,2019,420873700.0
+cereal-production,United States,2020,433259870.0
+cereal-production,United States,2021,450200700.0
+cereal-production,United States,2022,408899970.0
+cereal-production,United States,2023,462631170.0
+cereal-production,United States,2024,454987900.0
+cereal-production,World,1961,876874500.0
+cereal-production,World,1962,933372900.0
+cereal-production,World,1963,949345860.0
+cereal-production,World,1964,1001214000.0
+cereal-production,World,1965,998593000.0
+cereal-production,World,1966,1078340200.0
+cereal-production,World,1967,1124081300.0
+cereal-production,World,1968,1160679000.0
+cereal-production,World,1969,1170980100.0
+cereal-production,World,1970,1192507600.0
+cereal-production,World,1971,1299667700.0
+cereal-production,World,1972,1258478700.0
+cereal-production,World,1973,1357015200.0
+cereal-production,World,1974,1326549500.0
+cereal-production,World,1975,1359804000.0
+cereal-production,World,1976,1463711100.0
+cereal-production,World,1977,1456344200.0
+cereal-production,World,1978,1582019600.0
+cereal-production,World,1979,1537501600.0
+cereal-production,World,1980,1549912200.0
+cereal-production,World,1981,1632382100.0
+cereal-production,World,1982,1692539900.0
+cereal-production,World,1983,1626946300.0
+cereal-production,World,1984,1786795500.0
+cereal-production,World,1985,1821240800.0
+cereal-production,World,1986,1834022400.0
+cereal-production,World,1987,1771529000.0
+cereal-production,World,1988,1727627500.0
+cereal-production,World,1989,1871355600.0
+cereal-production,World,1990,1952573800.0
+cereal-production,World,1991,1888077000.0
+cereal-production,World,1992,1974329300.0
+cereal-production,World,1993,1900378400.0
+cereal-production,World,1994,1957426400.0
+cereal-production,World,1995,1894870300.0
+cereal-production,World,1996,2051723300.0
+cereal-production,World,1997,2093981600.0
+cereal-production,World,1998,2073617200.0
+cereal-production,World,1999,2084706600.0
+cereal-production,World,2000,2057903000.0
+cereal-production,World,2001,2106830500.0
+cereal-production,World,2002,2037238400.0
+cereal-production,World,2003,2098750700.0
+cereal-production,World,2004,2277130200.0
+cereal-production,World,2005,2263875800.0
+cereal-production,World,2006,2235489800.0
+cereal-production,World,2007,2349024000.0
+cereal-production,World,2008,2519355100.0
+cereal-production,World,2009,2489053400.0
+cereal-production,World,2010,2470961700.0
+cereal-production,World,2011,2588497700.0
+cereal-production,World,2012,2543282200.0
+cereal-production,World,2013,2766181600.0
+cereal-production,World,2014,2825198000.0
+cereal-production,World,2015,2835200300.0
+cereal-production,World,2016,2935987000.0
+cereal-production,World,2017,2940738000.0
+cereal-production,World,2018,2899639000.0
+cereal-production,World,2019,2966105300.0
+cereal-production,World,2020,3026008600.0
+cereal-production,World,2021,3075147000.0
+cereal-production,World,2022,3054490600.0
+cereal-production,World,2023,3126272300.0
+cereal-production,World,2024,3133222700.0

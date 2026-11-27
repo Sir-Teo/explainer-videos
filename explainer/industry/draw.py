@@ -14,6 +14,9 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`tank` (``.oil`` at a level), :func:`column` (a distillation tower with its ``.cuts``), :func:`tanker`;
 * mining and metals: :func:`open_pit` (benches, ``.ore`` below), :func:`haul_truck`, :func:`mill_drum` (``.drum``
   turns), :func:`flotation_cell` (``.froth``), :func:`cathode`, :func:`gold_bar`, :func:`battery` (``.charge``);
+* farming and food: :func:`wheat` (tall or dwarf, ``.head``), :func:`corn_plant` (``.cob``), :func:`field` (rows of
+  plants), :func:`tractor` (``.wheels``), :func:`grain_elevator`, :func:`cow`, :func:`chicken`, :func:`loaf`,
+  :func:`cocoa_pod`, :func:`sack`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -30,7 +33,7 @@ from __future__ import annotations
 import math
 
 import numpy as np
-from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UP, Arc, Circle, DecimalNumber, Dot, Ellipse, Line, MathTex,
+from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UL, UP, UR, Arc, Circle, DecimalNumber, Dot, Ellipse, Line, MathTex,
                    Polygon,
                    Rectangle, RoundedRectangle, Square, Triangle, ValueTracker, VGroup, VMobject, always_redraw,
                    interpolate_color, ManimColor)
@@ -978,4 +981,171 @@ def world_map(width: float = 12.0, lon=(-170.0, 180.0), lat=(-56.0, 78.0), color
         return frame.get_center() + (xy(lo, la) - np.array([0.0, 0.0, 0.0])) * (frame.width / width)
     g.p = p
     g.frame = frame
+    return g
+
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Farming and food
+
+
+WHEATC = "#E2B85C"
+LEAF = "#6FAF5A"
+
+
+def wheat(h: float = 1.6, dwarf: bool = False, color: str = WHEATC) -> VGroup:
+    """A wheat plant: a stem, two leaves and an eared head (``g.head``).  The dwarf variety is short and thick with a
+    heavier head, the old tall variety thin and lodging-prone."""
+    stem_h = h * (0.55 if dwarf else 1.0)
+    w = 3.5 if not dwarf else 6.0
+    stem = Line([0, 0, 0], [0, stem_h, 0], stroke_color="#C9A24A", stroke_width=w)
+    leaves = VGroup(*[Arc(radius=0.25 * h, start_angle=a, angle=0.9, stroke_color=LEAF, stroke_width=3).move_to(
+        [s_ * 0.1 * h, stem_h * f, 0]) for a, s_, f in ((PI * 0.15, 1, 0.35), (PI * 0.6, -1, 0.55))])
+    n = 6 if dwarf else 5
+    size = 0.075 * h * (1.35 if dwarf else 1.0)
+    grains = VGroup()
+    for k in range(n):
+        for side in (-1, 1):
+            grains.add(Ellipse(width=size, height=size * 1.6, stroke_width=0, fill_color=color, fill_opacity=1).rotate(
+                side * 0.35).move_to([side * size * 0.45, stem_h + k * size * 1.05, 0]))
+    awns = VGroup(*[Line([0, stem_h + n * size * 1.05, 0], [x * size, stem_h + n * size * 1.05 + 0.18 * h, 0],
+                         stroke_color=color, stroke_width=1.2) for x in (-1, 0, 1)])
+    head = VGroup(grains, awns)
+    g = VGroup(stem, leaves, head)
+    g.head = head
+    return g
+
+
+def corn_plant(h: float = 1.8) -> VGroup:
+    """A maize plant: a stalk, leaves, a tassel and a cob (``g.cob``)."""
+    stalk = Line([0, 0, 0], [0, h, 0], stroke_color="#7FA34E", stroke_width=6)
+    leaves = VGroup(*[Arc(radius=0.35 * h, start_angle=a, angle=1.0, stroke_color=LEAF, stroke_width=4).move_to(
+        [s_ * 0.18 * h, h * f, 0]) for a, s_, f in ((PI * 0.1, 1, 0.3), (PI * 0.55, -1, 0.45), (PI * 0.12, 1, 0.62),
+                                                    (PI * 0.6, -1, 0.75))])
+    tassel = VGroup(*[Line([0, h, 0], [x * 0.08 * h, h + 0.14 * h, 0], stroke_color="#D9C27A", stroke_width=2)
+                      for x in (-1, -0.4, 0.4, 1)])
+    cob = VGroup(Ellipse(width=0.13 * h, height=0.3 * h, stroke_width=0, fill_color="#F2C14E", fill_opacity=1),
+                 Ellipse(width=0.15 * h, height=0.32 * h, stroke_color="#8DBF5E", stroke_width=2, fill_opacity=0)
+                 ).rotate(-0.35).move_to([0.09 * h, 0.5 * h, 0])
+    g = VGroup(stalk, leaves, tassel, cob)
+    g.cob = cob
+    return g
+
+
+def field(w: float = 6.0, rows: int = 3, n: int = 10, kind: str = "corn", h: float = 0.6) -> VGroup:
+    """Rows of plants on brown soil: ``kind`` is "corn" or "wheat" (or "dwarf")."""
+    soil = Rectangle(width=w, height=0.18 * rows + 0.1, stroke_width=0, fill_color="#6B4F33", fill_opacity=1)
+    plants = VGroup()
+    for r in range(rows):
+        for k in range(n):
+            pl = corn_plant(h) if kind == "corn" else wheat(h, dwarf=(kind == "dwarf"))
+            pl.move_to([-w / 2 + (k + 0.5) * w / n + (r % 2) * 0.12, 0, 0], aligned_edge=DOWN).shift(
+                UP * (soil.get_top()[1] - 0.12 * r) + DOWN * 0.02)
+            plants.add(pl)
+    g = VGroup(soil, plants)
+    g.plants = plants
+    return g
+
+
+def tractor(w: float = 1.6, color: str = "#3FA34D") -> VGroup:
+    """A farm tractor facing right: body, cab, exhaust and a big rear and small front wheel (``g.wheels``)."""
+    body = Rectangle(width=0.62 * w, height=0.22 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [0.12 * w, 0.32 * w, 0])
+    cab = Rectangle(width=0.26 * w, height=0.3 * w, stroke_color=color, stroke_width=3, fill_color=GLASS,
+                    fill_opacity=1).move_to([-0.17 * w, 0.55 * w, 0])
+    pipe = Rectangle(width=0.03 * w, height=0.18 * w, stroke_width=0, fill_color=STEEL, fill_opacity=1).move_to(
+        [0.28 * w, 0.52 * w, 0])
+    rear = VGroup(Circle(radius=0.22 * w, stroke_color="#20242C", stroke_width=6, fill_color="#2E3440", fill_opacity=1),
+                  Circle(radius=0.08 * w, stroke_width=0, fill_color="#F2C14E", fill_opacity=1)).move_to(
+        [-0.2 * w, 0.22 * w, 0])
+    front = VGroup(Circle(radius=0.12 * w, stroke_color="#20242C", stroke_width=5, fill_color="#2E3440", fill_opacity=1),
+                   Circle(radius=0.045 * w, stroke_width=0, fill_color="#F2C14E", fill_opacity=1)).move_to(
+        [0.33 * w, 0.12 * w, 0])
+    g = VGroup(pipe, body, cab, rear, front)
+    g.wheels = VGroup(rear, front)
+    return g
+
+
+def grain_elevator(h: float = 2.0, color: str = "#C9D3E0") -> VGroup:
+    """A country grain elevator: a row of silos and a taller head house."""
+    silos = VGroup(*[VGroup(Rectangle(width=0.22 * h, height=0.7 * h, stroke_color="#8B95A7", stroke_width=1.5,
+                                      fill_color=color, fill_opacity=1),
+                            Arc(radius=0.11 * h, start_angle=0, angle=PI, stroke_width=0, fill_color=color,
+                                fill_opacity=1).shift(UP * 0.35 * h)) for _ in range(3)]).arrange(RIGHT, buff=0.02 * h)
+    head = Rectangle(width=0.18 * h, height=h, stroke_color="#8B95A7", stroke_width=1.5, fill_color="#AEB8C6",
+                     fill_opacity=1).next_to(silos, RIGHT, buff=0).align_to(silos, DOWN)
+    roof = Polygon(head.get_corner(UL), head.get_corner(UR), head.get_top() + UP * 0.08 * h, stroke_width=0,
+                   fill_color="#8B95A7", fill_opacity=1)
+    spout = Line(head.get_top() + DOWN * 0.15 * h, head.get_corner(UR) + RIGHT * 0.25 * h + DOWN * 0.55 * h,
+                 stroke_color="#8B95A7", stroke_width=3)
+    return VGroup(silos, head, roof, spout)
+
+
+def cow(w: float = 1.2, color: str = "#E8EAED", spots: str = "#2B2B2B") -> VGroup:
+    """A beef animal facing right: body, head, horns, legs, tail and a few patches."""
+    body = RoundedRectangle(corner_radius=0.12 * w, width=w, height=0.48 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.5 * w, 0])
+    head = RoundedRectangle(corner_radius=0.06 * w, width=0.26 * w, height=0.22 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0.6 * w, 0.66 * w, 0])
+    muzzle = Rectangle(width=0.1 * w, height=0.14 * w, stroke_width=0, fill_color="#F2A7B5", fill_opacity=1).move_to(
+        [0.71 * w, 0.62 * w, 0])
+    horns = VGroup(*[Line([0.55 * w, 0.77 * w, 0], [0.55 * w + d * 0.06 * w, 0.86 * w, 0], stroke_color="#D9C27A",
+                          stroke_width=3) for d in (-1, 1)])
+    legs = VGroup(*[Rectangle(width=0.08 * w, height=0.28 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [x * w, 0.14 * w, 0]) for x in (-0.38, -0.24, 0.24, 0.38)])
+    patches = VGroup(Ellipse(width=0.3 * w, height=0.2 * w, stroke_width=0, fill_color=spots, fill_opacity=1).move_to(
+        [-0.15 * w, 0.56 * w, 0]), Ellipse(width=0.18 * w, height=0.14 * w, stroke_width=0, fill_color=spots,
+                                           fill_opacity=1).move_to([0.22 * w, 0.44 * w, 0]))
+    tail = Line([-0.5 * w, 0.62 * w, 0], [-0.58 * w, 0.32 * w, 0], stroke_color=color, stroke_width=3)
+    eye = Dot([0.63 * w, 0.7 * w, 0], radius=0.02 * w, color=DARK)
+    return VGroup(legs, tail, body, patches, head, muzzle, horns, eye)
+
+
+def chicken(w: float = 0.7, color: str = "#F4F1E8") -> VGroup:
+    """A chicken facing right: body, head, comb, beak and legs."""
+    body = Ellipse(width=w, height=0.75 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.55 * w, 0])
+    tail = Polygon([-0.45 * w, 0.6 * w, 0], [-0.68 * w, 0.95 * w, 0], [-0.4 * w, 0.85 * w, 0], stroke_width=0,
+                   fill_color=color, fill_opacity=1)
+    head = Circle(radius=0.17 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0.42 * w, 0.95 * w, 0])
+    comb = VGroup(*[Circle(radius=0.05 * w, stroke_width=0, fill_color="#E8554E", fill_opacity=1).move_to(
+        [0.36 * w + k * 0.07 * w, 1.13 * w, 0]) for k in range(3)])
+    beak = Polygon([0.57 * w, 0.98 * w, 0], [0.72 * w, 0.93 * w, 0], [0.57 * w, 0.88 * w, 0], stroke_width=0,
+                   fill_color="#F2A65A", fill_opacity=1)
+    eye = Dot([0.46 * w, 0.98 * w, 0], radius=0.025 * w, color=DARK)
+    legs = VGroup(*[Line([x * w, 0.22 * w, 0], [x * w, 0.0, 0], stroke_color="#F2A65A", stroke_width=3)
+                    for x in (-0.08, 0.1)])
+    return VGroup(legs, tail, body, head, comb, beak, eye)
+
+
+def loaf(w: float = 1.2, color: str = "#C98A4B") -> VGroup:
+    """A loaf of bread, side view: a domed crust and a few scores."""
+    crust = VMobject(stroke_width=0, fill_color=color, fill_opacity=1).set_points_smoothly(
+        [[-0.5 * w, 0, 0], [-0.52 * w, 0.22 * w, 0], [-0.3 * w, 0.42 * w, 0], [0, 0.46 * w, 0], [0.3 * w, 0.42 * w, 0],
+         [0.52 * w, 0.22 * w, 0], [0.5 * w, 0, 0], [-0.5 * w, 0, 0]])
+    scores = VGroup(*[Line([x * w - 0.06 * w, 0.28 * w, 0], [x * w + 0.06 * w, 0.4 * w, 0], stroke_color="#F2D3A0",
+                           stroke_width=3) for x in (-0.22, 0, 0.22)])
+    return VGroup(crust, scores)
+
+
+def cocoa_pod(h: float = 1.0, color: str = "#C9732F") -> VGroup:
+    """A cocoa pod: a ridged, pointed oval."""
+    pod = VMobject(stroke_width=0, fill_color=color, fill_opacity=1).set_points_smoothly(
+        [[0, -0.5 * h, 0], [0.24 * h, -0.3 * h, 0], [0.3 * h, 0, 0], [0.22 * h, 0.3 * h, 0], [0, 0.5 * h, 0],
+         [-0.22 * h, 0.3 * h, 0], [-0.3 * h, 0, 0], [-0.24 * h, -0.3 * h, 0], [0, -0.5 * h, 0]])
+    ridges = VGroup(*[Line([x * h, -0.38 * h, 0], [x * h, 0.38 * h, 0], stroke_color="#8E4A1C", stroke_width=2)
+                      for x in (-0.12, 0, 0.12)])
+    stem = Line([0, 0.5 * h, 0], [0, 0.62 * h, 0], stroke_color="#6B4F33", stroke_width=4)
+    return VGroup(pod, ridges, stem)
+
+
+def sack(h: float = 0.8, color: str = "#D9C9A3", label_: str = "") -> VGroup:
+    """A grain sack with a tied neck and an optional label."""
+    body = RoundedRectangle(corner_radius=0.12 * h, width=0.7 * h, height=0.8 * h, stroke_width=0, fill_color=color,
+                            fill_opacity=1)
+    neck = Polygon([-0.18 * h, 0.38 * h, 0], [0.18 * h, 0.38 * h, 0], [0.1 * h, 0.52 * h, 0], [-0.1 * h, 0.52 * h, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    tie = Line([-0.14 * h, 0.44 * h, 0], [0.14 * h, 0.44 * h, 0], stroke_color="#8A6E52", stroke_width=3)
+    g = VGroup(body, neck, tie)
+    if label_:
+        g.add(tx(label_, 22 * h, "#5A4300", bold=True).move_to(body))
     return g

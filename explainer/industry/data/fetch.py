@@ -328,7 +328,10 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1543151, "UBER"), (2042694, "PRMB"), (354950, "HD"), (60667, "LOW"),
                  (93410, "CVX"), (1163165, "COP"), (821189, "EOG"), (797468, "OXY"), (1090012, "DVN"),
                  (1035002, "VLO"), (1510295, "MPC"), (87347, "SLB"), (45012, "HAL"), (3570, "LNG"),
-                 (831259, "FCX"), (1164727, "NEM"), (1001838, "SCCO"), (915913, "ALB")]
+                 (831259, "FCX"), (1164727, "NEM"), (1001838, "SCCO"), (915913, "ALB"),
+                 (7084, "ADM"), (1996862, "BG"), (1755672, "CTVA"), (315189, "DE"), (100493, "TSN"), (1324404, "CF"),
+                 (1285785, "MOS"), (802481, "PPC"), (48465, "HRL"), (40704, "GIS"), (1637459, "KHC"), (77476, "PEP"),
+                 (1103982, "MDLZ"), (47111, "HSY"), (56873, "KR")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -343,7 +346,15 @@ SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
                  "OXY": {"net_income": ["NetIncomeLoss", "ProfitLoss"]},
                  # Freeport and Southern Copper tag profit to common shareholders, not NetIncomeLoss, in most years
                  "FCX": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
-                 "SCCO": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
+                 "SCCO": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 # ADM and Bunge tag only part of their sales as revenue from contracts with customers (the rest is
+                 # commodity trading revenue); their total is Revenues.  Hormel and Kraft Heinz tag revenue including
+                 # the excise taxes they collect; CF tags profit to common shareholders, not NetIncomeLoss
+                 "ADM": {"revenue": ["Revenues", "SalesRevenueNet"]},
+                 "BG": {"revenue": ["Revenues", "SalesRevenueNet"]},
+                 "HRL": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
+                 "KHC": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
+                 "CF": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
 
 
 def sec_annual():
@@ -924,7 +935,145 @@ def ne_land():
     return path
 
 
-JOBS = {"ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+ERS = "https://www.ers.usda.gov/media/"
+ERS_FOOD_DOLLAR = ERS + "7052/food-dollar-nominal-data-in-machine-readable-format.zip"
+ERS_FOOD_DOLLAR_OLD = ERS + "7055/food-dollar-nominal-data-2011-model-1993-2023.csv"
+
+
+def ers_food_dollar():
+    """USDA ERS's food dollar: where a dollar spent on food in the US goes.  The new Ag-FEDS model (released November
+    2026, 2007-2025): the farm and marketing shares for all food, food at home and food away from home, and the bill of
+    thirteen industry groups for all food, in cents per domestic food dollar and in millions; and the farm share from
+    the 2011 model (1993-2023), which ERS says is not directly comparable."""
+    z = zipfile.ZipFile(io.BytesIO(_get(ERS_FOOD_DOLLAR)))
+    name = next(n for n in z.namelist() if n.endswith(".csv"))
+    rows = csv.DictReader(io.StringIO(z.read(name).decode("utf-8-sig")))
+    out = []
+    for r in rows:
+        if r["Type"] != "Food" or r["ValueTypeDesc"] != "Total":
+            continue
+        top = (r["Aggregation"] == "Type total" and r["Channel"] == "All") or r["Aggregation"] == "Channel total"
+        if not top or r["Series"] not in ("Marketing bill", "Industry group bill", "Total spending by production source",
+                                          "Industry group total"):
+            continue
+        unit = "cents" if r["Unit"].startswith("Cents") else "usd_m"
+        try:
+            v = float(r["Value"])
+        except ValueError:
+            continue
+        out.append(["agfeds", int(r["Year"]), r["Channel"], r["Series"], r["CategoryName"], unit, v])
+    old = csv.DictReader(io.StringIO(_get(ERS_FOOD_DOLLAR_OLD).decode("utf-8-sig")))
+    for r in old:
+        if r["Table_name"] == "Food dollar" and r["Category_desc"] in ("Farm production", "Total") and \
+                r["Units"].startswith("Cents"):
+            try:
+                out.append(["model2011", int(r["Year"]), "All", "Industry group bill", r["Category_desc"], "cents",
+                            float(r["Total"])])
+            except ValueError:
+                continue
+    out.sort(key=lambda q: (q[0], q[1], q[2], q[3], q[4], q[5]))
+    return _write("ers_food_dollar", ["model", "year", "channel", "series", "category", "unit", "value"], out,
+                  [ERS_FOOD_DOLLAR, ERS_FOOD_DOLLAR_OLD])
+
+
+ERS_COSTS = {"corn": ERS + "4962/corn.csv", "soybeans": ERS + "4976/soybeans.csv", "wheat": ERS + "4978/wheat.csv"}
+
+
+def ers_costs():
+    """USDA ERS's commodity costs and returns for corn, soybeans and wheat, US total, every item a year (dollars per
+    planted acre, and the yield, price and size that go with them)."""
+    out = []
+    for crop, url in ERS_COSTS.items():
+        for r in csv.DictReader(io.StringIO(_get(url).decode("utf-8-sig"))):
+            if r["Region"] != "U.S. total" or r["Size"] != "No specific size":
+                continue
+            try:
+                v = float(r["Value"])
+            except ValueError:
+                continue
+            out.append([crop, int(r["Year"]), r["Category"].strip(), r["Item"].strip(), r["Units"].strip(), v])
+    out.sort(key=lambda q: (q[0], q[1], q[2], q[3]))
+    return _write("ers_costs", ["crop", "year", "category", "item", "units", "value"], out, list(ERS_COSTS.values()))
+
+
+ERS_FIWS = ERS + "29517/september-3-2026-release.zip"
+FIWS_KEEP = ("Net farm income", "Net cash farm income", "Gross cash income", "Cash receipts value, all commodities",
+             "Value of government payments, total", "Dec. 31 value of real estate assets, excl. operator dwellings",
+             "Dec. 31 value of farm assets, excl. operator dwellings", "Dec. 31 value of farm debt, all, excl.",
+             "Dec. 31 value of farm equity, all", "Intermediate product expenses, fertilizer",
+             "Rate of return on farm assets", "Net rent, nonoperator landlords, incl.")
+
+
+def ers_farm_income():
+    """USDA ERS's farm income and wealth statistics (release of 3 September 2026), US totals since 1910 for a few lines
+    of the farm sector's accounts, in thousands of dollars, with the GDP deflator ERS supplies (2026 = 100)."""
+    z = zipfile.ZipFile(io.BytesIO(_get(ERS_FIWS)))
+    name = next(n for n in z.namelist() if n.lower().endswith(".csv"))
+    out = []
+    for r in csv.DictReader(io.StringIO(z.read(name).decode("latin-1"))):
+        d = (r.get("VariableDescriptionTotal") or "").strip()
+        if r.get("State") != "US" or not any(d.startswith(k) for k in FIWS_KEEP):
+            continue
+        try:
+            v = float(r["Amount"])
+            defl = float(r["ChainType_GDP_Deflator"]) if r.get("ChainType_GDP_Deflator") not in (None, "", "NA") else None
+        except ValueError:
+            continue
+        out.append([d, int(r["Year"]), v, defl])
+    out.sort(key=lambda q: (q[0], q[1]))
+    return _write("ers_farm_income", ["variable", "year", "value_kusd", "gdp_deflator"], out, [ERS_FIWS])
+
+
+OWID_AG = {"wheat-yields": "wheat_yield", "maize-yields": "maize_yield", "rice-yields": "rice_yield",
+           "daily-per-capita-caloric-supply": None, "cereal-production": None}
+OWID_ENTITIES = ("World", "India", "Mexico", "Pakistan", "United States", "China", "Brazil", "Africa", "Nigeria",
+                 "Ethiopia", "Bangladesh", "Indonesia")
+
+
+def owid_ag():
+    """Our World in Data's crop yields, food supply per person and cereal output (from FAOSTAT), for a few countries
+    and the world, every year (CC BY 4.0)."""
+    out = []
+    for slug in OWID_AG:
+        txt = _get(f"https://ourworldindata.org/grapher/{slug}.csv?v=1&csvType=full&useColumnShortNames=true").decode()
+        rows = list(csv.reader(io.StringIO(txt)))
+        head = rows[0]
+        col = len(head) - 1
+        for r in rows[1:]:
+            if r[0] in OWID_ENTITIES and r[col] not in ("", None):
+                out.append([slug, r[0], int(r[2]), float(r[col])])
+    return _write("owid_ag", ["series", "entity", "year", "value"], out,
+                  ["https://ourworldindata.org/grapher/" + s for s in OWID_AG])
+
+
+FRED_FOOD = {"PWHEAMTUSDM": "wheat ($/t)", "PMAIZMTUSDM": "maize ($/t)", "PSOYBUSDM": "soybeans ($/t)",
+             "PRICENPQUSDM": "rice ($/t)", "PCOCOUSDM": "cocoa ($/t)", "PCOFFOTMUSDM": "coffee, other milds (c/lb)",
+             "PBEEFUSDM": "beef (c/lb)", "PPOILUSDM": "palm oil ($/t)", "PSUGAISAUSDM": "sugar (c/lb)",
+             "PCU325311325311": "PPI, nitrogenous fertilizer manufacturing (Dec 1979 = 100)",
+             "APU0000702111": "white bread, a pound (US city average, $)", "APU0000703112": "ground beef, a pound ($)",
+             "APU0000708111": "eggs, a dozen ($)", "CUSR0000SAF11": "CPI food at home (1982-84 = 100)",
+             "CPIAUCSL": "CPI, all items (1982-84 = 100)"}
+
+
+def fred_food():
+    """Monthly food and fertilizer prices: the IMF's world prices of grains, oilseeds, cocoa, coffee, beef, palm oil,
+    sugar, urea and potash, the BLS's average retail prices of bread, ground beef and eggs, and the CPI for food at
+    home and all items, via FRED."""
+    out = []
+    for sid in FRED_FOOD:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            parts = line.split(",")
+            if len(parts) == 2 and parts[1] not in (".", ""):
+                try:
+                    out.append([sid, parts[0][:7], float(parts[1])])
+                except ValueError:
+                    continue
+    return _write("fred_food", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_FOOD.items()) + ")"])
+
+
+JOBS = {"ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

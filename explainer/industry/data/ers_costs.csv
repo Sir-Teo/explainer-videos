@@ -1,0 +1,2409 @@
+# source: https://www.ers.usda.gov/media/4962/corn.csv
+# source: https://www.ers.usda.gov/media/4976/soybeans.csv
+# source: https://www.ers.usda.gov/media/4978/wheat.csv
+# retrieved: 2026-11-27
+crop,year,category,item,units,value
+corn,1996,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,63.02
+corn,1996,Allocated overhead,General farm overhead,dollars per planted acre,10.38
+corn,1996,Allocated overhead,Hired labor,dollars per planted acre,2.83
+corn,1996,Allocated overhead,Opportunity cost of land,dollars per planted acre,80.79
+corn,1996,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,28.99
+corn,1996,Allocated overhead,Taxes and insurance,dollars per planted acre,6.98
+corn,1996,Allocated overhead,"Total, allocated overhead",dollars per planted acre,192.99
+corn,1996,Costs listed,"Total, costs listed",dollars per planted acre,353.94
+corn,1996,Gross value of production,"Primary product, grain",dollars per planted acre,366.46
+corn,1996,Gross value of production,"Secondary product, silage",dollars per planted acre,3.47
+corn,1996,Gross value of production,"Total, gross value of production",dollars per planted acre,369.93
+corn,1996,Net value,Value of production less operating costs,dollars per planted acre,208.98
+corn,1996,Net value,Value of production less total costs listed,dollars per planted acre,15.99
+corn,1996,Operating costs,Chemicals,dollars per planted acre,27.42
+corn,1996,Operating costs,Custom services,dollars per planted acre,11.3
+corn,1996,Operating costs,Fertilizer,dollars per planted acre,51.21
+corn,1996,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,24.43
+corn,1996,Operating costs,Interest on operating capital,dollars per planted acre,3.86
+corn,1996,Operating costs,Purchased irrigation water,dollars per planted acre,0.3
+corn,1996,Operating costs,Repairs,dollars per planted acre,15.78
+corn,1996,Operating costs,Seed,dollars per planted acre,26.65
+corn,1996,Operating costs,"Total, operating costs",dollars per planted acre,160.95
+corn,1996,Production practices,Dryland,percent of acres,85.0
+corn,1996,Production practices,Irrigated,percent of acres,15.0
+corn,1996,Supporting information,Enterprise size,planted acres,189.0
+corn,1996,Supporting information,Price,dollars per bushel at harvest,2.82
+corn,1996,Supporting information,Yield,bushels per planted acre,130.0
+corn,1997,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,64.5
+corn,1997,Allocated overhead,General farm overhead,dollars per planted acre,12.21
+corn,1997,Allocated overhead,Hired labor,dollars per planted acre,3.07
+corn,1997,Allocated overhead,Opportunity cost of land,dollars per planted acre,84.81
+corn,1997,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,29.89
+corn,1997,Allocated overhead,Taxes and insurance,dollars per planted acre,7.0
+corn,1997,Allocated overhead,"Total, allocated overhead",dollars per planted acre,201.48
+corn,1997,Costs listed,"Total, costs listed",dollars per planted acre,363.73
+corn,1997,Gross value of production,"Primary product, grain",dollars per planted acre,327.6
+corn,1997,Gross value of production,"Secondary product, silage",dollars per planted acre,3.77
+corn,1997,Gross value of production,"Total, gross value of production",dollars per planted acre,331.37
+corn,1997,Net value,Value of production less operating costs,dollars per planted acre,169.12
+corn,1997,Net value,Value of production less total costs listed,dollars per planted acre,-32.36
+corn,1997,Operating costs,Chemicals,dollars per planted acre,26.87
+corn,1997,Operating costs,Custom services,dollars per planted acre,11.3
+corn,1997,Operating costs,Fertilizer,dollars per planted acre,50.37
+corn,1997,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,24.55
+corn,1997,Operating costs,Interest on operating capital,dollars per planted acre,3.96
+corn,1997,Operating costs,Purchased irrigation water,dollars per planted acre,0.32
+corn,1997,Operating costs,Repairs,dollars per planted acre,16.17
+corn,1997,Operating costs,Seed,dollars per planted acre,28.71
+corn,1997,Operating costs,"Total, operating costs",dollars per planted acre,162.25
+corn,1997,Production practices,Dryland,percent of acres,85.0
+corn,1997,Production practices,Irrigated,percent of acres,15.0
+corn,1997,Supporting information,Enterprise size,planted acres,189.0
+corn,1997,Supporting information,Price,dollars per bushel at harvest,2.52
+corn,1997,Supporting information,Yield,bushels per planted acre,130.0
+corn,1998,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,66.46
+corn,1998,Allocated overhead,General farm overhead,dollars per planted acre,11.47
+corn,1998,Allocated overhead,Hired labor,dollars per planted acre,3.19
+corn,1998,Allocated overhead,Opportunity cost of land,dollars per planted acre,86.35
+corn,1998,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,30.63
+corn,1998,Allocated overhead,Taxes and insurance,dollars per planted acre,7.05
+corn,1998,Allocated overhead,"Total, allocated overhead",dollars per planted acre,205.15
+corn,1998,Costs listed,"Total, costs listed",dollars per planted acre,362.86
+corn,1998,Gross value of production,"Primary product, grain",dollars per planted acre,259.76
+corn,1998,Gross value of production,"Secondary product, silage",dollars per planted acre,3.12
+corn,1998,Gross value of production,"Total, gross value of production",dollars per planted acre,262.88
+corn,1998,Net value,Value of production less operating costs,dollars per planted acre,105.17
+corn,1998,Net value,Value of production less total costs listed,dollars per planted acre,-99.98
+corn,1998,Operating costs,Chemicals,dollars per planted acre,27.36
+corn,1998,Operating costs,Custom services,dollars per planted acre,11.29
+corn,1998,Operating costs,Fertilizer,dollars per planted acre,45.51
+corn,1998,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,22.96
+corn,1998,Operating costs,Interest on operating capital,dollars per planted acre,3.61
+corn,1998,Operating costs,Purchased irrigation water,dollars per planted acre,0.31
+corn,1998,Operating costs,Repairs,dollars per planted acre,16.65
+corn,1998,Operating costs,Seed,dollars per planted acre,30.02
+corn,1998,Operating costs,"Total, operating costs",dollars per planted acre,157.71
+corn,1998,Production practices,Dryland,percent of acres,85.0
+corn,1998,Production practices,Irrigated,percent of acres,15.0
+corn,1998,Supporting information,Enterprise size,planted acres,189.0
+corn,1998,Supporting information,Price,dollars per bushel at harvest,1.91
+corn,1998,Supporting information,Yield,bushels per planted acre,136.0
+corn,1999,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,68.49
+corn,1999,Allocated overhead,General farm overhead,dollars per planted acre,10.88
+corn,1999,Allocated overhead,Hired labor,dollars per planted acre,3.28
+corn,1999,Allocated overhead,Opportunity cost of land,dollars per planted acre,86.77
+corn,1999,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,31.43
+corn,1999,Allocated overhead,Taxes and insurance,dollars per planted acre,6.96
+corn,1999,Allocated overhead,"Total, allocated overhead",dollars per planted acre,207.81
+corn,1999,Costs listed,"Total, costs listed",dollars per planted acre,364.73
+corn,1999,Gross value of production,"Primary product, grain",dollars per planted acre,228.15
+corn,1999,Gross value of production,"Secondary product, silage",dollars per planted acre,2.55
+corn,1999,Gross value of production,"Total, gross value of production",dollars per planted acre,230.7
+corn,1999,Net value,Value of production less operating costs,dollars per planted acre,73.78
+corn,1999,Net value,Value of production less total costs listed,dollars per planted acre,-134.03
+corn,1999,Operating costs,Chemicals,dollars per planted acre,28.4
+corn,1999,Operating costs,Custom services,dollars per planted acre,11.37
+corn,1999,Operating costs,Fertilizer,dollars per planted acre,42.84
+corn,1999,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,23.04
+corn,1999,Operating costs,Interest on operating capital,dollars per planted acre,3.5
+corn,1999,Operating costs,Purchased irrigation water,dollars per planted acre,0.31
+corn,1999,Operating costs,Repairs,dollars per planted acre,17.17
+corn,1999,Operating costs,Seed,dollars per planted acre,30.29
+corn,1999,Operating costs,"Total, operating costs",dollars per planted acre,156.92
+corn,1999,Production practices,Dryland,percent of acres,85.0
+corn,1999,Production practices,Irrigated,percent of acres,15.0
+corn,1999,Supporting information,Enterprise size,planted acres,189.0
+corn,1999,Supporting information,Price,dollars per bushel at harvest,1.69
+corn,1999,Supporting information,Yield,bushels per planted acre,135.0
+corn,2000,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,70.16
+corn,2000,Allocated overhead,General farm overhead,dollars per planted acre,11.11
+corn,2000,Allocated overhead,Hired labor,dollars per planted acre,3.36
+corn,2000,Allocated overhead,Opportunity cost of land,dollars per planted acre,89.36
+corn,2000,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,32.21
+corn,2000,Allocated overhead,Taxes and insurance,dollars per planted acre,7.13
+corn,2000,Allocated overhead,"Total, allocated overhead",dollars per planted acre,213.33
+corn,2000,Costs listed,"Total, costs listed",dollars per planted acre,378.32
+corn,2000,Gross value of production,"Primary product, grain",dollars per planted acre,244.26
+corn,2000,Gross value of production,"Secondary product, silage",dollars per planted acre,2.41
+corn,2000,Gross value of production,"Total, gross value of production",dollars per planted acre,246.67
+corn,2000,Net value,Value of production less operating costs,dollars per planted acre,81.68
+corn,2000,Net value,Value of production less total costs listed,dollars per planted acre,-131.65
+corn,2000,Operating costs,Chemicals,dollars per planted acre,28.82
+corn,2000,Operating costs,Custom services,dollars per planted acre,11.48
+corn,2000,Operating costs,Fertilizer,dollars per planted acre,43.16
+corn,2000,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,29.12
+corn,2000,Operating costs,Interest on operating capital,dollars per planted acre,4.53
+corn,2000,Operating costs,Purchased irrigation water,dollars per planted acre,0.31
+corn,2000,Operating costs,Repairs,dollars per planted acre,17.55
+corn,2000,Operating costs,Seed,dollars per planted acre,30.02
+corn,2000,Operating costs,"Total, operating costs",dollars per planted acre,164.99
+corn,2000,Production practices,Dryland,percent of acres,85.0
+corn,2000,Production practices,Irrigated,percent of acres,15.0
+corn,2000,Supporting information,Enterprise size,planted acres,189.0
+corn,2000,Supporting information,Price,dollars per bushel at harvest,1.77
+corn,2000,Supporting information,Yield,bushels per planted acre,138.0
+corn,2001,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,54.69
+corn,2001,Allocated overhead,General farm overhead,dollars per planted acre,11.67
+corn,2001,Allocated overhead,Hired labor,dollars per planted acre,2.92
+corn,2001,Allocated overhead,Opportunity cost of land,dollars per planted acre,86.5
+corn,2001,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,24.96
+corn,2001,Allocated overhead,Taxes and insurance,dollars per planted acre,5.49
+corn,2001,Allocated overhead,"Total, allocated overhead",dollars per planted acre,186.23
+corn,2001,Costs listed,"Total, costs listed",dollars per planted acre,348.53
+corn,2001,Gross value of production,"Primary product, grain",dollars per planted acre,264.96
+corn,2001,Gross value of production,"Secondary product, silage",dollars per planted acre,1.96
+corn,2001,Gross value of production,"Total, gross value of production",dollars per planted acre,266.92
+corn,2001,Net value,Value of production less operating costs,dollars per planted acre,104.62
+corn,2001,Net value,Value of production less total costs listed,dollars per planted acre,-81.61
+corn,2001,Operating costs,Chemicals,dollars per planted acre,26.44
+corn,2001,Operating costs,Custom services,dollars per planted acre,10.94
+corn,2001,Operating costs,Fertilizer,dollars per planted acre,55.12
+corn,2001,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,20.88
+corn,2001,Operating costs,Interest on operating capital,dollars per planted acre,2.6
+corn,2001,Operating costs,Purchased irrigation water,dollars per planted acre,0.22
+corn,2001,Operating costs,Repairs,dollars per planted acre,13.76
+corn,2001,Operating costs,Seed,dollars per planted acre,32.34
+corn,2001,Operating costs,"Total, operating costs",dollars per planted acre,162.3
+corn,2001,Production practices,Dryland,percent of acres,86.0
+corn,2001,Production practices,Irrigated,percent of acres,14.0
+corn,2001,Supporting information,Enterprise size,planted acres,236.0
+corn,2001,Supporting information,Price,dollars per bushel at harvest,1.84
+corn,2001,Supporting information,Yield,bushels per planted acre,144.0
+corn,2002,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,55.26
+corn,2002,Allocated overhead,General farm overhead,dollars per planted acre,11.91
+corn,2002,Allocated overhead,Hired labor,dollars per planted acre,3.06
+corn,2002,Allocated overhead,Opportunity cost of land,dollars per planted acre,87.44
+corn,2002,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,25.74
+corn,2002,Allocated overhead,Taxes and insurance,dollars per planted acre,5.42
+corn,2002,Allocated overhead,"Total, allocated overhead",dollars per planted acre,188.83
+corn,2002,Costs listed,"Total, costs listed",dollars per planted acre,334.31
+corn,2002,Gross value of production,"Primary product, grain",dollars per planted acre,310.88
+corn,2002,Gross value of production,"Secondary product, silage",dollars per planted acre,1.94
+corn,2002,Gross value of production,"Total, gross value of production",dollars per planted acre,312.82
+corn,2002,Net value,Value of production less operating costs,dollars per planted acre,167.34
+corn,2002,Net value,Value of production less total costs listed,dollars per planted acre,-21.49
+corn,2002,Operating costs,Chemicals,dollars per planted acre,26.11
+corn,2002,Operating costs,Custom services,dollars per planted acre,10.79
+corn,2002,Operating costs,Fertilizer,dollars per planted acre,42.51
+corn,2002,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,18.93
+corn,2002,Operating costs,Interest on operating capital,dollars per planted acre,1.17
+corn,2002,Operating costs,Purchased irrigation water,dollars per planted acre,0.22
+corn,2002,Operating costs,Repairs,dollars per planted acre,13.91
+corn,2002,Operating costs,Seed,dollars per planted acre,31.84
+corn,2002,Operating costs,"Total, operating costs",dollars per planted acre,145.48
+corn,2002,Production practices,Dryland,percent of acres,86.0
+corn,2002,Production practices,Irrigated,percent of acres,14.0
+corn,2002,Supporting information,Enterprise size,planted acres,236.0
+corn,2002,Supporting information,Price,dollars per bushel at harvest,2.32
+corn,2002,Supporting information,Yield,bushels per planted acre,134.0
+corn,2003,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,56.67
+corn,2003,Allocated overhead,General farm overhead,dollars per planted acre,12.17
+corn,2003,Allocated overhead,Hired labor,dollars per planted acre,3.14
+corn,2003,Allocated overhead,Opportunity cost of land,dollars per planted acre,89.2
+corn,2003,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,26.53
+corn,2003,Allocated overhead,Taxes and insurance,dollars per planted acre,5.54
+corn,2003,Allocated overhead,"Total, allocated overhead",dollars per planted acre,193.25
+corn,2003,Costs listed,"Total, costs listed",dollars per planted acre,354.41
+corn,2003,Gross value of production,"Primary product, grain",dollars per planted acre,317.37
+corn,2003,Gross value of production,"Secondary product, silage",dollars per planted acre,2.25
+corn,2003,Gross value of production,"Total, gross value of production",dollars per planted acre,319.62
+corn,2003,Net value,Value of production less operating costs,dollars per planted acre,158.46
+corn,2003,Net value,Value of production less total costs listed,dollars per planted acre,-34.79
+corn,2003,Operating costs,Chemicals,dollars per planted acre,26.2
+corn,2003,Operating costs,Custom services,dollars per planted acre,11.17
+corn,2003,Operating costs,Fertilizer,dollars per planted acre,50.64
+corn,2003,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,23.06
+corn,2003,Operating costs,Interest on operating capital,dollars per planted acre,0.82
+corn,2003,Operating costs,Purchased irrigation water,dollars per planted acre,0.22
+corn,2003,Operating costs,Repairs,dollars per planted acre,14.22
+corn,2003,Operating costs,Seed,dollars per planted acre,34.83
+corn,2003,Operating costs,"Total, operating costs",dollars per planted acre,161.16
+corn,2003,Production practices,Dryland,percent of acres,86.0
+corn,2003,Production practices,Irrigated,percent of acres,14.0
+corn,2003,Supporting information,Enterprise size,planted acres,236.0
+corn,2003,Supporting information,Price,dollars per bushel at harvest,2.13
+corn,2003,Supporting information,Yield,bushels per planted acre,149.0
+corn,2004,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,61.25
+corn,2004,Allocated overhead,General farm overhead,dollars per planted acre,12.41
+corn,2004,Allocated overhead,Hired labor,dollars per planted acre,3.2
+corn,2004,Allocated overhead,Opportunity cost of land,dollars per planted acre,92.14
+corn,2004,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,26.98
+corn,2004,Allocated overhead,Taxes and insurance,dollars per planted acre,5.58
+corn,2004,Allocated overhead,"Total, allocated overhead",dollars per planted acre,201.56
+corn,2004,Costs listed,"Total, costs listed",dollars per planted acre,377.5
+corn,2004,Gross value of production,"Primary product, grain",dollars per planted acre,359.97
+corn,2004,Gross value of production,"Secondary product, silage",dollars per planted acre,2.38
+corn,2004,Gross value of production,"Total, gross value of production",dollars per planted acre,362.35
+corn,2004,Net value,Value of production less operating costs,dollars per planted acre,186.41
+corn,2004,Net value,Value of production less total costs listed,dollars per planted acre,-15.15
+corn,2004,Operating costs,Chemicals,dollars per planted acre,26.76
+corn,2004,Operating costs,Custom services,dollars per planted acre,11.55
+corn,2004,Operating costs,Fertilizer,dollars per planted acre,54.62
+corn,2004,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,29.29
+corn,2004,Operating costs,Interest on operating capital,dollars per planted acre,1.31
+corn,2004,Operating costs,Purchased irrigation water,dollars per planted acre,0.24
+corn,2004,Operating costs,Repairs,dollars per planted acre,15.35
+corn,2004,Operating costs,Seed,dollars per planted acre,36.82
+corn,2004,Operating costs,"Total, operating costs",dollars per planted acre,175.94
+corn,2004,Production practices,Dryland,percent of acres,86.0
+corn,2004,Production practices,Irrigated,percent of acres,14.0
+corn,2004,Supporting information,Enterprise size,planted acres,236.0
+corn,2004,Supporting information,Price,dollars per bushel at harvest,2.13
+corn,2004,Supporting information,Yield,bushels per planted acre,169.0
+corn,2005,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,64.02
+corn,2005,Allocated overhead,General farm overhead,dollars per planted acre,12.61
+corn,2005,Allocated overhead,Hired labor,dollars per planted acre,2.08
+corn,2005,Allocated overhead,Opportunity cost of land,dollars per planted acre,93.27
+corn,2005,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,22.02
+corn,2005,Allocated overhead,Taxes and insurance,dollars per planted acre,6.51
+corn,2005,Allocated overhead,"Total, allocated overhead",dollars per planted acre,200.51
+corn,2005,Costs listed,"Total, costs listed",dollars per planted acre,386.88
+corn,2005,Gross value of production,"Primary product, grain",dollars per planted acre,259.26
+corn,2005,Gross value of production,"Secondary product, silage",dollars per planted acre,1.17
+corn,2005,Gross value of production,"Total, gross value of production",dollars per planted acre,260.43
+corn,2005,Net value,Value of production less operating costs,dollars per planted acre,74.06
+corn,2005,Net value,Value of production less total costs listed,dollars per planted acre,-126.45
+corn,2005,Operating costs,Chemicals,dollars per planted acre,22.84
+corn,2005,Operating costs,Custom services,dollars per planted acre,9.97
+corn,2005,Operating costs,Fertilizer,dollars per planted acre,69.35
+corn,2005,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,26.5
+corn,2005,Operating costs,Interest on operating capital,dollars per planted acre,3.12
+corn,2005,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+corn,2005,Operating costs,Repairs,dollars per planted acre,14.0
+corn,2005,Operating costs,Seed,dollars per planted acre,40.47
+corn,2005,Operating costs,"Total, operating costs",dollars per planted acre,186.37
+corn,2005,Production practices,Dryland,percent of acres,88.0
+corn,2005,Production practices,Irrigated,percent of acres,12.0
+corn,2005,Supporting information,Enterprise size,planted acres,250.0
+corn,2005,Supporting information,Price,dollars per bushel at harvest,1.74
+corn,2005,Supporting information,Yield,bushels per planted acre,149.0
+corn,2006,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,66.71
+corn,2006,Allocated overhead,General farm overhead,dollars per planted acre,13.45
+corn,2006,Allocated overhead,Hired labor,dollars per planted acre,2.19
+corn,2006,Allocated overhead,Opportunity cost of land,dollars per planted acre,90.84
+corn,2006,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,23.56
+corn,2006,Allocated overhead,Taxes and insurance,dollars per planted acre,7.01
+corn,2006,Allocated overhead,"Total, allocated overhead",dollars per planted acre,203.76
+corn,2006,Costs listed,"Total, costs listed",dollars per planted acre,409.74
+corn,2006,Gross value of production,"Primary product, grain",dollars per planted acre,350.52
+corn,2006,Gross value of production,"Secondary product, silage",dollars per planted acre,1.35
+corn,2006,Gross value of production,"Total, gross value of production",dollars per planted acre,351.87
+corn,2006,Net value,Value of production less operating costs,dollars per planted acre,145.89
+corn,2006,Net value,Value of production less total costs listed,dollars per planted acre,-57.87
+corn,2006,Operating costs,Chemicals,dollars per planted acre,23.62
+corn,2006,Operating costs,Custom services,dollars per planted acre,10.58
+corn,2006,Operating costs,Fertilizer,dollars per planted acre,80.17
+corn,2006,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,28.73
+corn,2006,Operating costs,Interest on operating capital,dollars per planted acre,4.76
+corn,2006,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+corn,2006,Operating costs,Repairs,dollars per planted acre,14.45
+corn,2006,Operating costs,Seed,dollars per planted acre,43.55
+corn,2006,Operating costs,"Total, operating costs",dollars per planted acre,205.98
+corn,2006,Production practices,Dryland,percent of acres,88.0
+corn,2006,Production practices,Irrigated,percent of acres,12.0
+corn,2006,Supporting information,Enterprise size,planted acres,250.0
+corn,2006,Supporting information,Price,dollars per bushel at harvest,2.54
+corn,2006,Supporting information,Yield,bushels per planted acre,138.0
+corn,2007,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,69.77
+corn,2007,Allocated overhead,General farm overhead,dollars per planted acre,13.88
+corn,2007,Allocated overhead,Hired labor,dollars per planted acre,2.26
+corn,2007,Allocated overhead,Opportunity cost of land,dollars per planted acre,97.21
+corn,2007,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,24.34
+corn,2007,Allocated overhead,Taxes and insurance,dollars per planted acre,7.52
+corn,2007,Allocated overhead,"Total, allocated overhead",dollars per planted acre,214.98
+corn,2007,Costs listed,"Total, costs listed",dollars per planted acre,443.97
+corn,2007,Gross value of production,"Primary product, grain",dollars per planted acre,467.61
+corn,2007,Gross value of production,"Secondary product, silage",dollars per planted acre,1.33
+corn,2007,Gross value of production,"Total, gross value of production",dollars per planted acre,468.94
+corn,2007,Net value,Value of production less operating costs,dollars per planted acre,239.95
+corn,2007,Net value,Value of production less total costs listed,dollars per planted acre,24.97
+corn,2007,Operating costs,Chemicals,dollars per planted acre,24.38
+corn,2007,Operating costs,Custom services,dollars per planted acre,10.93
+corn,2007,Operating costs,Fertilizer,dollars per planted acre,93.13
+corn,2007,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,31.58
+corn,2007,Operating costs,Interest on operating capital,dollars per planted acre,4.94
+corn,2007,Operating costs,Purchased irrigation water,dollars per planted acre,0.13
+corn,2007,Operating costs,Repairs,dollars per planted acre,14.86
+corn,2007,Operating costs,Seed,dollars per planted acre,49.04
+corn,2007,Operating costs,"Total, operating costs",dollars per planted acre,228.99
+corn,2007,Production practices,Dryland,percent of acres,88.0
+corn,2007,Production practices,Irrigated,percent of acres,12.0
+corn,2007,Supporting information,Enterprise size,planted acres,250.0
+corn,2007,Supporting information,Price,dollars per bushel at harvest,3.27
+corn,2007,Supporting information,Yield,bushels per planted acre,143.0
+corn,2008,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,76.36
+corn,2008,Allocated overhead,General farm overhead,dollars per planted acre,14.18
+corn,2008,Allocated overhead,Hired labor,dollars per planted acre,2.37
+corn,2008,Allocated overhead,Opportunity cost of land,dollars per planted acre,107.37
+corn,2008,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,25.12
+corn,2008,Allocated overhead,Taxes and insurance,dollars per planted acre,8.29
+corn,2008,Allocated overhead,"Total, allocated overhead",dollars per planted acre,233.69
+corn,2008,Costs listed,"Total, costs listed",dollars per planted acre,529.38
+corn,2008,Gross value of production,"Primary product, grain",dollars per planted acre,627.84
+corn,2008,Gross value of production,"Secondary product, silage",dollars per planted acre,1.52
+corn,2008,Gross value of production,"Total, gross value of production",dollars per planted acre,629.36
+corn,2008,Net value,Value of production less operating costs,dollars per planted acre,333.67
+corn,2008,Net value,Value of production less total costs listed,dollars per planted acre,99.98
+corn,2008,Operating costs,Chemicals,dollars per planted acre,25.19
+corn,2008,Operating costs,Custom services,dollars per planted acre,10.98
+corn,2008,Operating costs,Fertilizer,dollars per planted acre,139.18
+corn,2008,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,42.64
+corn,2008,Operating costs,Interest on operating capital,dollars per planted acre,2.17
+corn,2008,Operating costs,Purchased irrigation water,dollars per planted acre,0.14
+corn,2008,Operating costs,Repairs,dollars per planted acre,15.37
+corn,2008,Operating costs,Seed,dollars per planted acre,60.02
+corn,2008,Operating costs,"Total, operating costs",dollars per planted acre,295.69
+corn,2008,Production practices,Dryland,percent of acres,88.0
+corn,2008,Production practices,Irrigated,percent of acres,12.0
+corn,2008,Supporting information,Enterprise size,planted acres,250.0
+corn,2008,Supporting information,Price,dollars per bushel at harvest,4.36
+corn,2008,Supporting information,Yield,bushels per planted acre,144.0
+corn,2009,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,81.12
+corn,2009,Allocated overhead,General farm overhead,dollars per planted acre,14.49
+corn,2009,Allocated overhead,Hired labor,dollars per planted acre,2.41
+corn,2009,Allocated overhead,Opportunity cost of land,dollars per planted acre,123.87
+corn,2009,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,25.67
+corn,2009,Allocated overhead,Taxes and insurance,dollars per planted acre,8.13
+corn,2009,Allocated overhead,"Total, allocated overhead",dollars per planted acre,255.69
+corn,2009,Costs listed,"Total, costs listed",dollars per planted acre,550.7
+corn,2009,Gross value of production,"Primary product, grain",dollars per planted acre,560.04
+corn,2009,Gross value of production,"Secondary product, silage",dollars per planted acre,1.18
+corn,2009,Gross value of production,"Total, gross value of production",dollars per planted acre,561.22
+corn,2009,Net value,Value of production less operating costs,dollars per planted acre,266.21
+corn,2009,Net value,Value of production less total costs listed,dollars per planted acre,10.52
+corn,2009,Operating costs,Chemicals,dollars per planted acre,27.83
+corn,2009,Operating costs,Custom services,dollars per planted acre,11.76
+corn,2009,Operating costs,Fertilizer,dollars per planted acre,131.11
+corn,2009,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,29.13
+corn,2009,Operating costs,Interest on operating capital,dollars per planted acre,0.43
+corn,2009,Operating costs,Purchased irrigation water,dollars per planted acre,0.14
+corn,2009,Operating costs,Repairs,dollars per planted acre,15.69
+corn,2009,Operating costs,Seed,dollars per planted acre,78.92
+corn,2009,Operating costs,"Total, operating costs",dollars per planted acre,295.01
+corn,2009,Production practices,Dryland,percent of acres,88.0
+corn,2009,Production practices,Irrigated,percent of acres,12.0
+corn,2009,Supporting information,Enterprise size,planted acres,250.0
+corn,2009,Supporting information,Price,dollars per bushel at harvest,3.59
+corn,2009,Supporting information,Yield,bushels per planted acre,156.0
+corn,2010,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,84.4
+corn,2010,Allocated overhead,General farm overhead,dollars per planted acre,18.1
+corn,2010,Allocated overhead,Hired labor,dollars per planted acre,2.96
+corn,2010,Allocated overhead,Opportunity cost of land,dollars per planted acre,127.33
+corn,2010,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,22.54
+corn,2010,Allocated overhead,Taxes and insurance,dollars per planted acre,8.46
+corn,2010,Allocated overhead,"Total, allocated overhead",dollars per planted acre,263.79
+corn,2010,Costs listed,"Total, costs listed",dollars per planted acre,550.2
+corn,2010,Gross value of production,"Primary product, grain",dollars per planted acre,688.47
+corn,2010,Gross value of production,"Secondary product, silage",dollars per planted acre,0.92
+corn,2010,Gross value of production,"Total, gross value of production",dollars per planted acre,689.39
+corn,2010,Net value,Value of production less operating costs,dollars per planted acre,402.98
+corn,2010,Net value,Value of production less total costs listed,dollars per planted acre,139.19
+corn,2010,Operating costs,Chemicals,dollars per planted acre,26.29
+corn,2010,Operating costs,Custom services,dollars per planted acre,16.36
+corn,2010,Operating costs,Fertilizer,dollars per planted acre,112.03
+corn,2010,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,25.8
+corn,2010,Operating costs,Interest on operating capital,dollars per planted acre,0.28
+corn,2010,Operating costs,Purchased irrigation water,dollars per planted acre,0.11
+corn,2010,Operating costs,Repairs,dollars per planted acre,23.96
+corn,2010,Operating costs,Seed,dollars per planted acre,81.58
+corn,2010,Operating costs,"Total, operating costs",dollars per planted acre,286.41
+corn,2010,Production practices,Dryland,percent of acres,89.0
+corn,2010,Production practices,Irrigated,percent of acres,11.0
+corn,2010,Supporting information,Enterprise size,planted acres,280.0
+corn,2010,Supporting information,Price,dollars per bushel at harvest,4.33
+corn,2010,Supporting information,Yield,bushels per planted acre,159.0
+corn,2011,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,89.59
+corn,2011,Allocated overhead,General farm overhead,dollars per planted acre,18.73
+corn,2011,Allocated overhead,Hired labor,dollars per planted acre,2.92
+corn,2011,Allocated overhead,Opportunity cost of land,dollars per planted acre,138.2
+corn,2011,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,22.77
+corn,2011,Allocated overhead,Taxes and insurance,dollars per planted acre,8.92
+corn,2011,Allocated overhead,"Total, allocated overhead",dollars per planted acre,281.13
+corn,2011,Costs listed,"Total, costs listed",dollars per planted acre,613.46
+corn,2011,Gross value of production,"Primary product, grain",dollars per planted acre,836.58
+corn,2011,Gross value of production,"Secondary product, silage",dollars per planted acre,1.19
+corn,2011,Gross value of production,"Total, gross value of production",dollars per planted acre,837.77
+corn,2011,Net value,Value of production less operating costs,dollars per planted acre,505.44
+corn,2011,Net value,Value of production less total costs listed,dollars per planted acre,224.31
+corn,2011,Operating costs,Chemicals,dollars per planted acre,26.35
+corn,2011,Operating costs,Custom services,dollars per planted acre,16.77
+corn,2011,Operating costs,Fertilizer,dollars per planted acre,147.36
+corn,2011,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,32.42
+corn,2011,Operating costs,Interest on operating capital,dollars per planted acre,0.17
+corn,2011,Operating costs,Purchased irrigation water,dollars per planted acre,0.1
+corn,2011,Operating costs,Repairs,dollars per planted acre,24.79
+corn,2011,Operating costs,Seed,dollars per planted acre,84.37
+corn,2011,Operating costs,"Total, operating costs",dollars per planted acre,332.33
+corn,2011,Production practices,Dryland,percent of acres,89.0
+corn,2011,Production practices,Irrigated,percent of acres,11.0
+corn,2011,Supporting information,Enterprise size,planted acres,280.0
+corn,2011,Supporting information,Price,dollars per bushel at harvest,5.73
+corn,2011,Supporting information,Yield,bushels per planted acre,146.0
+corn,2012,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,94.05
+corn,2012,Allocated overhead,General farm overhead,dollars per planted acre,19.32
+corn,2012,Allocated overhead,Hired labor,dollars per planted acre,3.02
+corn,2012,Allocated overhead,Opportunity cost of land,dollars per planted acre,154.94
+corn,2012,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,23.65
+corn,2012,Allocated overhead,Taxes and insurance,dollars per planted acre,9.0
+corn,2012,Allocated overhead,"Total, allocated overhead",dollars per planted acre,303.98
+corn,2012,Costs listed,"Total, costs listed",dollars per planted acre,653.57
+corn,2012,Gross value of production,"Primary product, grain",dollars per planted acre,801.22
+corn,2012,Gross value of production,"Secondary product, silage",dollars per planted acre,1.33
+corn,2012,Gross value of production,"Total, gross value of production",dollars per planted acre,802.55
+corn,2012,Net value,Value of production less operating costs,dollars per planted acre,452.96
+corn,2012,Net value,Value of production less total costs listed,dollars per planted acre,148.98
+corn,2012,Operating costs,Chemicals,dollars per planted acre,27.52
+corn,2012,Operating costs,Custom services,dollars per planted acre,17.07
+corn,2012,Operating costs,Fertilizer,dollars per planted acre,156.51
+corn,2012,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,30.63
+corn,2012,Operating costs,Interest on operating capital,dollars per planted acre,0.23
+corn,2012,Operating costs,Purchased irrigation water,dollars per planted acre,0.11
+corn,2012,Operating costs,Repairs,dollars per planted acre,25.48
+corn,2012,Operating costs,Seed,dollars per planted acre,92.04
+corn,2012,Operating costs,"Total, operating costs",dollars per planted acre,349.59
+corn,2012,Production practices,Dryland,percent of acres,89.0
+corn,2012,Production practices,Irrigated,percent of acres,11.0
+corn,2012,Supporting information,Enterprise size,planted acres,280.0
+corn,2012,Supporting information,Price,dollars per bushel at harvest,6.79
+corn,2012,Supporting information,Yield,bushels per planted acre,118.0
+corn,2013,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,96.86
+corn,2013,Allocated overhead,General farm overhead,dollars per planted acre,19.54
+corn,2013,Allocated overhead,Hired labor,dollars per planted acre,3.12
+corn,2013,Allocated overhead,Opportunity cost of land,dollars per planted acre,167.74
+corn,2013,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,24.4
+corn,2013,Allocated overhead,Taxes and insurance,dollars per planted acre,9.19
+corn,2013,Allocated overhead,"Total, allocated overhead",dollars per planted acre,320.85
+corn,2013,Costs listed,"Total, costs listed",dollars per planted acre,676.45
+corn,2013,Gross value of production,"Primary product, grain",dollars per planted acre,719.16
+corn,2013,Gross value of production,"Secondary product, silage",dollars per planted acre,1.35
+corn,2013,Gross value of production,"Total, gross value of production",dollars per planted acre,720.51
+corn,2013,Net value,Value of production less operating costs,dollars per planted acre,364.91
+corn,2013,Net value,Value of production less total costs listed,dollars per planted acre,44.06
+corn,2013,Operating costs,Chemicals,dollars per planted acre,28.57
+corn,2013,Operating costs,Custom services,dollars per planted acre,17.77
+corn,2013,Operating costs,Fertilizer,dollars per planted acre,153.33
+corn,2013,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,32.27
+corn,2013,Operating costs,Interest on operating capital,dollars per planted acre,0.16
+corn,2013,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+corn,2013,Operating costs,Repairs,dollars per planted acre,25.79
+corn,2013,Operating costs,Seed,dollars per planted acre,97.59
+corn,2013,Operating costs,"Total, operating costs",dollars per planted acre,355.6
+corn,2013,Production practices,Dryland,percent of acres,89.0
+corn,2013,Production practices,Irrigated,percent of acres,11.0
+corn,2013,Supporting information,Enterprise size,planted acres,280.0
+corn,2013,Supporting information,Price,dollars per bushel at harvest,4.61
+corn,2013,Supporting information,Yield,bushels per planted acre,156.0
+corn,2014,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,100.15
+corn,2014,Allocated overhead,General farm overhead,dollars per planted acre,19.88
+corn,2014,Allocated overhead,Hired labor,dollars per planted acre,3.16
+corn,2014,Allocated overhead,Opportunity cost of land,dollars per planted acre,175.6
+corn,2014,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,24.75
+corn,2014,Allocated overhead,Taxes and insurance,dollars per planted acre,9.34
+corn,2014,Allocated overhead,"Total, allocated overhead",dollars per planted acre,332.88
+corn,2014,Costs listed,"Total, costs listed",dollars per planted acre,689.8
+corn,2014,Gross value of production,"Primary product, grain",dollars per planted acre,601.8
+corn,2014,Gross value of production,"Secondary product, silage",dollars per planted acre,1.38
+corn,2014,Gross value of production,"Total, gross value of production",dollars per planted acre,603.18
+corn,2014,Net value,Value of production less operating costs,dollars per planted acre,246.26
+corn,2014,Net value,Value of production less total costs listed,dollars per planted acre,-86.62
+corn,2014,Operating costs,Chemicals,dollars per planted acre,29.2
+corn,2014,Operating costs,Custom services,dollars per planted acre,18.24
+corn,2014,Operating costs,Fertilizer,dollars per planted acre,149.23
+corn,2014,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,32.8
+corn,2014,Operating costs,Interest on operating capital,dollars per planted acre,0.12
+corn,2014,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+corn,2014,Operating costs,Repairs,dollars per planted acre,26.17
+corn,2014,Operating costs,Seed,dollars per planted acre,101.04
+corn,2014,Operating costs,"Total, operating costs",dollars per planted acre,356.92
+corn,2014,Production practices,Dryland,percent of acres,89.0
+corn,2014,Production practices,Irrigated,percent of acres,11.0
+corn,2014,Supporting information,Enterprise size,planted acres,280.0
+corn,2014,Supporting information,Price,dollars per bushel at harvest,3.54
+corn,2014,Supporting information,Yield,bushels per planted acre,170.0
+corn,2015,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,102.63
+corn,2015,Allocated overhead,General farm overhead,dollars per planted acre,19.83
+corn,2015,Allocated overhead,Hired labor,dollars per planted acre,3.28
+corn,2015,Allocated overhead,Opportunity cost of land,dollars per planted acre,179.15
+corn,2015,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,25.63
+corn,2015,Allocated overhead,Taxes and insurance,dollars per planted acre,11.01
+corn,2015,Allocated overhead,"Total, allocated overhead",dollars per planted acre,341.53
+corn,2015,Costs listed,"Total, costs listed",dollars per planted acre,675.33
+corn,2015,Gross value of production,"Primary product, grain",dollars per planted acre,611.22
+corn,2015,Gross value of production,"Secondary product, silage",dollars per planted acre,1.38
+corn,2015,Gross value of production,"Total, gross value of production",dollars per planted acre,612.6
+corn,2015,Net value,Value of production less operating costs,dollars per planted acre,278.8
+corn,2015,Net value,Value of production less total costs listed,dollars per planted acre,-62.73
+corn,2015,Operating costs,Chemicals,dollars per planted acre,27.95
+corn,2015,Operating costs,Custom services,dollars per planted acre,19.04
+corn,2015,Operating costs,Fertilizer,dollars per planted acre,137.33
+corn,2015,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,21.28
+corn,2015,Operating costs,Interest on operating capital,dollars per planted acre,0.28
+corn,2015,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+corn,2015,Operating costs,Repairs,dollars per planted acre,26.18
+corn,2015,Operating costs,Seed,dollars per planted acre,101.62
+corn,2015,Operating costs,"Total, operating costs",dollars per planted acre,333.8
+corn,2015,Production practices,Dryland,percent of acres,89.0
+corn,2015,Production practices,Irrigated,percent of acres,11.0
+corn,2015,Supporting information,Enterprise size,planted acres,280.0
+corn,2015,Supporting information,Price,dollars per bushel at harvest,3.66
+corn,2015,Supporting information,Yield,bushels per planted acre,167.0
+corn,2016,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,117.96
+corn,2016,Allocated overhead,General farm overhead,dollars per planted acre,17.74
+corn,2016,Allocated overhead,Hired labor,dollars per planted acre,4.49
+corn,2016,Allocated overhead,Opportunity cost of land,dollars per planted acre,160.42
+corn,2016,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,25.76
+corn,2016,Allocated overhead,Taxes and insurance,dollars per planted acre,11.56
+corn,2016,Allocated overhead,"Total, allocated overhead",dollars per planted acre,337.93
+corn,2016,Costs listed,"Total, costs listed",dollars per planted acre,678.48
+corn,2016,Gross value of production,"Primary product, grain",dollars per planted acre,602.07
+corn,2016,Gross value of production,"Secondary product, silage",dollars per planted acre,1.85
+corn,2016,Gross value of production,"Total, gross value of production",dollars per planted acre,603.92
+corn,2016,Net value,Value of production less operating costs,dollars per planted acre,263.37
+corn,2016,Net value,Value of production less total costs listed,dollars per planted acre,-74.56
+corn,2016,Operating costs,Chemicals,dollars per planted acre,35.65
+corn,2016,Operating costs,Custom services,dollars per planted acre,22.69
+corn,2016,Operating costs,Fertilizer,dollars per planted acre,126.53
+corn,2016,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,24.08
+corn,2016,Operating costs,Interest on operating capital,dollars per planted acre,0.78
+corn,2016,Operating costs,Purchased irrigation water,dollars per planted acre,0.26
+corn,2016,Operating costs,Repairs,dollars per planted acre,32.2
+corn,2016,Operating costs,Seed,dollars per planted acre,98.36
+corn,2016,Operating costs,"Total, operating costs",dollars per planted acre,340.55
+corn,2016,Production practices,Dryland,percent of acres,89.0
+corn,2016,Production practices,Irrigated,percent of acres,11.0
+corn,2016,Supporting information,Enterprise size,planted acres,278.0
+corn,2016,Supporting information,Price,dollars per bushel at harvest,3.29
+corn,2016,Supporting information,Yield,bushels per planted acre,183.0
+corn,2017,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,120.3
+corn,2017,Allocated overhead,General farm overhead,dollars per planted acre,17.99
+corn,2017,Allocated overhead,Hired labor,dollars per planted acre,4.58
+corn,2017,Allocated overhead,Opportunity cost of land,dollars per planted acre,158.73
+corn,2017,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,26.4
+corn,2017,Allocated overhead,Taxes and insurance,dollars per planted acre,12.02
+corn,2017,Allocated overhead,"Total, allocated overhead",dollars per planted acre,340.02
+corn,2017,Costs listed,"Total, costs listed",dollars per planted acre,666.28
+corn,2017,Gross value of production,"Primary product, grain",dollars per planted acre,598.0
+corn,2017,Gross value of production,"Secondary product, silage",dollars per planted acre,2.03
+corn,2017,Gross value of production,"Total, gross value of production",dollars per planted acre,600.03
+corn,2017,Net value,Value of production less operating costs,dollars per planted acre,273.77
+corn,2017,Net value,Value of production less total costs listed,dollars per planted acre,-66.25
+corn,2017,Operating costs,Chemicals,dollars per planted acre,34.24
+corn,2017,Operating costs,Custom services,dollars per planted acre,22.05
+corn,2017,Operating costs,Fertilizer,dollars per planted acre,110.98
+corn,2017,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,27.21
+corn,2017,Operating costs,Interest on operating capital,dollars per planted acre,1.7
+corn,2017,Operating costs,Purchased irrigation water,dollars per planted acre,0.26
+corn,2017,Operating costs,Repairs,dollars per planted acre,32.75
+corn,2017,Operating costs,Seed,dollars per planted acre,97.07
+corn,2017,Operating costs,"Total, operating costs",dollars per planted acre,326.26
+corn,2017,Production practices,Dryland,percent of acres,89.0
+corn,2017,Production practices,Irrigated,percent of acres,11.0
+corn,2017,Supporting information,Enterprise size,planted acres,278.0
+corn,2017,Supporting information,Price,dollars per bushel at harvest,3.25
+corn,2017,Supporting information,Yield,bushels per planted acre,184.0
+corn,2018,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,127.78
+corn,2018,Allocated overhead,General farm overhead,dollars per planted acre,18.68
+corn,2018,Allocated overhead,Hired labor,dollars per planted acre,4.85
+corn,2018,Allocated overhead,Opportunity cost of land,dollars per planted acre,160.73
+corn,2018,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,28.12
+corn,2018,Allocated overhead,Taxes and insurance,dollars per planted acre,12.22
+corn,2018,Allocated overhead,"Total, allocated overhead",dollars per planted acre,352.38
+corn,2018,Costs listed,"Total, costs listed",dollars per planted acre,685.11
+corn,2018,Gross value of production,"Primary product, grain",dollars per planted acre,625.86
+corn,2018,Gross value of production,"Secondary product, silage",dollars per planted acre,2.25
+corn,2018,Gross value of production,"Total, gross value of production",dollars per planted acre,628.11
+corn,2018,Net value,Value of production less operating costs,dollars per planted acre,295.38
+corn,2018,Net value,Value of production less total costs listed,dollars per planted acre,-57.0
+corn,2018,Operating costs,Chemicals,dollars per planted acre,33.82
+corn,2018,Operating costs,Custom services,dollars per planted acre,22.48
+corn,2018,Operating costs,Fertilizer,dollars per planted acre,114.36
+corn,2018,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,30.84
+corn,2018,Operating costs,Interest on operating capital,dollars per planted acre,3.44
+corn,2018,Operating costs,Purchased irrigation water,dollars per planted acre,0.27
+corn,2018,Operating costs,Repairs,dollars per planted acre,33.91
+corn,2018,Operating costs,Seed,dollars per planted acre,93.61
+corn,2018,Operating costs,"Total, operating costs",dollars per planted acre,332.73
+corn,2018,Production practices,Dryland,percent of acres,89.0
+corn,2018,Production practices,Irrigated,percent of acres,11.0
+corn,2018,Supporting information,Enterprise size,planted acres,278.0
+corn,2018,Supporting information,Price,dollars per bushel at harvest,3.42
+corn,2018,Supporting information,Yield,bushels per planted acre,183.0
+corn,2019,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,126.58
+corn,2019,Allocated overhead,General farm overhead,dollars per planted acre,19.26
+corn,2019,Allocated overhead,Hired labor,dollars per planted acre,5.25
+corn,2019,Allocated overhead,Opportunity cost of land,dollars per planted acre,159.4
+corn,2019,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,29.68
+corn,2019,Allocated overhead,Taxes and insurance,dollars per planted acre,12.67
+corn,2019,Allocated overhead,"Total, allocated overhead",dollars per planted acre,352.84
+corn,2019,Costs listed,"Total, costs listed",dollars per planted acre,692.23
+corn,2019,Gross value of production,"Primary product, grain",dollars per planted acre,662.59
+corn,2019,Gross value of production,"Secondary product, silage",dollars per planted acre,2.35
+corn,2019,Gross value of production,"Total, gross value of production",dollars per planted acre,664.94
+corn,2019,Net value,Value of production less operating costs,dollars per planted acre,325.55
+corn,2019,Net value,Value of production less total costs listed,dollars per planted acre,-27.29
+corn,2019,Operating costs,Chemicals,dollars per planted acre,33.27
+corn,2019,Operating costs,Custom services,dollars per planted acre,22.74
+corn,2019,Operating costs,Fertilizer,dollars per planted acre,123.55
+corn,2019,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,29.95
+corn,2019,Operating costs,Interest on operating capital,dollars per planted acre,3.48
+corn,2019,Operating costs,Purchased irrigation water,dollars per planted acre,0.29
+corn,2019,Operating costs,Repairs,dollars per planted acre,35.13
+corn,2019,Operating costs,Seed,dollars per planted acre,90.98
+corn,2019,Operating costs,"Total, operating costs",dollars per planted acre,339.39
+corn,2019,Production practices,Dryland,percent of acres,88.0
+corn,2019,Production practices,Irrigated,percent of acres,12.0
+corn,2019,Supporting information,Enterprise size,planted acres,278.0
+corn,2019,Supporting information,Price,dollars per bushel at harvest,3.83
+corn,2019,Supporting information,Yield,bushels per planted acre,173.0
+corn,2020,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,127.8
+corn,2020,Allocated overhead,General farm overhead,dollars per planted acre,19.62
+corn,2020,Allocated overhead,Hired labor,dollars per planted acre,5.33
+corn,2020,Allocated overhead,Opportunity cost of land,dollars per planted acre,161.86
+corn,2020,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,31.01
+corn,2020,Allocated overhead,Taxes and insurance,dollars per planted acre,13.22
+corn,2020,Allocated overhead,"Total, allocated overhead",dollars per planted acre,358.84
+corn,2020,Costs listed,"Total, costs listed",dollars per planted acre,678.28
+corn,2020,Gross value of production,"Primary product, grain",dollars per planted acre,642.58
+corn,2020,Gross value of production,"Secondary product, silage",dollars per planted acre,2.13
+corn,2020,Gross value of production,"Total, gross value of production",dollars per planted acre,644.71
+corn,2020,Net value,Value of production less operating costs,dollars per planted acre,325.27
+corn,2020,Net value,Value of production less total costs listed,dollars per planted acre,-33.57
+corn,2020,Operating costs,Chemicals,dollars per planted acre,31.56
+corn,2020,Operating costs,Custom services,dollars per planted acre,22.94
+corn,2020,Operating costs,Fertilizer,dollars per planted acre,111.58
+corn,2020,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,25.31
+corn,2020,Operating costs,Interest on operating capital,dollars per planted acre,0.62
+corn,2020,Operating costs,Purchased irrigation water,dollars per planted acre,0.28
+corn,2020,Operating costs,Repairs,dollars per planted acre,35.56
+corn,2020,Operating costs,Seed,dollars per planted acre,91.59
+corn,2020,Operating costs,"Total, operating costs",dollars per planted acre,319.44
+corn,2020,Production practices,Dryland,percent of acres,88.0
+corn,2020,Production practices,Irrigated,percent of acres,12.0
+corn,2020,Supporting information,Enterprise size,planted acres,278.0
+corn,2020,Supporting information,Price,dollars per bushel at harvest,3.61
+corn,2020,Supporting information,Yield,bushels per planted acre,178.0
+corn,2021,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,146.53
+corn,2021,Allocated overhead,General farm overhead,dollars per planted acre,22.26
+corn,2021,Allocated overhead,Hired labor,dollars per planted acre,3.87
+corn,2021,Allocated overhead,Opportunity cost of land,dollars per planted acre,166.45
+corn,2021,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,26.44
+corn,2021,Allocated overhead,Taxes and insurance,dollars per planted acre,16.31
+corn,2021,Allocated overhead,"Total, allocated overhead",dollars per planted acre,381.86
+corn,2021,Costs listed,"Total, costs listed",dollars per planted acre,735.19
+corn,2021,Gross value of production,"Primary product, grain",dollars per planted acre,942.01
+corn,2021,Gross value of production,"Secondary product, silage",dollars per planted acre,2.55
+corn,2021,Gross value of production,"Total, gross value of production",dollars per planted acre,944.56
+corn,2021,Net value,Value of production less operating costs,dollars per planted acre,591.24
+corn,2021,Net value,Value of production less total costs listed,dollars per planted acre,209.37
+corn,2021,Operating costs,Chemicals,dollars per planted acre,41.32
+corn,2021,Operating costs,Custom services,dollars per planted acre,29.34
+corn,2021,Operating costs,Fertilizer,dollars per planted acre,119.75
+corn,2021,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,23.87
+corn,2021,Operating costs,Interest on operating capital,dollars per planted acre,0.11
+corn,2021,Operating costs,Purchased irrigation water,dollars per planted acre,0.23
+corn,2021,Operating costs,Repairs,dollars per planted acre,40.88
+corn,2021,Operating costs,Seed,dollars per planted acre,97.84
+corn,2021,Operating costs,"Total, operating costs",dollars per planted acre,353.33
+corn,2021,Production practices,Dryland,percent of acres,90.0
+corn,2021,Production practices,Irrigated,percent of acres,10.0
+corn,2021,Supporting information,Enterprise size,planted acres,296.0
+corn,2021,Supporting information,Price,dollars per bushel at harvest,5.07
+corn,2021,Supporting information,Yield,bushels per planted acre,186.0
+corn,2022,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,153.65
+corn,2022,Allocated overhead,General farm overhead,dollars per planted acre,24.83
+corn,2022,Allocated overhead,Hired labor,dollars per planted acre,4.15
+corn,2022,Allocated overhead,Opportunity cost of land,dollars per planted acre,179.63
+corn,2022,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,28.45
+corn,2022,Allocated overhead,Taxes and insurance,dollars per planted acre,18.03
+corn,2022,Allocated overhead,"Total, allocated overhead",dollars per planted acre,408.75
+corn,2022,Costs listed,"Total, costs listed",dollars per planted acre,927.86
+corn,2022,Gross value of production,"Primary product, grain",dollars per planted acre,1167.59
+corn,2022,Gross value of production,"Secondary product, silage",dollars per planted acre,2.6
+corn,2022,Gross value of production,"Total, gross value of production",dollars per planted acre,1170.19
+corn,2022,Net value,Value of production less operating costs,dollars per planted acre,651.07
+corn,2022,Net value,Value of production less total costs listed,dollars per planted acre,242.33
+corn,2022,Operating costs,Chemicals,dollars per planted acre,63.37
+corn,2022,Operating costs,Custom services,dollars per planted acre,33.23
+corn,2022,Operating costs,Fertilizer,dollars per planted acre,225.73
+corn,2022,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,34.62
+corn,2022,Operating costs,Interest on operating capital,dollars per planted acre,6.26
+corn,2022,Operating costs,Purchased irrigation water,dollars per planted acre,0.26
+corn,2022,Operating costs,Repairs,dollars per planted acre,45.58
+corn,2022,Operating costs,Seed,dollars per planted acre,110.08
+corn,2022,Operating costs,"Total, operating costs",dollars per planted acre,519.11
+corn,2022,Production practices,Dryland,percent of acres,90.0
+corn,2022,Production practices,Irrigated,percent of acres,10.0
+corn,2022,Supporting information,Enterprise size,planted acres,296.0
+corn,2022,Supporting information,Price,dollars per bushel at harvest,6.48
+corn,2022,Supporting information,Yield,bushels per planted acre,180.0
+corn,2023,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,163.82
+corn,2023,Allocated overhead,General farm overhead,dollars per planted acre,25.64
+corn,2023,Allocated overhead,Hired labor,dollars per planted acre,4.4
+corn,2023,Allocated overhead,Opportunity cost of land,dollars per planted acre,186.56
+corn,2023,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,29.94
+corn,2023,Allocated overhead,Taxes and insurance,dollars per planted acre,18.69
+corn,2023,Allocated overhead,"Total, allocated overhead",dollars per planted acre,429.06
+corn,2023,Costs listed,"Total, costs listed",dollars per planted acre,908.81
+corn,2023,Gross value of production,"Primary product, grain",dollars per planted acre,917.54
+corn,2023,Gross value of production,"Secondary product, silage",dollars per planted acre,2.87
+corn,2023,Gross value of production,"Total, gross value of production",dollars per planted acre,920.41
+corn,2023,Net value,Value of production less operating costs,dollars per planted acre,440.67
+corn,2023,Net value,Value of production less total costs listed,dollars per planted acre,11.6
+corn,2023,Operating costs,Chemicals,dollars per planted acre,61.27
+corn,2023,Operating costs,Custom services,dollars per planted acre,34.75
+corn,2023,Operating costs,Fertilizer,dollars per planted acre,178.94
+corn,2023,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,29.73
+corn,2023,Operating costs,Interest on operating capital,dollars per planted acre,11.88
+corn,2023,Operating costs,Purchased irrigation water,dollars per planted acre,0.27
+corn,2023,Operating costs,Repairs,dollars per planted acre,47.24
+corn,2023,Operating costs,Seed,dollars per planted acre,115.67
+corn,2023,Operating costs,"Total, operating costs",dollars per planted acre,479.74
+corn,2023,Production practices,Dryland,percent of acres,90.0
+corn,2023,Production practices,Irrigated,percent of acres,10.0
+corn,2023,Supporting information,Enterprise size,planted acres,296.0
+corn,2023,Supporting information,Price,dollars per bushel at harvest,4.92
+corn,2023,Supporting information,Yield,bushels per planted acre,186.0
+corn,2024,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,170.92
+corn,2024,Allocated overhead,General farm overhead,dollars per planted acre,25.86
+corn,2024,Allocated overhead,Hired labor,dollars per planted acre,4.55
+corn,2024,Allocated overhead,Opportunity cost of land,dollars per planted acre,191.67
+corn,2024,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,30.76
+corn,2024,Allocated overhead,Taxes and insurance,dollars per planted acre,19.89
+corn,2024,Allocated overhead,"Total, allocated overhead",dollars per planted acre,443.65
+corn,2024,Costs listed,"Total, costs listed",dollars per planted acre,878.31
+corn,2024,Gross value of production,"Primary product, grain",dollars per planted acre,755.28
+corn,2024,Gross value of production,"Secondary product, silage",dollars per planted acre,2.69
+corn,2024,Gross value of production,"Total, gross value of production",dollars per planted acre,757.97
+corn,2024,Net value,Value of production less operating costs,dollars per planted acre,323.31
+corn,2024,Net value,Value of production less total costs listed,dollars per planted acre,-120.34
+corn,2024,Operating costs,Chemicals,dollars per planted acre,48.94
+corn,2024,Operating costs,Custom services,dollars per planted acre,35.99
+corn,2024,Operating costs,Fertilizer,dollars per planted acre,152.41
+corn,2024,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,27.79
+corn,2024,Operating costs,Interest on operating capital,dollars per planted acre,10.21
+corn,2024,Operating costs,Purchased irrigation water,dollars per planted acre,0.29
+corn,2024,Operating costs,Repairs,dollars per planted acre,47.71
+corn,2024,Operating costs,Seed,dollars per planted acre,111.33
+corn,2024,Operating costs,"Total, operating costs",dollars per planted acre,434.66
+corn,2024,Production practices,Dryland,percent of acres,90.0
+corn,2024,Production practices,Irrigated,percent of acres,10.0
+corn,2024,Supporting information,Enterprise size,planted acres,296.0
+corn,2024,Supporting information,Price,dollars per bushel at harvest,3.97
+corn,2024,Supporting information,Yield,bushels per planted acre,190.0
+corn,2025,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,171.34
+corn,2025,Allocated overhead,General farm overhead,dollars per planted acre,26.33
+corn,2025,Allocated overhead,Hired labor,dollars per planted acre,4.66
+corn,2025,Allocated overhead,Opportunity cost of land,dollars per planted acre,190.3
+corn,2025,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,31.37
+corn,2025,Allocated overhead,Taxes and insurance,dollars per planted acre,20.72
+corn,2025,Allocated overhead,"Total, allocated overhead",dollars per planted acre,444.72
+corn,2025,Costs listed,"Total, costs listed",dollars per planted acre,900.52
+corn,2025,Gross value of production,"Primary product, grain",dollars per planted acre,779.8
+corn,2025,Gross value of production,"Secondary product, silage",dollars per planted acre,2.63
+corn,2025,Gross value of production,"Total, gross value of production",dollars per planted acre,782.44
+corn,2025,Net value,Value of production less operating costs,dollars per planted acre,326.64
+corn,2025,Net value,Value of production less total costs listed,dollars per planted acre,-118.08
+corn,2025,Operating costs,Chemicals,dollars per planted acre,49.24
+corn,2025,Operating costs,Custom services,dollars per planted acre,37.01
+corn,2025,Operating costs,Fertilizer,dollars per planted acre,171.89
+corn,2025,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,26.71
+corn,2025,Operating costs,Interest on operating capital,dollars per planted acre,8.85
+corn,2025,Operating costs,Purchased irrigation water,dollars per planted acre,0.29
+corn,2025,Operating costs,Repairs,dollars per planted acre,48.7
+corn,2025,Operating costs,Seed,dollars per planted acre,113.1
+corn,2025,Operating costs,"Total, operating costs",dollars per planted acre,455.8
+corn,2025,Production practices,Dryland,percent of acres,90.0
+corn,2025,Production practices,Irrigated,percent of acres,10.0
+corn,2025,Supporting information,Enterprise size,planted acres,296.0
+corn,2025,Supporting information,Price,dollars per bushel at harvest,3.93
+corn,2025,Supporting information,Yield,bushels per planted acre,198.0
+soybeans,1997,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,49.61
+soybeans,1997,Allocated overhead,General farm overhead,dollars per planted acre,13.68
+soybeans,1997,Allocated overhead,Hired labor,dollars per planted acre,1.94
+soybeans,1997,Allocated overhead,Opportunity cost of land,dollars per planted acre,76.74
+soybeans,1997,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.63
+soybeans,1997,Allocated overhead,Taxes and insurance,dollars per planted acre,6.76
+soybeans,1997,Allocated overhead,"Total, allocated overhead",dollars per planted acre,166.36
+soybeans,1997,Costs listed,"Total, costs listed",dollars per planted acre,245.83
+soybeans,1997,Gross value of production,"Primary product, soybeans",dollars per planted acre,281.22
+soybeans,1997,Gross value of production,"Total, gross value of production",dollars per planted acre,281.22
+soybeans,1997,Net value,Value of production less operating costs,dollars per planted acre,199.31
+soybeans,1997,Net value,Value of production less total costs listed,dollars per planted acre,32.94
+soybeans,1997,Operating costs,Chemicals,dollars per planted acre,26.37
+soybeans,1997,Operating costs,Custom services,dollars per planted acre,5.85
+soybeans,1997,Operating costs,Fertilizer,dollars per planted acre,8.96
+soybeans,1997,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,7.14
+soybeans,1997,Operating costs,Interest on operating capital,dollars per planted acre,1.98
+soybeans,1997,Operating costs,Purchased irrigation water,dollars per planted acre,0.05
+soybeans,1997,Operating costs,Repairs,dollars per planted acre,9.4
+soybeans,1997,Operating costs,Seed,dollars per planted acre,19.72
+soybeans,1997,Operating costs,"Total, operating costs",dollars per planted acre,79.47
+soybeans,1997,Production practices,Dryland,percent of acres,95.0
+soybeans,1997,Production practices,Irrigated,percent of acres,5.0
+soybeans,1997,Supporting information,Enterprise size,planted acres,220.0
+soybeans,1997,Supporting information,Price,dollars per bushel at harvest,6.54
+soybeans,1997,Supporting information,Yield,bushels per planted acre,43.0
+soybeans,1998,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,50.66
+soybeans,1998,Allocated overhead,General farm overhead,dollars per planted acre,12.94
+soybeans,1998,Allocated overhead,Hired labor,dollars per planted acre,1.98
+soybeans,1998,Allocated overhead,Opportunity cost of land,dollars per planted acre,77.66
+soybeans,1998,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.11
+soybeans,1998,Allocated overhead,Taxes and insurance,dollars per planted acre,6.89
+soybeans,1998,Allocated overhead,"Total, allocated overhead",dollars per planted acre,168.24
+soybeans,1998,Costs listed,"Total, costs listed",dollars per planted acre,247.56
+soybeans,1998,Gross value of production,"Primary product, soybeans",dollars per planted acre,223.17
+soybeans,1998,Gross value of production,"Total, gross value of production",dollars per planted acre,223.17
+soybeans,1998,Net value,Value of production less operating costs,dollars per planted acre,143.85
+soybeans,1998,Net value,Value of production less total costs listed,dollars per planted acre,-24.39
+soybeans,1998,Operating costs,Chemicals,dollars per planted acre,26.65
+soybeans,1998,Operating costs,Custom services,dollars per planted acre,5.84
+soybeans,1998,Operating costs,Fertilizer,dollars per planted acre,8.9
+soybeans,1998,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,5.97
+soybeans,1998,Operating costs,Interest on operating capital,dollars per planted acre,1.86
+soybeans,1998,Operating costs,Purchased irrigation water,dollars per planted acre,0.05
+soybeans,1998,Operating costs,Repairs,dollars per planted acre,9.59
+soybeans,1998,Operating costs,Seed,dollars per planted acre,20.46
+soybeans,1998,Operating costs,"Total, operating costs",dollars per planted acre,79.32
+soybeans,1998,Production practices,Dryland,percent of acres,95.0
+soybeans,1998,Production practices,Irrigated,percent of acres,5.0
+soybeans,1998,Supporting information,Enterprise size,planted acres,220.0
+soybeans,1998,Supporting information,Price,dollars per bushel at harvest,5.19
+soybeans,1998,Supporting information,Yield,bushels per planted acre,43.0
+soybeans,1999,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,51.58
+soybeans,1999,Allocated overhead,General farm overhead,dollars per planted acre,14.13
+soybeans,1999,Allocated overhead,Hired labor,dollars per planted acre,2.01
+soybeans,1999,Allocated overhead,Opportunity cost of land,dollars per planted acre,79.74
+soybeans,1999,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.46
+soybeans,1999,Allocated overhead,Taxes and insurance,dollars per planted acre,6.77
+soybeans,1999,Allocated overhead,"Total, allocated overhead",dollars per planted acre,172.69
+soybeans,1999,Costs listed,"Total, costs listed",dollars per planted acre,249.02
+soybeans,1999,Gross value of production,"Primary product, soybeans",dollars per planted acre,178.0
+soybeans,1999,Gross value of production,"Total, gross value of production",dollars per planted acre,178.0
+soybeans,1999,Net value,Value of production less operating costs,dollars per planted acre,101.67
+soybeans,1999,Net value,Value of production less total costs listed,dollars per planted acre,-71.02
+soybeans,1999,Operating costs,Chemicals,dollars per planted acre,24.88
+soybeans,1999,Operating costs,Custom services,dollars per planted acre,5.86
+soybeans,1999,Operating costs,Fertilizer,dollars per planted acre,8.85
+soybeans,1999,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,5.9
+soybeans,1999,Operating costs,Interest on operating capital,dollars per planted acre,1.75
+soybeans,1999,Operating costs,Purchased irrigation water,dollars per planted acre,0.05
+soybeans,1999,Operating costs,Repairs,dollars per planted acre,9.79
+soybeans,1999,Operating costs,Seed,dollars per planted acre,19.25
+soybeans,1999,Operating costs,"Total, operating costs",dollars per planted acre,76.33
+soybeans,1999,Production practices,Dryland,percent of acres,95.0
+soybeans,1999,Production practices,Irrigated,percent of acres,5.0
+soybeans,1999,Supporting information,Enterprise size,planted acres,220.0
+soybeans,1999,Supporting information,Price,dollars per bushel at harvest,4.45
+soybeans,1999,Supporting information,Yield,bushels per planted acre,40.0
+soybeans,2000,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,53.61
+soybeans,2000,Allocated overhead,General farm overhead,dollars per planted acre,14.56
+soybeans,2000,Allocated overhead,Hired labor,dollars per planted acre,2.03
+soybeans,2000,Allocated overhead,Opportunity cost of land,dollars per planted acre,80.12
+soybeans,2000,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,19.49
+soybeans,2000,Allocated overhead,Taxes and insurance,dollars per planted acre,7.01
+soybeans,2000,Allocated overhead,"Total, allocated overhead",dollars per planted acre,176.82
+soybeans,2000,Costs listed,"Total, costs listed",dollars per planted acre,254.1
+soybeans,2000,Gross value of production,"Primary product, soybeans",dollars per planted acre,182.45
+soybeans,2000,Gross value of production,"Total, gross value of production",dollars per planted acre,182.45
+soybeans,2000,Net value,Value of production less operating costs,dollars per planted acre,105.17
+soybeans,2000,Net value,Value of production less total costs listed,dollars per planted acre,-71.65
+soybeans,2000,Operating costs,Chemicals,dollars per planted acre,22.32
+soybeans,2000,Operating costs,Custom services,dollars per planted acre,5.94
+soybeans,2000,Operating costs,Fertilizer,dollars per planted acre,8.85
+soybeans,2000,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,8.6
+soybeans,2000,Operating costs,Interest on operating capital,dollars per planted acre,2.16
+soybeans,2000,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2000,Operating costs,Repairs,dollars per planted acre,10.17
+soybeans,2000,Operating costs,Seed,dollars per planted acre,19.18
+soybeans,2000,Operating costs,"Total, operating costs",dollars per planted acre,77.28
+soybeans,2000,Production practices,Dryland,percent of acres,95.0
+soybeans,2000,Production practices,Irrigated,percent of acres,5.0
+soybeans,2000,Supporting information,Enterprise size,planted acres,220.0
+soybeans,2000,Supporting information,Price,dollars per bushel at harvest,4.45
+soybeans,2000,Supporting information,Yield,bushels per planted acre,41.0
+soybeans,2001,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,55.75
+soybeans,2001,Allocated overhead,General farm overhead,dollars per planted acre,15.17
+soybeans,2001,Allocated overhead,Hired labor,dollars per planted acre,2.04
+soybeans,2001,Allocated overhead,Opportunity cost of land,dollars per planted acre,81.98
+soybeans,2001,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,20.17
+soybeans,2001,Allocated overhead,Taxes and insurance,dollars per planted acre,7.14
+soybeans,2001,Allocated overhead,"Total, allocated overhead",dollars per planted acre,182.25
+soybeans,2001,Costs listed,"Total, costs listed",dollars per planted acre,264.08
+soybeans,2001,Gross value of production,"Primary product, soybeans",dollars per planted acre,178.62
+soybeans,2001,Gross value of production,"Total, gross value of production",dollars per planted acre,178.62
+soybeans,2001,Net value,Value of production less operating costs,dollars per planted acre,96.79
+soybeans,2001,Net value,Value of production less total costs listed,dollars per planted acre,-85.46
+soybeans,2001,Operating costs,Chemicals,dollars per planted acre,22.89
+soybeans,2001,Operating costs,Custom services,dollars per planted acre,6.13
+soybeans,2001,Operating costs,Fertilizer,dollars per planted acre,9.52
+soybeans,2001,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,8.69
+soybeans,2001,Operating costs,Interest on operating capital,dollars per planted acre,1.36
+soybeans,2001,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2001,Operating costs,Repairs,dollars per planted acre,10.59
+soybeans,2001,Operating costs,Seed,dollars per planted acre,22.59
+soybeans,2001,Operating costs,"Total, operating costs",dollars per planted acre,81.83
+soybeans,2001,Production practices,Dryland,percent of acres,95.0
+soybeans,2001,Production practices,Irrigated,percent of acres,5.0
+soybeans,2001,Supporting information,Enterprise size,planted acres,220.0
+soybeans,2001,Supporting information,Price,dollars per bushel at harvest,4.15
+soybeans,2001,Supporting information,Yield,bushels per planted acre,43.0
+soybeans,2002,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,43.3
+soybeans,2002,Allocated overhead,General farm overhead,dollars per planted acre,11.37
+soybeans,2002,Allocated overhead,Hired labor,dollars per planted acre,1.84
+soybeans,2002,Allocated overhead,Opportunity cost of land,dollars per planted acre,80.74
+soybeans,2002,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.59
+soybeans,2002,Allocated overhead,Taxes and insurance,dollars per planted acre,5.66
+soybeans,2002,Allocated overhead,"Total, allocated overhead",dollars per planted acre,158.5
+soybeans,2002,Costs listed,"Total, costs listed",dollars per planted acre,232.0
+soybeans,2002,Gross value of production,"Primary product, soybeans",dollars per planted acre,208.0
+soybeans,2002,Gross value of production,"Total, gross value of production",dollars per planted acre,208.0
+soybeans,2002,Net value,Value of production less operating costs,dollars per planted acre,134.5
+soybeans,2002,Net value,Value of production less total costs listed,dollars per planted acre,-24.0
+soybeans,2002,Operating costs,Chemicals,dollars per planted acre,17.12
+soybeans,2002,Operating costs,Custom services,dollars per planted acre,6.16
+soybeans,2002,Operating costs,Fertilizer,dollars per planted acre,7.3
+soybeans,2002,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,6.98
+soybeans,2002,Operating costs,Interest on operating capital,dollars per planted acre,0.61
+soybeans,2002,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+soybeans,2002,Operating costs,Repairs,dollars per planted acre,9.76
+soybeans,2002,Operating costs,Seed,dollars per planted acre,25.45
+soybeans,2002,Operating costs,"Total, operating costs",dollars per planted acre,73.5
+soybeans,2002,Production practices,Dryland,percent of acres,91.0
+soybeans,2002,Production practices,Irrigated,percent of acres,9.0
+soybeans,2002,Supporting information,Enterprise size,planted acres,268.0
+soybeans,2002,Supporting information,Price,dollars per bushel at harvest,5.2
+soybeans,2002,Supporting information,Yield,bushels per planted acre,40.0
+soybeans,2003,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,43.43
+soybeans,2003,Allocated overhead,General farm overhead,dollars per planted acre,11.66
+soybeans,2003,Allocated overhead,Hired labor,dollars per planted acre,1.9
+soybeans,2003,Allocated overhead,Opportunity cost of land,dollars per planted acre,81.93
+soybeans,2003,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.11
+soybeans,2003,Allocated overhead,Taxes and insurance,dollars per planted acre,5.8
+soybeans,2003,Allocated overhead,"Total, allocated overhead",dollars per planted acre,160.83
+soybeans,2003,Costs listed,"Total, costs listed",dollars per planted acre,238.49
+soybeans,2003,Gross value of production,"Primary product, soybeans",dollars per planted acre,233.47
+soybeans,2003,Gross value of production,"Total, gross value of production",dollars per planted acre,233.47
+soybeans,2003,Net value,Value of production less operating costs,dollars per planted acre,155.81
+soybeans,2003,Net value,Value of production less total costs listed,dollars per planted acre,-5.02
+soybeans,2003,Operating costs,Chemicals,dollars per planted acre,16.92
+soybeans,2003,Operating costs,Custom services,dollars per planted acre,6.32
+soybeans,2003,Operating costs,Fertilizer,dollars per planted acre,7.97
+soybeans,2003,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,8.73
+soybeans,2003,Operating costs,Interest on operating capital,dollars per planted acre,0.41
+soybeans,2003,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+soybeans,2003,Operating costs,Repairs,dollars per planted acre,9.77
+soybeans,2003,Operating costs,Seed,dollars per planted acre,27.42
+soybeans,2003,Operating costs,"Total, operating costs",dollars per planted acre,77.66
+soybeans,2003,Production practices,Dryland,percent of acres,91.0
+soybeans,2003,Production practices,Irrigated,percent of acres,9.0
+soybeans,2003,Supporting information,Enterprise size,planted acres,268.0
+soybeans,2003,Supporting information,Price,dollars per bushel at harvest,6.56
+soybeans,2003,Supporting information,Yield,bushels per planted acre,36.0
+soybeans,2004,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,47.49
+soybeans,2004,Allocated overhead,General farm overhead,dollars per planted acre,11.86
+soybeans,2004,Allocated overhead,Hired labor,dollars per planted acre,2.04
+soybeans,2004,Allocated overhead,Opportunity cost of land,dollars per planted acre,83.88
+soybeans,2004,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.12
+soybeans,2004,Allocated overhead,Taxes and insurance,dollars per planted acre,5.85
+soybeans,2004,Allocated overhead,"Total, allocated overhead",dollars per planted acre,167.24
+soybeans,2004,Costs listed,"Total, costs listed",dollars per planted acre,249.01
+soybeans,2004,Gross value of production,"Primary product, soybeans",dollars per planted acre,253.46
+soybeans,2004,Gross value of production,"Total, gross value of production",dollars per planted acre,253.46
+soybeans,2004,Net value,Value of production less operating costs,dollars per planted acre,171.69
+soybeans,2004,Net value,Value of production less total costs listed,dollars per planted acre,4.45
+soybeans,2004,Operating costs,Chemicals,dollars per planted acre,16.07
+soybeans,2004,Operating costs,Custom services,dollars per planted acre,6.38
+soybeans,2004,Operating costs,Fertilizer,dollars per planted acre,8.7
+soybeans,2004,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,9.44
+soybeans,2004,Operating costs,Interest on operating capital,dollars per planted acre,0.64
+soybeans,2004,Operating costs,Purchased irrigation water,dollars per planted acre,0.13
+soybeans,2004,Operating costs,Repairs,dollars per planted acre,10.7
+soybeans,2004,Operating costs,Seed,dollars per planted acre,29.71
+soybeans,2004,Operating costs,"Total, operating costs",dollars per planted acre,81.77
+soybeans,2004,Production practices,Dryland,percent of acres,91.0
+soybeans,2004,Production practices,Irrigated,percent of acres,9.0
+soybeans,2004,Supporting information,Enterprise size,planted acres,268.0
+soybeans,2004,Supporting information,Price,dollars per bushel at harvest,5.6
+soybeans,2004,Supporting information,Yield,bushels per planted acre,45.0
+soybeans,2005,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,50.17
+soybeans,2005,Allocated overhead,General farm overhead,dollars per planted acre,12.47
+soybeans,2005,Allocated overhead,Hired labor,dollars per planted acre,2.03
+soybeans,2005,Allocated overhead,Opportunity cost of land,dollars per planted acre,86.68
+soybeans,2005,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.77
+soybeans,2005,Allocated overhead,Taxes and insurance,dollars per planted acre,6.06
+soybeans,2005,Allocated overhead,"Total, allocated overhead",dollars per planted acre,174.18
+soybeans,2005,Costs listed,"Total, costs listed",dollars per planted acre,264.39
+soybeans,2005,Gross value of production,"Primary product, soybeans",dollars per planted acre,264.57
+soybeans,2005,Gross value of production,"Total, gross value of production",dollars per planted acre,264.57
+soybeans,2005,Net value,Value of production less operating costs,dollars per planted acre,174.36
+soybeans,2005,Net value,Value of production less total costs listed,dollars per planted acre,0.18
+soybeans,2005,Operating costs,Chemicals,dollars per planted acre,13.59
+soybeans,2005,Operating costs,Custom services,dollars per planted acre,6.67
+soybeans,2005,Operating costs,Fertilizer,dollars per planted acre,10.79
+soybeans,2005,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.62
+soybeans,2005,Operating costs,Interest on operating capital,dollars per planted acre,1.5
+soybeans,2005,Operating costs,Purchased irrigation water,dollars per planted acre,0.13
+soybeans,2005,Operating costs,Repairs,dollars per planted acre,11.29
+soybeans,2005,Operating costs,Seed,dollars per planted acre,32.62
+soybeans,2005,Operating costs,"Total, operating costs",dollars per planted acre,90.21
+soybeans,2005,Production practices,Dryland,percent of acres,91.0
+soybeans,2005,Production practices,Irrigated,percent of acres,9.0
+soybeans,2005,Supporting information,Enterprise size,planted acres,268.0
+soybeans,2005,Supporting information,Price,dollars per bushel at harvest,5.68
+soybeans,2005,Supporting information,Yield,bushels per planted acre,47.0
+soybeans,2006,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,60.38
+soybeans,2006,Allocated overhead,General farm overhead,dollars per planted acre,13.22
+soybeans,2006,Allocated overhead,Hired labor,dollars per planted acre,1.78
+soybeans,2006,Allocated overhead,Opportunity cost of land,dollars per planted acre,86.17
+soybeans,2006,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.2
+soybeans,2006,Allocated overhead,Taxes and insurance,dollars per planted acre,7.93
+soybeans,2006,Allocated overhead,"Total, allocated overhead",dollars per planted acre,184.68
+soybeans,2006,Costs listed,"Total, costs listed",dollars per planted acre,278.09
+soybeans,2006,Gross value of production,"Primary product, soybeans",dollars per planted acre,254.84
+soybeans,2006,Gross value of production,"Total, gross value of production",dollars per planted acre,254.84
+soybeans,2006,Net value,Value of production less operating costs,dollars per planted acre,161.43
+soybeans,2006,Net value,Value of production less total costs listed,dollars per planted acre,-23.25
+soybeans,2006,Operating costs,Chemicals,dollars per planted acre,14.46
+soybeans,2006,Operating costs,Custom services,dollars per planted acre,6.01
+soybeans,2006,Operating costs,Fertilizer,dollars per planted acre,13.05
+soybeans,2006,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.51
+soybeans,2006,Operating costs,Interest on operating capital,dollars per planted acre,2.17
+soybeans,2006,Operating costs,Purchased irrigation water,dollars per planted acre,0.11
+soybeans,2006,Operating costs,Repairs,dollars per planted acre,11.8
+soybeans,2006,Operating costs,Seed,dollars per planted acre,32.3
+soybeans,2006,Operating costs,"Total, operating costs",dollars per planted acre,93.41
+soybeans,2006,Production practices,Dryland,percent of acres,91.0
+soybeans,2006,Production practices,Irrigated,percent of acres,9.0
+soybeans,2006,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2006,Supporting information,Price,dollars per bushel at harvest,5.54
+soybeans,2006,Supporting information,Yield,bushels per planted acre,46.0
+soybeans,2007,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,64.59
+soybeans,2007,Allocated overhead,General farm overhead,dollars per planted acre,13.89
+soybeans,2007,Allocated overhead,Hired labor,dollars per planted acre,1.93
+soybeans,2007,Allocated overhead,Opportunity cost of land,dollars per planted acre,85.14
+soybeans,2007,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.16
+soybeans,2007,Allocated overhead,Taxes and insurance,dollars per planted acre,8.71
+soybeans,2007,Allocated overhead,"Total, allocated overhead",dollars per planted acre,190.42
+soybeans,2007,Costs listed,"Total, costs listed",dollars per planted acre,297.05
+soybeans,2007,Gross value of production,"Primary product, soybeans",dollars per planted acre,357.75
+soybeans,2007,Gross value of production,"Total, gross value of production",dollars per planted acre,357.75
+soybeans,2007,Net value,Value of production less operating costs,dollars per planted acre,251.12
+soybeans,2007,Net value,Value of production less total costs listed,dollars per planted acre,60.7
+soybeans,2007,Operating costs,Chemicals,dollars per planted acre,15.0
+soybeans,2007,Operating costs,Custom services,dollars per planted acre,6.51
+soybeans,2007,Operating costs,Fertilizer,dollars per planted acre,15.31
+soybeans,2007,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,15.23
+soybeans,2007,Operating costs,Interest on operating capital,dollars per planted acre,2.34
+soybeans,2007,Operating costs,Purchased irrigation water,dollars per planted acre,0.11
+soybeans,2007,Operating costs,Repairs,dollars per planted acre,12.36
+soybeans,2007,Operating costs,Seed,dollars per planted acre,39.77
+soybeans,2007,Operating costs,"Total, operating costs",dollars per planted acre,106.63
+soybeans,2007,Production practices,Dryland,percent of acres,91.0
+soybeans,2007,Production practices,Irrigated,percent of acres,9.0
+soybeans,2007,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2007,Supporting information,Price,dollars per bushel at harvest,7.95
+soybeans,2007,Supporting information,Yield,bushels per planted acre,45.0
+soybeans,2008,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,70.98
+soybeans,2008,Allocated overhead,General farm overhead,dollars per planted acre,14.29
+soybeans,2008,Allocated overhead,Hired labor,dollars per planted acre,2.07
+soybeans,2008,Allocated overhead,Opportunity cost of land,dollars per planted acre,93.14
+soybeans,2008,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.77
+soybeans,2008,Allocated overhead,Taxes and insurance,dollars per planted acre,9.64
+soybeans,2008,Allocated overhead,"Total, allocated overhead",dollars per planted acre,206.9
+soybeans,2008,Costs listed,"Total, costs listed",dollars per planted acre,334.69
+soybeans,2008,Gross value of production,"Primary product, soybeans",dollars per planted acre,450.64
+soybeans,2008,Gross value of production,"Total, gross value of production",dollars per planted acre,450.64
+soybeans,2008,Net value,Value of production less operating costs,dollars per planted acre,322.85
+soybeans,2008,Net value,Value of production less total costs listed,dollars per planted acre,115.95
+soybeans,2008,Operating costs,Chemicals,dollars per planted acre,15.73
+soybeans,2008,Operating costs,Custom services,dollars per planted acre,6.56
+soybeans,2008,Operating costs,Fertilizer,dollars per planted acre,25.12
+soybeans,2008,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,20.2
+soybeans,2008,Operating costs,Interest on operating capital,dollars per planted acre,2.8
+soybeans,2008,Operating costs,Purchased irrigation water,dollars per planted acre,0.12
+soybeans,2008,Operating costs,Repairs,dollars per planted acre,12.91
+soybeans,2008,Operating costs,Seed,dollars per planted acre,44.35
+soybeans,2008,Operating costs,"Total, operating costs",dollars per planted acre,127.79
+soybeans,2008,Production practices,Dryland,percent of acres,91.0
+soybeans,2008,Production practices,Irrigated,percent of acres,9.0
+soybeans,2008,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2008,Supporting information,Price,dollars per bushel at harvest,10.48
+soybeans,2008,Supporting information,Yield,bushels per planted acre,43.0
+soybeans,2009,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,75.54
+soybeans,2009,Allocated overhead,General farm overhead,dollars per planted acre,14.57
+soybeans,2009,Allocated overhead,Hired labor,dollars per planted acre,2.14
+soybeans,2009,Allocated overhead,Opportunity cost of land,dollars per planted acre,107.5
+soybeans,2009,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.19
+soybeans,2009,Allocated overhead,Taxes and insurance,dollars per planted acre,10.84
+soybeans,2009,Allocated overhead,"Total, allocated overhead",dollars per planted acre,227.78
+soybeans,2009,Costs listed,"Total, costs listed",dollars per planted acre,358.27
+soybeans,2009,Gross value of production,"Primary product, soybeans",dollars per planted acre,437.1
+soybeans,2009,Gross value of production,"Total, gross value of production",dollars per planted acre,437.1
+soybeans,2009,Net value,Value of production less operating costs,dollars per planted acre,306.61
+soybeans,2009,Net value,Value of production less total costs listed,dollars per planted acre,78.83
+soybeans,2009,Operating costs,Chemicals,dollars per planted acre,17.38
+soybeans,2009,Operating costs,Custom services,dollars per planted acre,7.17
+soybeans,2009,Operating costs,Fertilizer,dollars per planted acre,23.65
+soybeans,2009,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.48
+soybeans,2009,Operating costs,Interest on operating capital,dollars per planted acre,0.19
+soybeans,2009,Operating costs,Purchased irrigation water,dollars per planted acre,0.14
+soybeans,2009,Operating costs,Repairs,dollars per planted acre,13.22
+soybeans,2009,Operating costs,Seed,dollars per planted acre,55.26
+soybeans,2009,Operating costs,"Total, operating costs",dollars per planted acre,130.49
+soybeans,2009,Production practices,Dryland,percent of acres,91.0
+soybeans,2009,Production practices,Irrigated,percent of acres,9.0
+soybeans,2009,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2009,Supporting information,Price,dollars per bushel at harvest,9.3
+soybeans,2009,Supporting information,Yield,bushels per planted acre,47.0
+soybeans,2010,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,78.18
+soybeans,2010,Allocated overhead,General farm overhead,dollars per planted acre,14.86
+soybeans,2010,Allocated overhead,Hired labor,dollars per planted acre,2.11
+soybeans,2010,Allocated overhead,Opportunity cost of land,dollars per planted acre,110.3
+soybeans,2010,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.33
+soybeans,2010,Allocated overhead,Taxes and insurance,dollars per planted acre,9.41
+soybeans,2010,Allocated overhead,"Total, allocated overhead",dollars per planted acre,232.19
+soybeans,2010,Costs listed,"Total, costs listed",dollars per planted acre,364.09
+soybeans,2010,Gross value of production,"Primary product, soybeans",dollars per planted acre,449.32
+soybeans,2010,Gross value of production,"Total, gross value of production",dollars per planted acre,449.32
+soybeans,2010,Net value,Value of production less operating costs,dollars per planted acre,317.43
+soybeans,2010,Net value,Value of production less total costs listed,dollars per planted acre,85.23
+soybeans,2010,Operating costs,Chemicals,dollars per planted acre,17.04
+soybeans,2010,Operating costs,Custom services,dollars per planted acre,7.23
+soybeans,2010,Operating costs,Fertilizer,dollars per planted acre,17.87
+soybeans,2010,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,16.81
+soybeans,2010,Operating costs,Interest on operating capital,dollars per planted acre,0.13
+soybeans,2010,Operating costs,Purchased irrigation water,dollars per planted acre,0.16
+soybeans,2010,Operating costs,Repairs,dollars per planted acre,13.46
+soybeans,2010,Operating costs,Seed,dollars per planted acre,59.2
+soybeans,2010,Operating costs,"Total, operating costs",dollars per planted acre,131.89
+soybeans,2010,Production practices,Dryland,percent of acres,91.0
+soybeans,2010,Production practices,Irrigated,percent of acres,9.0
+soybeans,2010,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2010,Supporting information,Price,dollars per bushel at harvest,9.56
+soybeans,2010,Supporting information,Yield,bushels per planted acre,47.0
+soybeans,2011,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,81.34
+soybeans,2011,Allocated overhead,General farm overhead,dollars per planted acre,15.1
+soybeans,2011,Allocated overhead,Hired labor,dollars per planted acre,2.07
+soybeans,2011,Allocated overhead,Opportunity cost of land,dollars per planted acre,120.64
+soybeans,2011,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.09
+soybeans,2011,Allocated overhead,Taxes and insurance,dollars per planted acre,9.93
+soybeans,2011,Allocated overhead,"Total, allocated overhead",dollars per planted acre,246.17
+soybeans,2011,Costs listed,"Total, costs listed",dollars per planted acre,383.04
+soybeans,2011,Gross value of production,"Primary product, soybeans",dollars per planted acre,525.36
+soybeans,2011,Gross value of production,"Total, gross value of production",dollars per planted acre,525.36
+soybeans,2011,Net value,Value of production less operating costs,dollars per planted acre,388.49
+soybeans,2011,Net value,Value of production less total costs listed,dollars per planted acre,142.32
+soybeans,2011,Operating costs,Chemicals,dollars per planted acre,16.42
+soybeans,2011,Operating costs,Custom services,dollars per planted acre,7.18
+soybeans,2011,Operating costs,Fertilizer,dollars per planted acre,22.84
+soybeans,2011,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,20.98
+soybeans,2011,Operating costs,Interest on operating capital,dollars per planted acre,0.07
+soybeans,2011,Operating costs,Purchased irrigation water,dollars per planted acre,0.15
+soybeans,2011,Operating costs,Repairs,dollars per planted acre,13.68
+soybeans,2011,Operating costs,Seed,dollars per planted acre,55.55
+soybeans,2011,Operating costs,"Total, operating costs",dollars per planted acre,136.87
+soybeans,2011,Production practices,Dryland,percent of acres,91.0
+soybeans,2011,Production practices,Irrigated,percent of acres,9.0
+soybeans,2011,Supporting information,Enterprise size,planted acres,303.0
+soybeans,2011,Supporting information,Price,dollars per bushel at harvest,11.94
+soybeans,2011,Supporting information,Yield,bushels per planted acre,44.0
+soybeans,2012,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,81.16
+soybeans,2012,Allocated overhead,General farm overhead,dollars per planted acre,17.44
+soybeans,2012,Allocated overhead,Hired labor,dollars per planted acre,2.81
+soybeans,2012,Allocated overhead,Opportunity cost of land,dollars per planted acre,137.55
+soybeans,2012,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.76
+soybeans,2012,Allocated overhead,Taxes and insurance,dollars per planted acre,9.58
+soybeans,2012,Allocated overhead,"Total, allocated overhead",dollars per planted acre,265.3
+soybeans,2012,Costs listed,"Total, costs listed",dollars per planted acre,437.59
+soybeans,2012,Gross value of production,"Primary product, soybeans",dollars per planted acre,596.82
+soybeans,2012,Gross value of production,"Total, gross value of production",dollars per planted acre,596.82
+soybeans,2012,Net value,Value of production less operating costs,dollars per planted acre,424.53
+soybeans,2012,Net value,Value of production less total costs listed,dollars per planted acre,159.23
+soybeans,2012,Operating costs,Chemicals,dollars per planted acre,26.38
+soybeans,2012,Operating costs,Custom services,dollars per planted acre,9.41
+soybeans,2012,Operating costs,Fertilizer,dollars per planted acre,37.54
+soybeans,2012,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,21.24
+soybeans,2012,Operating costs,Interest on operating capital,dollars per planted acre,0.11
+soybeans,2012,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2012,Operating costs,Repairs,dollars per planted acre,22.23
+soybeans,2012,Operating costs,Seed,dollars per planted acre,55.32
+soybeans,2012,Operating costs,"Total, operating costs",dollars per planted acre,172.29
+soybeans,2012,Production practices,Dryland,percent of acres,90.0
+soybeans,2012,Production practices,Irrigated,percent of acres,10.0
+soybeans,2012,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2012,Supporting information,Price,dollars per bushel at harvest,14.21
+soybeans,2012,Supporting information,Yield,bushels per planted acre,42.0
+soybeans,2013,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,82.98
+soybeans,2013,Allocated overhead,General farm overhead,dollars per planted acre,17.61
+soybeans,2013,Allocated overhead,Hired labor,dollars per planted acre,2.99
+soybeans,2013,Allocated overhead,Opportunity cost of land,dollars per planted acre,150.97
+soybeans,2013,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.35
+soybeans,2013,Allocated overhead,Taxes and insurance,dollars per planted acre,9.78
+soybeans,2013,Allocated overhead,"Total, allocated overhead",dollars per planted acre,281.68
+soybeans,2013,Costs listed,"Total, costs listed",dollars per planted acre,458.31
+soybeans,2013,Gross value of production,"Primary product, soybeans",dollars per planted acre,571.04
+soybeans,2013,Gross value of production,"Total, gross value of production",dollars per planted acre,571.04
+soybeans,2013,Net value,Value of production less operating costs,dollars per planted acre,394.41
+soybeans,2013,Net value,Value of production less total costs listed,dollars per planted acre,112.73
+soybeans,2013,Operating costs,Chemicals,dollars per planted acre,27.63
+soybeans,2013,Operating costs,Custom services,dollars per planted acre,9.76
+soybeans,2013,Operating costs,Fertilizer,dollars per planted acre,37.45
+soybeans,2013,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,21.15
+soybeans,2013,Operating costs,Interest on operating capital,dollars per planted acre,0.08
+soybeans,2013,Operating costs,Purchased irrigation water,dollars per planted acre,0.05
+soybeans,2013,Operating costs,Repairs,dollars per planted acre,22.33
+soybeans,2013,Operating costs,Seed,dollars per planted acre,58.18
+soybeans,2013,Operating costs,"Total, operating costs",dollars per planted acre,176.63
+soybeans,2013,Production practices,Dryland,percent of acres,90.0
+soybeans,2013,Production practices,Irrigated,percent of acres,10.0
+soybeans,2013,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2013,Supporting information,Price,dollars per bushel at harvest,13.28
+soybeans,2013,Supporting information,Yield,bushels per planted acre,43.0
+soybeans,2014,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,86.3
+soybeans,2014,Allocated overhead,General farm overhead,dollars per planted acre,17.93
+soybeans,2014,Allocated overhead,Hired labor,dollars per planted acre,3.03
+soybeans,2014,Allocated overhead,Opportunity cost of land,dollars per planted acre,155.04
+soybeans,2014,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.68
+soybeans,2014,Allocated overhead,Taxes and insurance,dollars per planted acre,9.95
+soybeans,2014,Allocated overhead,"Total, allocated overhead",dollars per planted acre,289.93
+soybeans,2014,Costs listed,"Total, costs listed",dollars per planted acre,466.72
+soybeans,2014,Gross value of production,"Primary product, soybeans",dollars per planted acre,522.24
+soybeans,2014,Gross value of production,"Total, gross value of production",dollars per planted acre,522.24
+soybeans,2014,Net value,Value of production less operating costs,dollars per planted acre,345.45
+soybeans,2014,Net value,Value of production less total costs listed,dollars per planted acre,55.52
+soybeans,2014,Operating costs,Chemicals,dollars per planted acre,28.0
+soybeans,2014,Operating costs,Custom services,dollars per planted acre,10.03
+soybeans,2014,Operating costs,Fertilizer,dollars per planted acre,35.92
+soybeans,2014,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,21.12
+soybeans,2014,Operating costs,Interest on operating capital,dollars per planted acre,0.05
+soybeans,2014,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2014,Operating costs,Repairs,dollars per planted acre,22.83
+soybeans,2014,Operating costs,Seed,dollars per planted acre,58.78
+soybeans,2014,Operating costs,"Total, operating costs",dollars per planted acre,176.79
+soybeans,2014,Production practices,Dryland,percent of acres,90.0
+soybeans,2014,Production practices,Irrigated,percent of acres,10.0
+soybeans,2014,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2014,Supporting information,Price,dollars per bushel at harvest,10.88
+soybeans,2014,Supporting information,Yield,bushels per planted acre,48.0
+soybeans,2015,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,88.35
+soybeans,2015,Allocated overhead,General farm overhead,dollars per planted acre,17.95
+soybeans,2015,Allocated overhead,Hired labor,dollars per planted acre,3.18
+soybeans,2015,Allocated overhead,Opportunity cost of land,dollars per planted acre,157.91
+soybeans,2015,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.37
+soybeans,2015,Allocated overhead,Taxes and insurance,dollars per planted acre,10.57
+soybeans,2015,Allocated overhead,"Total, allocated overhead",dollars per planted acre,296.33
+soybeans,2015,Costs listed,"Total, costs listed",dollars per planted acre,463.3
+soybeans,2015,Gross value of production,"Primary product, soybeans",dollars per planted acre,430.56
+soybeans,2015,Gross value of production,"Total, gross value of production",dollars per planted acre,430.56
+soybeans,2015,Net value,Value of production less operating costs,dollars per planted acre,263.59
+soybeans,2015,Net value,Value of production less total costs listed,dollars per planted acre,-32.74
+soybeans,2015,Operating costs,Chemicals,dollars per planted acre,26.96
+soybeans,2015,Operating costs,Custom services,dollars per planted acre,10.47
+soybeans,2015,Operating costs,Fertilizer,dollars per planted acre,33.45
+soybeans,2015,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.77
+soybeans,2015,Operating costs,Interest on operating capital,dollars per planted acre,0.14
+soybeans,2015,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2015,Operating costs,Repairs,dollars per planted acre,22.91
+soybeans,2015,Operating costs,Seed,dollars per planted acre,59.21
+soybeans,2015,Operating costs,"Total, operating costs",dollars per planted acre,166.97
+soybeans,2015,Production practices,Dryland,percent of acres,90.0
+soybeans,2015,Production practices,Irrigated,percent of acres,10.0
+soybeans,2015,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2015,Supporting information,Price,dollars per bushel at harvest,8.97
+soybeans,2015,Supporting information,Yield,bushels per planted acre,48.0
+soybeans,2016,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,88.84
+soybeans,2016,Allocated overhead,General farm overhead,dollars per planted acre,17.98
+soybeans,2016,Allocated overhead,Hired labor,dollars per planted acre,3.19
+soybeans,2016,Allocated overhead,Opportunity cost of land,dollars per planted acre,143.72
+soybeans,2016,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.9
+soybeans,2016,Allocated overhead,Taxes and insurance,dollars per planted acre,10.52
+soybeans,2016,Allocated overhead,"Total, allocated overhead",dollars per planted acre,283.15
+soybeans,2016,Costs listed,"Total, costs listed",dollars per planted acre,443.46
+soybeans,2016,Gross value of production,"Primary product, soybeans",dollars per planted acre,491.92
+soybeans,2016,Gross value of production,"Total, gross value of production",dollars per planted acre,491.92
+soybeans,2016,Net value,Value of production less operating costs,dollars per planted acre,331.61
+soybeans,2016,Net value,Value of production less total costs listed,dollars per planted acre,48.46
+soybeans,2016,Operating costs,Chemicals,dollars per planted acre,27.64
+soybeans,2016,Operating costs,Custom services,dollars per planted acre,10.6
+soybeans,2016,Operating costs,Fertilizer,dollars per planted acre,28.14
+soybeans,2016,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,11.89
+soybeans,2016,Operating costs,Interest on operating capital,dollars per planted acre,0.37
+soybeans,2016,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2016,Operating costs,Repairs,dollars per planted acre,22.82
+soybeans,2016,Operating costs,Seed,dollars per planted acre,58.79
+soybeans,2016,Operating costs,"Total, operating costs",dollars per planted acre,160.31
+soybeans,2016,Production practices,Dryland,percent of acres,90.0
+soybeans,2016,Production practices,Irrigated,percent of acres,10.0
+soybeans,2016,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2016,Supporting information,Price,dollars per bushel at harvest,9.46
+soybeans,2016,Supporting information,Yield,bushels per planted acre,52.0
+soybeans,2017,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,90.99
+soybeans,2017,Allocated overhead,General farm overhead,dollars per planted acre,18.25
+soybeans,2017,Allocated overhead,Hired labor,dollars per planted acre,3.26
+soybeans,2017,Allocated overhead,Opportunity cost of land,dollars per planted acre,142.86
+soybeans,2017,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,19.4
+soybeans,2017,Allocated overhead,Taxes and insurance,dollars per planted acre,10.66
+soybeans,2017,Allocated overhead,"Total, allocated overhead",dollars per planted acre,285.42
+soybeans,2017,Costs listed,"Total, costs listed",dollars per planted acre,443.5
+soybeans,2017,Gross value of production,"Primary product, soybeans",dollars per planted acre,454.72
+soybeans,2017,Gross value of production,"Total, gross value of production",dollars per planted acre,454.72
+soybeans,2017,Net value,Value of production less operating costs,dollars per planted acre,296.64
+soybeans,2017,Net value,Value of production less total costs listed,dollars per planted acre,11.22
+soybeans,2017,Operating costs,Chemicals,dollars per planted acre,26.83
+soybeans,2017,Operating costs,Custom services,dollars per planted acre,10.32
+soybeans,2017,Operating costs,Fertilizer,dollars per planted acre,25.06
+soybeans,2017,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.57
+soybeans,2017,Operating costs,Interest on operating capital,dollars per planted acre,0.83
+soybeans,2017,Operating costs,Purchased irrigation water,dollars per planted acre,0.06
+soybeans,2017,Operating costs,Repairs,dollars per planted acre,23.34
+soybeans,2017,Operating costs,Seed,dollars per planted acre,58.07
+soybeans,2017,Operating costs,"Total, operating costs",dollars per planted acre,158.08
+soybeans,2017,Production practices,Dryland,percent of acres,90.0
+soybeans,2017,Production practices,Irrigated,percent of acres,10.0
+soybeans,2017,Supporting information,Enterprise size,planted acres,273.0
+soybeans,2017,Supporting information,Price,dollars per bushel at harvest,9.28
+soybeans,2017,Supporting information,Yield,bushels per planted acre,49.0
+soybeans,2018,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,107.55
+soybeans,2018,Allocated overhead,General farm overhead,dollars per planted acre,17.88
+soybeans,2018,Allocated overhead,Hired labor,dollars per planted acre,4.72
+soybeans,2018,Allocated overhead,Opportunity cost of land,dollars per planted acre,150.33
+soybeans,2018,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.26
+soybeans,2018,Allocated overhead,Taxes and insurance,dollars per planted acre,11.96
+soybeans,2018,Allocated overhead,"Total, allocated overhead",dollars per planted acre,308.7
+soybeans,2018,Costs listed,"Total, costs listed",dollars per planted acre,495.86
+soybeans,2018,Gross value of production,"Primary product, soybeans",dollars per planted acre,458.91
+soybeans,2018,Gross value of production,"Total, gross value of production",dollars per planted acre,458.91
+soybeans,2018,Net value,Value of production less operating costs,dollars per planted acre,271.75
+soybeans,2018,Net value,Value of production less total costs listed,dollars per planted acre,-36.95
+soybeans,2018,Operating costs,Chemicals,dollars per planted acre,37.3
+soybeans,2018,Operating costs,Custom services,dollars per planted acre,12.45
+soybeans,2018,Operating costs,Fertilizer,dollars per planted acre,29.17
+soybeans,2018,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,15.78
+soybeans,2018,Operating costs,Interest on operating capital,dollars per planted acre,1.93
+soybeans,2018,Operating costs,Purchased irrigation water,dollars per planted acre,0.01
+soybeans,2018,Operating costs,Repairs,dollars per planted acre,28.13
+soybeans,2018,Operating costs,Seed,dollars per planted acre,62.39
+soybeans,2018,Operating costs,"Total, operating costs",dollars per planted acre,187.16
+soybeans,2018,Production practices,Dryland,percent of acres,90.0
+soybeans,2018,Production practices,Irrigated,percent of acres,10.0
+soybeans,2018,Supporting information,Enterprise size,planted acres,314.0
+soybeans,2018,Supporting information,Price,dollars per bushel at harvest,8.61
+soybeans,2018,Supporting information,Yield,bushels per planted acre,53.0
+soybeans,2019,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,105.57
+soybeans,2019,Allocated overhead,General farm overhead,dollars per planted acre,18.33
+soybeans,2019,Allocated overhead,Hired labor,dollars per planted acre,4.84
+soybeans,2019,Allocated overhead,Opportunity cost of land,dollars per planted acre,151.81
+soybeans,2019,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.14
+soybeans,2019,Allocated overhead,Taxes and insurance,dollars per planted acre,12.24
+soybeans,2019,Allocated overhead,"Total, allocated overhead",dollars per planted acre,309.93
+soybeans,2019,Costs listed,"Total, costs listed",dollars per planted acre,497.64
+soybeans,2019,Gross value of production,"Primary product, soybeans",dollars per planted acre,429.34
+soybeans,2019,Gross value of production,"Total, gross value of production",dollars per planted acre,429.34
+soybeans,2019,Net value,Value of production less operating costs,dollars per planted acre,241.63
+soybeans,2019,Net value,Value of production less total costs listed,dollars per planted acre,-68.3
+soybeans,2019,Operating costs,Chemicals,dollars per planted acre,36.81
+soybeans,2019,Operating costs,Custom services,dollars per planted acre,12.74
+soybeans,2019,Operating costs,Fertilizer,dollars per planted acre,31.79
+soybeans,2019,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,14.82
+soybeans,2019,Operating costs,Interest on operating capital,dollars per planted acre,1.92
+soybeans,2019,Operating costs,Purchased irrigation water,dollars per planted acre,0.01
+soybeans,2019,Operating costs,Repairs,dollars per planted acre,28.69
+soybeans,2019,Operating costs,Seed,dollars per planted acre,60.93
+soybeans,2019,Operating costs,"Total, operating costs",dollars per planted acre,187.71
+soybeans,2019,Production practices,Dryland,percent of acres,90.0
+soybeans,2019,Production practices,Irrigated,percent of acres,10.0
+soybeans,2019,Supporting information,Enterprise size,planted acres,314.0
+soybeans,2019,Supporting information,Price,dollars per bushel at harvest,8.61
+soybeans,2019,Supporting information,Yield,bushels per planted acre,50.0
+soybeans,2020,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,106.88
+soybeans,2020,Allocated overhead,General farm overhead,dollars per planted acre,18.69
+soybeans,2020,Allocated overhead,Hired labor,dollars per planted acre,5.06
+soybeans,2020,Allocated overhead,Opportunity cost of land,dollars per planted acre,151.46
+soybeans,2020,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.82
+soybeans,2020,Allocated overhead,Taxes and insurance,dollars per planted acre,12.91
+soybeans,2020,Allocated overhead,"Total, allocated overhead",dollars per planted acre,312.82
+soybeans,2020,Costs listed,"Total, costs listed",dollars per planted acre,491.82
+soybeans,2020,Gross value of production,"Primary product, soybeans",dollars per planted acre,524.17
+soybeans,2020,Gross value of production,"Total, gross value of production",dollars per planted acre,524.17
+soybeans,2020,Net value,Value of production less operating costs,dollars per planted acre,345.17
+soybeans,2020,Net value,Value of production less total costs listed,dollars per planted acre,32.35
+soybeans,2020,Operating costs,Chemicals,dollars per planted acre,34.66
+soybeans,2020,Operating costs,Custom services,dollars per planted acre,12.68
+soybeans,2020,Operating costs,Fertilizer,dollars per planted acre,28.51
+soybeans,2020,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.62
+soybeans,2020,Operating costs,Interest on operating capital,dollars per planted acre,0.35
+soybeans,2020,Operating costs,Purchased irrigation water,dollars per planted acre,0.01
+soybeans,2020,Operating costs,Repairs,dollars per planted acre,29.18
+soybeans,2020,Operating costs,Seed,dollars per planted acre,60.99
+soybeans,2020,Operating costs,"Total, operating costs",dollars per planted acre,179.0
+soybeans,2020,Production practices,Dryland,percent of acres,90.0
+soybeans,2020,Production practices,Irrigated,percent of acres,10.0
+soybeans,2020,Supporting information,Enterprise size,planted acres,314.0
+soybeans,2020,Supporting information,Price,dollars per bushel at harvest,9.67
+soybeans,2020,Supporting information,Yield,bushels per planted acre,54.0
+soybeans,2021,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,125.39
+soybeans,2021,Allocated overhead,General farm overhead,dollars per planted acre,19.97
+soybeans,2021,Allocated overhead,Hired labor,dollars per planted acre,5.37
+soybeans,2021,Allocated overhead,Opportunity cost of land,dollars per planted acre,154.97
+soybeans,2021,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.77
+soybeans,2021,Allocated overhead,Taxes and insurance,dollars per planted acre,13.51
+soybeans,2021,Allocated overhead,"Total, allocated overhead",dollars per planted acre,337.98
+soybeans,2021,Costs listed,"Total, costs listed",dollars per planted acre,531.77
+soybeans,2021,Gross value of production,"Primary product, soybeans",dollars per planted acre,655.23
+soybeans,2021,Gross value of production,"Total, gross value of production",dollars per planted acre,655.23
+soybeans,2021,Net value,Value of production less operating costs,dollars per planted acre,461.44
+soybeans,2021,Net value,Value of production less total costs listed,dollars per planted acre,123.46
+soybeans,2021,Operating costs,Chemicals,dollars per planted acre,35.72
+soybeans,2021,Operating costs,Custom services,dollars per planted acre,13.1
+soybeans,2021,Operating costs,Fertilizer,dollars per planted acre,33.34
+soybeans,2021,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,16.92
+soybeans,2021,Operating costs,Interest on operating capital,dollars per planted acre,0.06
+soybeans,2021,Operating costs,Purchased irrigation water,dollars per planted acre,0.01
+soybeans,2021,Operating costs,Repairs,dollars per planted acre,31.43
+soybeans,2021,Operating costs,Seed,dollars per planted acre,63.21
+soybeans,2021,Operating costs,"Total, operating costs",dollars per planted acre,193.79
+soybeans,2021,Production practices,Dryland,percent of acres,90.0
+soybeans,2021,Production practices,Irrigated,percent of acres,10.0
+soybeans,2021,Supporting information,Enterprise size,planted acres,314.0
+soybeans,2021,Supporting information,Price,dollars per bushel at harvest,11.98
+soybeans,2021,Supporting information,Yield,bushels per planted acre,55.0
+soybeans,2022,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,130.97
+soybeans,2022,Allocated overhead,General farm overhead,dollars per planted acre,22.31
+soybeans,2022,Allocated overhead,Hired labor,dollars per planted acre,5.87
+soybeans,2022,Allocated overhead,Opportunity cost of land,dollars per planted acre,166.0
+soybeans,2022,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,20.36
+soybeans,2022,Allocated overhead,Taxes and insurance,dollars per planted acre,14.94
+soybeans,2022,Allocated overhead,"Total, allocated overhead",dollars per planted acre,360.45
+soybeans,2022,Costs listed,"Total, costs listed",dollars per planted acre,628.28
+soybeans,2022,Gross value of production,"Primary product, soybeans",dollars per planted acre,708.36
+soybeans,2022,Gross value of production,"Total, gross value of production",dollars per planted acre,708.36
+soybeans,2022,Net value,Value of production less operating costs,dollars per planted acre,440.53
+soybeans,2022,Net value,Value of production less total costs listed,dollars per planted acre,80.08
+soybeans,2022,Operating costs,Chemicals,dollars per planted acre,55.03
+soybeans,2022,Operating costs,Custom services,dollars per planted acre,14.86
+soybeans,2022,Operating costs,Fertilizer,dollars per planted acre,63.92
+soybeans,2022,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,24.65
+soybeans,2022,Operating costs,Interest on operating capital,dollars per planted acre,3.23
+soybeans,2022,Operating costs,Purchased irrigation water,dollars per planted acre,0.02
+soybeans,2022,Operating costs,Repairs,dollars per planted acre,35.03
+soybeans,2022,Operating costs,Seed,dollars per planted acre,71.09
+soybeans,2022,Operating costs,"Total, operating costs",dollars per planted acre,267.83
+soybeans,2022,Production practices,Dryland,percent of acres,90.0
+soybeans,2022,Production practices,Irrigated,percent of acres,10.0
+soybeans,2022,Supporting information,Enterprise size,planted acres,314.0
+soybeans,2022,Supporting information,Price,dollars per bushel at harvest,13.49
+soybeans,2022,Supporting information,Yield,bushels per planted acre,52.0
+soybeans,2023,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,160.39
+soybeans,2023,Allocated overhead,General farm overhead,dollars per planted acre,18.47
+soybeans,2023,Allocated overhead,Hired labor,dollars per planted acre,8.95
+soybeans,2023,Allocated overhead,Opportunity cost of land,dollars per planted acre,179.17
+soybeans,2023,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.71
+soybeans,2023,Allocated overhead,Taxes and insurance,dollars per planted acre,11.6
+soybeans,2023,Allocated overhead,"Total, allocated overhead",dollars per planted acre,394.29
+soybeans,2023,Costs listed,"Total, costs listed",dollars per planted acre,662.52
+soybeans,2023,Gross value of production,"Primary product, soybeans",dollars per planted acre,688.06
+soybeans,2023,Gross value of production,"Total, gross value of production",dollars per planted acre,688.06
+soybeans,2023,Net value,Value of production less operating costs,dollars per planted acre,419.83
+soybeans,2023,Net value,Value of production less total costs listed,dollars per planted acre,25.54
+soybeans,2023,Operating costs,Chemicals,dollars per planted acre,61.12
+soybeans,2023,Operating costs,Custom services,dollars per planted acre,12.74
+soybeans,2023,Operating costs,Fertilizer,dollars per planted acre,61.08
+soybeans,2023,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.07
+soybeans,2023,Operating costs,Interest on operating capital,dollars per planted acre,6.57
+soybeans,2023,Operating costs,Purchased irrigation water,dollars per planted acre,0.18
+soybeans,2023,Operating costs,Repairs,dollars per planted acre,43.16
+soybeans,2023,Operating costs,Seed,dollars per planted acre,64.31
+soybeans,2023,Operating costs,"Total, operating costs",dollars per planted acre,268.23
+soybeans,2023,Production practices,Dryland,percent of acres,89.0
+soybeans,2023,Production practices,Irrigated,percent of acres,11.0
+soybeans,2023,Supporting information,Enterprise size,planted acres,374.0
+soybeans,2023,Supporting information,Price,dollars per bushel at harvest,12.75
+soybeans,2023,Supporting information,Yield,bushels per planted acre,54.0
+soybeans,2024,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,167.19
+soybeans,2024,Allocated overhead,General farm overhead,dollars per planted acre,18.66
+soybeans,2024,Allocated overhead,Hired labor,dollars per planted acre,9.27
+soybeans,2024,Allocated overhead,Opportunity cost of land,dollars per planted acre,183.68
+soybeans,2024,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.19
+soybeans,2024,Allocated overhead,Taxes and insurance,dollars per planted acre,12.28
+soybeans,2024,Allocated overhead,"Total, allocated overhead",dollars per planted acre,407.27
+soybeans,2024,Costs listed,"Total, costs listed",dollars per planted acre,650.83
+soybeans,2024,Gross value of production,"Primary product, soybeans",dollars per planted acre,543.06
+soybeans,2024,Gross value of production,"Total, gross value of production",dollars per planted acre,543.06
+soybeans,2024,Net value,Value of production less operating costs,dollars per planted acre,299.5
+soybeans,2024,Net value,Value of production less total costs listed,dollars per planted acre,-107.77
+soybeans,2024,Operating costs,Chemicals,dollars per planted acre,48.71
+soybeans,2024,Operating costs,Custom services,dollars per planted acre,13.14
+soybeans,2024,Operating costs,Fertilizer,dollars per planted acre,52.49
+soybeans,2024,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,17.74
+soybeans,2024,Operating costs,Interest on operating capital,dollars per planted acre,5.72
+soybeans,2024,Operating costs,Purchased irrigation water,dollars per planted acre,0.18
+soybeans,2024,Operating costs,Repairs,dollars per planted acre,43.55
+soybeans,2024,Operating costs,Seed,dollars per planted acre,62.03
+soybeans,2024,Operating costs,"Total, operating costs",dollars per planted acre,243.56
+soybeans,2024,Production practices,Dryland,percent of acres,89.0
+soybeans,2024,Production practices,Irrigated,percent of acres,11.0
+soybeans,2024,Supporting information,Enterprise size,planted acres,374.0
+soybeans,2024,Supporting information,Price,dollars per bushel at harvest,9.92
+soybeans,2024,Supporting information,Yield,bushels per planted acre,55.0
+soybeans,2025,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,167.61
+soybeans,2025,Allocated overhead,General farm overhead,dollars per planted acre,19.03
+soybeans,2025,Allocated overhead,Hired labor,dollars per planted acre,9.4
+soybeans,2025,Allocated overhead,Opportunity cost of land,dollars per planted acre,184.23
+soybeans,2025,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.58
+soybeans,2025,Allocated overhead,Taxes and insurance,dollars per planted acre,12.89
+soybeans,2025,Allocated overhead,"Total, allocated overhead",dollars per planted acre,409.74
+soybeans,2025,Costs listed,"Total, costs listed",dollars per planted acre,660.62
+soybeans,2025,Gross value of production,"Primary product, soybeans",dollars per planted acre,562.15
+soybeans,2025,Gross value of production,"Total, gross value of production",dollars per planted acre,562.15
+soybeans,2025,Net value,Value of production less operating costs,dollars per planted acre,311.27
+soybeans,2025,Net value,Value of production less total costs listed,dollars per planted acre,-98.47
+soybeans,2025,Operating costs,Chemicals,dollars per planted acre,48.94
+soybeans,2025,Operating costs,Custom services,dollars per planted acre,13.48
+soybeans,2025,Operating costs,Fertilizer,dollars per planted acre,59.18
+soybeans,2025,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,16.86
+soybeans,2025,Operating costs,Interest on operating capital,dollars per planted acre,4.87
+soybeans,2025,Operating costs,Purchased irrigation water,dollars per planted acre,0.18
+soybeans,2025,Operating costs,Repairs,dollars per planted acre,44.32
+soybeans,2025,Operating costs,Seed,dollars per planted acre,63.05
+soybeans,2025,Operating costs,"Total, operating costs",dollars per planted acre,250.88
+soybeans,2025,Production practices,Dryland,percent of acres,90.0
+soybeans,2025,Production practices,Irrigated,percent of acres,10.0
+soybeans,2025,Supporting information,Enterprise size,planted acres,374.0
+soybeans,2025,Supporting information,Price,dollars per bushel at harvest,9.76
+soybeans,2025,Supporting information,Yield,bushels per planted acre,58.0
+wheat,1998,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,43.0
+wheat,1998,Allocated overhead,General farm overhead,dollars per planted acre,6.59
+wheat,1998,Allocated overhead,Hired labor,dollars per planted acre,2.12
+wheat,1998,Allocated overhead,Opportunity cost of land,dollars per planted acre,37.52
+wheat,1998,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,14.85
+wheat,1998,Allocated overhead,Taxes and insurance,dollars per planted acre,3.7
+wheat,1998,Allocated overhead,"Total, allocated overhead",dollars per planted acre,107.78
+wheat,1998,Costs listed,"Total, costs listed",dollars per planted acre,165.19
+wheat,1998,Gross value of production,"Primary product, grain",dollars per planted acre,110.95
+wheat,1998,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.32
+wheat,1998,Gross value of production,"Total, gross value of production",dollars per planted acre,114.27
+wheat,1998,Net value,Value of production less operating costs,dollars per planted acre,56.86
+wheat,1998,Net value,Value of production less total costs listed,dollars per planted acre,-50.92
+wheat,1998,Operating costs,Chemicals,dollars per planted acre,7.36
+wheat,1998,Operating costs,Custom services,dollars per planted acre,6.77
+wheat,1998,Operating costs,Fertilizer,dollars per planted acre,18.61
+wheat,1998,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,6.14
+wheat,1998,Operating costs,Interest on operating inputs,dollars per planted acre,1.34
+wheat,1998,Operating costs,Other variable expenses,dollars per planted acre,0.58
+wheat,1998,Operating costs,Repairs,dollars per planted acre,9.0
+wheat,1998,Operating costs,Seed,dollars per planted acre,7.61
+wheat,1998,Operating costs,"Total, operating costs",dollars per planted acre,57.41
+wheat,1998,Production practices,Dryland,percent of acres,95.0
+wheat,1998,Production practices,Durum wheat,percent of acres,6.0
+wheat,1998,Production practices,Irrigated,percent of acres,5.0
+wheat,1998,Production practices,Spring wheat,percent of acres,27.0
+wheat,1998,Production practices,Winter wheat,percent of acres,67.0
+wheat,1998,Supporting information,Enterprise size,planted acres,296.0
+wheat,1998,Supporting information,Price,dollars per bushel at harvest,2.68
+wheat,1998,Supporting information,Yield,bushels per planted acre,41.0
+wheat,1999,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,45.52
+wheat,1999,Allocated overhead,General farm overhead,dollars per planted acre,6.69
+wheat,1999,Allocated overhead,Hired labor,dollars per planted acre,2.17
+wheat,1999,Allocated overhead,Opportunity cost of land,dollars per planted acre,37.89
+wheat,1999,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.32
+wheat,1999,Allocated overhead,Taxes and insurance,dollars per planted acre,3.74
+wheat,1999,Allocated overhead,"Total, allocated overhead",dollars per planted acre,111.33
+wheat,1999,Costs listed,"Total, costs listed",dollars per planted acre,166.15
+wheat,1999,Gross value of production,"Primary product, grain",dollars per planted acre,95.73
+wheat,1999,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.05
+wheat,1999,Gross value of production,"Total, gross value of production",dollars per planted acre,98.78
+wheat,1999,Net value,Value of production less operating costs,dollars per planted acre,43.96
+wheat,1999,Net value,Value of production less total costs listed,dollars per planted acre,-67.37
+wheat,1999,Operating costs,Chemicals,dollars per planted acre,7.22
+wheat,1999,Operating costs,Custom services,dollars per planted acre,6.47
+wheat,1999,Operating costs,Fertilizer,dollars per planted acre,16.95
+wheat,1999,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,6.53
+wheat,1999,Operating costs,Interest on operating inputs,dollars per planted acre,1.26
+wheat,1999,Operating costs,Other variable expenses,dollars per planted acre,0.57
+wheat,1999,Operating costs,Repairs,dollars per planted acre,9.44
+wheat,1999,Operating costs,Seed,dollars per planted acre,6.38
+wheat,1999,Operating costs,"Total, operating costs",dollars per planted acre,54.82
+wheat,1999,Production practices,Dryland,percent of acres,95.0
+wheat,1999,Production practices,Durum wheat,percent of acres,6.0
+wheat,1999,Production practices,Irrigated,percent of acres,5.0
+wheat,1999,Production practices,Spring wheat,percent of acres,27.0
+wheat,1999,Production practices,Winter wheat,percent of acres,67.0
+wheat,1999,Supporting information,Enterprise size,planted acres,296.0
+wheat,1999,Supporting information,Price,dollars per bushel at harvest,2.48
+wheat,1999,Supporting information,Yield,bushels per planted acre,39.0
+wheat,2000,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,48.25
+wheat,2000,Allocated overhead,General farm overhead,dollars per planted acre,6.84
+wheat,2000,Allocated overhead,Hired labor,dollars per planted acre,2.3
+wheat,2000,Allocated overhead,Opportunity cost of land,dollars per planted acre,38.53
+wheat,2000,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.74
+wheat,2000,Allocated overhead,Taxes and insurance,dollars per planted acre,3.82
+wheat,2000,Allocated overhead,"Total, allocated overhead",dollars per planted acre,115.48
+wheat,2000,Costs listed,"Total, costs listed",dollars per planted acre,173.86
+wheat,2000,Gross value of production,"Primary product, grain",dollars per planted acre,92.5
+wheat,2000,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.2
+wheat,2000,Gross value of production,"Total, gross value of production",dollars per planted acre,95.7
+wheat,2000,Net value,Value of production less operating costs,dollars per planted acre,37.32
+wheat,2000,Net value,Value of production less total costs listed,dollars per planted acre,-78.16
+wheat,2000,Operating costs,Chemicals,dollars per planted acre,7.13
+wheat,2000,Operating costs,Custom services,dollars per planted acre,6.5
+wheat,2000,Operating costs,Fertilizer,dollars per planted acre,17.28
+wheat,2000,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,9.13
+wheat,2000,Operating costs,Interest on operating inputs,dollars per planted acre,1.64
+wheat,2000,Operating costs,Other variable expenses,dollars per planted acre,0.59
+wheat,2000,Operating costs,Repairs,dollars per planted acre,9.97
+wheat,2000,Operating costs,Seed,dollars per planted acre,6.14
+wheat,2000,Operating costs,"Total, operating costs",dollars per planted acre,58.38
+wheat,2000,Production practices,Dryland,percent of acres,95.0
+wheat,2000,Production practices,Durum wheat,percent of acres,6.0
+wheat,2000,Production practices,Irrigated,percent of acres,5.0
+wheat,2000,Production practices,Spring wheat,percent of acres,27.0
+wheat,2000,Production practices,Winter wheat,percent of acres,67.0
+wheat,2000,Supporting information,Enterprise size,planted acres,296.0
+wheat,2000,Supporting information,Price,dollars per bushel at harvest,2.46
+wheat,2000,Supporting information,Yield,bushels per planted acre,38.0
+wheat,2001,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,49.4
+wheat,2001,Allocated overhead,General farm overhead,dollars per planted acre,7.1
+wheat,2001,Allocated overhead,Hired labor,dollars per planted acre,2.45
+wheat,2001,Allocated overhead,Opportunity cost of land,dollars per planted acre,39.54
+wheat,2001,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.0
+wheat,2001,Allocated overhead,Taxes and insurance,dollars per planted acre,3.91
+wheat,2001,Allocated overhead,"Total, allocated overhead",dollars per planted acre,118.4
+wheat,2001,Costs listed,"Total, costs listed",dollars per planted acre,183.34
+wheat,2001,Gross value of production,"Primary product, grain",dollars per planted acre,95.22
+wheat,2001,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.18
+wheat,2001,Gross value of production,"Total, gross value of production",dollars per planted acre,98.4
+wheat,2001,Net value,Value of production less operating costs,dollars per planted acre,33.46
+wheat,2001,Net value,Value of production less total costs listed,dollars per planted acre,-84.94
+wheat,2001,Operating costs,Chemicals,dollars per planted acre,7.2
+wheat,2001,Operating costs,Custom services,dollars per planted acre,6.37
+wheat,2001,Operating costs,Fertilizer,dollars per planted acre,23.9
+wheat,2001,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,9.19
+wheat,2001,Operating costs,Interest on operating inputs,dollars per planted acre,1.08
+wheat,2001,Operating costs,Other variable expenses,dollars per planted acre,0.62
+wheat,2001,Operating costs,Repairs,dollars per planted acre,10.24
+wheat,2001,Operating costs,Seed,dollars per planted acre,6.34
+wheat,2001,Operating costs,"Total, operating costs",dollars per planted acre,64.94
+wheat,2001,Production practices,Dryland,percent of acres,95.0
+wheat,2001,Production practices,Durum wheat,percent of acres,6.0
+wheat,2001,Production practices,Irrigated,percent of acres,5.0
+wheat,2001,Production practices,Spring wheat,percent of acres,27.0
+wheat,2001,Production practices,Winter wheat,percent of acres,67.0
+wheat,2001,Supporting information,Enterprise size,planted acres,296.0
+wheat,2001,Supporting information,Price,dollars per bushel at harvest,2.76
+wheat,2001,Supporting information,Yield,bushels per planted acre,35.0
+wheat,2002,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,48.97
+wheat,2002,Allocated overhead,General farm overhead,dollars per planted acre,7.25
+wheat,2002,Allocated overhead,Hired labor,dollars per planted acre,2.53
+wheat,2002,Allocated overhead,Opportunity cost of land,dollars per planted acre,39.19
+wheat,2002,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.72
+wheat,2002,Allocated overhead,Taxes and insurance,dollars per planted acre,3.9
+wheat,2002,Allocated overhead,"Total, allocated overhead",dollars per planted acre,118.56
+wheat,2002,Costs listed,"Total, costs listed",dollars per planted acre,175.63
+wheat,2002,Gross value of production,"Primary product, grain",dollars per planted acre,91.51
+wheat,2002,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.66
+wheat,2002,Gross value of production,"Total, gross value of production",dollars per planted acre,95.17
+wheat,2002,Net value,Value of production less operating costs,dollars per planted acre,38.1
+wheat,2002,Net value,Value of production less total costs listed,dollars per planted acre,-80.46
+wheat,2002,Operating costs,Chemicals,dollars per planted acre,7.13
+wheat,2002,Operating costs,Custom services,dollars per planted acre,5.67
+wheat,2002,Operating costs,Fertilizer,dollars per planted acre,17.71
+wheat,2002,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,8.67
+wheat,2002,Operating costs,Interest on operating inputs,dollars per planted acre,0.48
+wheat,2002,Operating costs,Other variable expenses,dollars per planted acre,0.61
+wheat,2002,Operating costs,Repairs,dollars per planted acre,10.15
+wheat,2002,Operating costs,Seed,dollars per planted acre,6.65
+wheat,2002,Operating costs,"Total, operating costs",dollars per planted acre,57.07
+wheat,2002,Production practices,Dryland,percent of acres,95.0
+wheat,2002,Production practices,Durum wheat,percent of acres,6.0
+wheat,2002,Production practices,Irrigated,percent of acres,5.0
+wheat,2002,Production practices,Spring wheat,percent of acres,27.0
+wheat,2002,Production practices,Winter wheat,percent of acres,67.0
+wheat,2002,Supporting information,Enterprise size,planted acres,296.0
+wheat,2002,Supporting information,Price,dollars per bushel at harvest,3.28
+wheat,2002,Supporting information,Yield,bushels per planted acre,28.0
+wheat,2003,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,52.3
+wheat,2003,Allocated overhead,General farm overhead,dollars per planted acre,7.4
+wheat,2003,Allocated overhead,Hired labor,dollars per planted acre,2.66
+wheat,2003,Allocated overhead,Opportunity cost of land,dollars per planted acre,39.93
+wheat,2003,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.2
+wheat,2003,Allocated overhead,Taxes and insurance,dollars per planted acre,3.95
+wheat,2003,Allocated overhead,"Total, allocated overhead",dollars per planted acre,123.44
+wheat,2003,Costs listed,"Total, costs listed",dollars per planted acre,191.12
+wheat,2003,Gross value of production,"Primary product, grain",dollars per planted acre,126.48
+wheat,2003,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,3.54
+wheat,2003,Gross value of production,"Total, gross value of production",dollars per planted acre,130.02
+wheat,2003,Net value,Value of production less operating costs,dollars per planted acre,62.34
+wheat,2003,Net value,Value of production less total costs listed,dollars per planted acre,-61.1
+wheat,2003,Operating costs,Chemicals,dollars per planted acre,6.94
+wheat,2003,Operating costs,Custom services,dollars per planted acre,7.19
+wheat,2003,Operating costs,Fertilizer,dollars per planted acre,23.11
+wheat,2003,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,10.95
+wheat,2003,Operating costs,Interest on operating inputs,dollars per planted acre,0.36
+wheat,2003,Operating costs,Other variable expenses,dollars per planted acre,0.68
+wheat,2003,Operating costs,Repairs,dollars per planted acre,10.85
+wheat,2003,Operating costs,Seed,dollars per planted acre,7.6
+wheat,2003,Operating costs,"Total, operating costs",dollars per planted acre,67.68
+wheat,2003,Production practices,Dryland,percent of acres,95.0
+wheat,2003,Production practices,Durum wheat,percent of acres,6.0
+wheat,2003,Production practices,Irrigated,percent of acres,5.0
+wheat,2003,Production practices,Spring wheat,percent of acres,27.0
+wheat,2003,Production practices,Winter wheat,percent of acres,67.0
+wheat,2003,Supporting information,Enterprise size,planted acres,296.0
+wheat,2003,Supporting information,Price,dollars per bushel at harvest,3.11
+wheat,2003,Supporting information,Yield,bushels per planted acre,41.0
+wheat,2004,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,45.91
+wheat,2004,Allocated overhead,General farm overhead,dollars per planted acre,7.93
+wheat,2004,Allocated overhead,Hired labor,dollars per planted acre,2.37
+wheat,2004,Allocated overhead,Opportunity cost of land,dollars per planted acre,37.8
+wheat,2004,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,20.32
+wheat,2004,Allocated overhead,Taxes and insurance,dollars per planted acre,5.45
+wheat,2004,Allocated overhead,"Total, allocated overhead",dollars per planted acre,119.78
+wheat,2004,Costs listed,"Total, costs listed",dollars per planted acre,190.6
+wheat,2004,Gross value of production,"Primary product, grain",dollars per planted acre,136.91
+wheat,2004,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,5.57
+wheat,2004,Gross value of production,"Total, gross value of production",dollars per planted acre,142.48
+wheat,2004,Net value,Value of production less operating costs,dollars per planted acre,71.66
+wheat,2004,Net value,Value of production less total costs listed,dollars per planted acre,-48.12
+wheat,2004,Operating costs,Chemicals,dollars per planted acre,8.57
+wheat,2004,Operating costs,Custom services,dollars per planted acre,6.77
+wheat,2004,Operating costs,Fertilizer,dollars per planted acre,22.84
+wheat,2004,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.23
+wheat,2004,Operating costs,Interest on operating inputs,dollars per planted acre,0.55
+wheat,2004,Operating costs,Other variable expenses,dollars per planted acre,0.31
+wheat,2004,Operating costs,Repairs,dollars per planted acre,11.66
+wheat,2004,Operating costs,Seed,dollars per planted acre,7.89
+wheat,2004,Operating costs,"Total, operating costs",dollars per planted acre,70.82
+wheat,2004,Production practices,Dryland,percent of acres,95.0
+wheat,2004,Production practices,Durum wheat,percent of acres,5.0
+wheat,2004,Production practices,Irrigated,percent of acres,5.0
+wheat,2004,Production practices,Spring wheat,percent of acres,28.0
+wheat,2004,Production practices,Winter wheat,percent of acres,67.0
+wheat,2004,Supporting information,Enterprise size,planted acres,412.0
+wheat,2004,Supporting information,Price,dollars per bushel at harvest,3.44
+wheat,2004,Supporting information,Yield,bushels per planted acre,40.0
+wheat,2005,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,48.78
+wheat,2005,Allocated overhead,General farm overhead,dollars per planted acre,8.22
+wheat,2005,Allocated overhead,Hired labor,dollars per planted acre,2.43
+wheat,2005,Allocated overhead,Opportunity cost of land,dollars per planted acre,41.07
+wheat,2005,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,20.97
+wheat,2005,Allocated overhead,Taxes and insurance,dollars per planted acre,6.53
+wheat,2005,Allocated overhead,"Total, allocated overhead",dollars per planted acre,128.0
+wheat,2005,Costs listed,"Total, costs listed",dollars per planted acre,207.45
+wheat,2005,Gross value of production,"Primary product, grain",dollars per planted acre,126.48
+wheat,2005,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,6.2
+wheat,2005,Gross value of production,"Total, gross value of production",dollars per planted acre,132.68
+wheat,2005,Net value,Value of production less operating costs,dollars per planted acre,53.23
+wheat,2005,Net value,Value of production less total costs listed,dollars per planted acre,-74.77
+wheat,2005,Operating costs,Chemicals,dollars per planted acre,8.57
+wheat,2005,Operating costs,Custom services,dollars per planted acre,6.6
+wheat,2005,Operating costs,Fertilizer,dollars per planted acre,26.16
+wheat,2005,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,16.22
+wheat,2005,Operating costs,Interest on operating inputs,dollars per planted acre,1.33
+wheat,2005,Operating costs,Other variable expenses,dollars per planted acre,0.3
+wheat,2005,Operating costs,Repairs,dollars per planted acre,12.21
+wheat,2005,Operating costs,Seed,dollars per planted acre,8.06
+wheat,2005,Operating costs,"Total, operating costs",dollars per planted acre,79.45
+wheat,2005,Production practices,Dryland,percent of acres,95.0
+wheat,2005,Production practices,Durum wheat,percent of acres,5.0
+wheat,2005,Production practices,Irrigated,percent of acres,5.0
+wheat,2005,Production practices,Spring wheat,percent of acres,28.0
+wheat,2005,Production practices,Winter wheat,percent of acres,67.0
+wheat,2005,Supporting information,Enterprise size,planted acres,412.0
+wheat,2005,Supporting information,Price,dollars per bushel at harvest,3.17
+wheat,2005,Supporting information,Yield,bushels per planted acre,40.0
+wheat,2006,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,51.33
+wheat,2006,Allocated overhead,General farm overhead,dollars per planted acre,8.54
+wheat,2006,Allocated overhead,Hired labor,dollars per planted acre,2.49
+wheat,2006,Allocated overhead,Opportunity cost of land,dollars per planted acre,40.86
+wheat,2006,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,21.69
+wheat,2006,Allocated overhead,Taxes and insurance,dollars per planted acre,6.86
+wheat,2006,Allocated overhead,"Total, allocated overhead",dollars per planted acre,131.77
+wheat,2006,Costs listed,"Total, costs listed",dollars per planted acre,216.78
+wheat,2006,Gross value of production,"Primary product, grain",dollars per planted acre,136.78
+wheat,2006,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,7.23
+wheat,2006,Gross value of production,"Total, gross value of production",dollars per planted acre,144.01
+wheat,2006,Net value,Value of production less operating costs,dollars per planted acre,59.0
+wheat,2006,Net value,Value of production less total costs listed,dollars per planted acre,-72.77
+wheat,2006,Operating costs,Chemicals,dollars per planted acre,8.84
+wheat,2006,Operating costs,Custom services,dollars per planted acre,6.71
+wheat,2006,Operating costs,Fertilizer,dollars per planted acre,28.44
+wheat,2006,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,17.81
+wheat,2006,Operating costs,Interest on operating inputs,dollars per planted acre,2.0
+wheat,2006,Operating costs,Other variable expenses,dollars per planted acre,0.33
+wheat,2006,Operating costs,Repairs,dollars per planted acre,12.42
+wheat,2006,Operating costs,Seed,dollars per planted acre,8.46
+wheat,2006,Operating costs,"Total, operating costs",dollars per planted acre,85.01
+wheat,2006,Production practices,Dryland,percent of acres,95.0
+wheat,2006,Production practices,Durum wheat,percent of acres,5.0
+wheat,2006,Production practices,Irrigated,percent of acres,5.0
+wheat,2006,Production practices,Spring wheat,percent of acres,28.0
+wheat,2006,Production practices,Winter wheat,percent of acres,67.0
+wheat,2006,Supporting information,Enterprise size,planted acres,412.0
+wheat,2006,Supporting information,Price,dollars per bushel at harvest,4.12
+wheat,2006,Supporting information,Yield,bushels per planted acre,33.0
+wheat,2007,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,53.71
+wheat,2007,Allocated overhead,General farm overhead,dollars per planted acre,8.74
+wheat,2007,Allocated overhead,Hired labor,dollars per planted acre,2.57
+wheat,2007,Allocated overhead,Opportunity cost of land,dollars per planted acre,43.54
+wheat,2007,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,22.52
+wheat,2007,Allocated overhead,Taxes and insurance,dollars per planted acre,7.88
+wheat,2007,Allocated overhead,"Total, allocated overhead",dollars per planted acre,138.96
+wheat,2007,Costs listed,"Total, costs listed",dollars per planted acre,231.99
+wheat,2007,Gross value of production,"Primary product, grain",dollars per planted acre,196.35
+wheat,2007,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,7.76
+wheat,2007,Gross value of production,"Total, gross value of production",dollars per planted acre,204.11
+wheat,2007,Net value,Value of production less operating costs,dollars per planted acre,111.08
+wheat,2007,Net value,Value of production less total costs listed,dollars per planted acre,-27.88
+wheat,2007,Operating costs,Chemicals,dollars per planted acre,8.78
+wheat,2007,Operating costs,Custom services,dollars per planted acre,6.79
+wheat,2007,Operating costs,Fertilizer,dollars per planted acre,32.69
+wheat,2007,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.77
+wheat,2007,Operating costs,Interest on operating inputs,dollars per planted acre,2.04
+wheat,2007,Operating costs,Other variable expenses,dollars per planted acre,0.33
+wheat,2007,Operating costs,Repairs,dollars per planted acre,12.86
+wheat,2007,Operating costs,Seed,dollars per planted acre,9.77
+wheat,2007,Operating costs,"Total, operating costs",dollars per planted acre,93.03
+wheat,2007,Production practices,Dryland,percent of acres,95.0
+wheat,2007,Production practices,Durum wheat,percent of acres,5.0
+wheat,2007,Production practices,Irrigated,percent of acres,5.0
+wheat,2007,Production practices,Spring wheat,percent of acres,28.0
+wheat,2007,Production practices,Winter wheat,percent of acres,67.0
+wheat,2007,Supporting information,Enterprise size,planted acres,412.0
+wheat,2007,Supporting information,Price,dollars per bushel at harvest,5.25
+wheat,2007,Supporting information,Yield,bushels per planted acre,37.0
+wheat,2008,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,58.95
+wheat,2008,Allocated overhead,General farm overhead,dollars per planted acre,9.13
+wheat,2008,Allocated overhead,Hired labor,dollars per planted acre,2.65
+wheat,2008,Allocated overhead,Opportunity cost of land,dollars per planted acre,48.9
+wheat,2008,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,23.04
+wheat,2008,Allocated overhead,Taxes and insurance,dollars per planted acre,9.05
+wheat,2008,Allocated overhead,"Total, allocated overhead",dollars per planted acre,151.72
+wheat,2008,Costs listed,"Total, costs listed",dollars per planted acre,277.4
+wheat,2008,Gross value of production,"Primary product, grain",dollars per planted acre,324.62
+wheat,2008,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,9.21
+wheat,2008,Gross value of production,"Total, gross value of production",dollars per planted acre,333.83
+wheat,2008,Net value,Value of production less operating costs,dollars per planted acre,208.15
+wheat,2008,Net value,Value of production less total costs listed,dollars per planted acre,56.43
+wheat,2008,Operating costs,Chemicals,dollars per planted acre,9.32
+wheat,2008,Operating costs,Custom services,dollars per planted acre,7.86
+wheat,2008,Operating costs,Fertilizer,dollars per planted acre,52.51
+wheat,2008,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,25.25
+wheat,2008,Operating costs,Interest on operating inputs,dollars per planted acre,1.03
+wheat,2008,Operating costs,Other variable expenses,dollars per planted acre,0.35
+wheat,2008,Operating costs,Repairs,dollars per planted acre,13.34
+wheat,2008,Operating costs,Seed,dollars per planted acre,16.02
+wheat,2008,Operating costs,"Total, operating costs",dollars per planted acre,125.68
+wheat,2008,Production practices,Dryland,percent of acres,95.0
+wheat,2008,Production practices,Durum wheat,percent of acres,5.0
+wheat,2008,Production practices,Irrigated,percent of acres,5.0
+wheat,2008,Production practices,Spring wheat,percent of acres,28.0
+wheat,2008,Production practices,Winter wheat,percent of acres,67.0
+wheat,2008,Supporting information,Enterprise size,planted acres,412.0
+wheat,2008,Supporting information,Price,dollars per bushel at harvest,7.86
+wheat,2008,Supporting information,Yield,bushels per planted acre,41.0
+wheat,2009,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,70.33
+wheat,2009,Allocated overhead,General farm overhead,dollars per planted acre,10.15
+wheat,2009,Allocated overhead,Hired labor,dollars per planted acre,1.97
+wheat,2009,Allocated overhead,Opportunity cost of land,dollars per planted acre,46.2
+wheat,2009,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.87
+wheat,2009,Allocated overhead,Taxes and insurance,dollars per planted acre,5.8
+wheat,2009,Allocated overhead,"Total, allocated overhead",dollars per planted acre,150.32
+wheat,2009,Costs listed,"Total, costs listed",dollars per planted acre,263.24
+wheat,2009,Gross value of production,"Primary product, grain",dollars per planted acre,221.6
+wheat,2009,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,7.1
+wheat,2009,Gross value of production,"Total, gross value of production",dollars per planted acre,228.7
+wheat,2009,Net value,Value of production less operating costs,dollars per planted acre,115.78
+wheat,2009,Net value,Value of production less total costs listed,dollars per planted acre,-34.54
+wheat,2009,Operating costs,Chemicals,dollars per planted acre,14.16
+wheat,2009,Operating costs,Custom services,dollars per planted acre,9.41
+wheat,2009,Operating costs,Fertilizer,dollars per planted acre,43.36
+wheat,2009,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.22
+wheat,2009,Operating costs,Interest on operating inputs,dollars per planted acre,0.16
+wheat,2009,Operating costs,Other variable expenses,dollars per planted acre,0.53
+wheat,2009,Operating costs,Repairs,dollars per planted acre,19.09
+wheat,2009,Operating costs,Seed,dollars per planted acre,13.99
+wheat,2009,Operating costs,"Total, operating costs",dollars per planted acre,112.92
+wheat,2009,Production practices,Dryland,percent of acres,95.0
+wheat,2009,Production practices,Durum wheat,percent of acres,5.0
+wheat,2009,Production practices,Irrigated,percent of acres,5.0
+wheat,2009,Production practices,Spring wheat,percent of acres,26.0
+wheat,2009,Production practices,Winter wheat,percent of acres,69.0
+wheat,2009,Supporting information,Enterprise size,planted acres,443.0
+wheat,2009,Supporting information,Price,dollars per bushel at harvest,5.54
+wheat,2009,Supporting information,Yield,bushels per planted acre,40.0
+wheat,2010,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,73.31
+wheat,2010,Allocated overhead,General farm overhead,dollars per planted acre,10.45
+wheat,2010,Allocated overhead,Hired labor,dollars per planted acre,2.04
+wheat,2010,Allocated overhead,Opportunity cost of land,dollars per planted acre,46.83
+wheat,2010,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.98
+wheat,2010,Allocated overhead,Taxes and insurance,dollars per planted acre,6.01
+wheat,2010,Allocated overhead,"Total, allocated overhead",dollars per planted acre,154.62
+wheat,2010,Costs listed,"Total, costs listed",dollars per planted acre,257.4
+wheat,2010,Gross value of production,"Primary product, grain",dollars per planted acre,215.18
+wheat,2010,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,7.06
+wheat,2010,Gross value of production,"Total, gross value of production",dollars per planted acre,222.24
+wheat,2010,Net value,Value of production less operating costs,dollars per planted acre,119.46
+wheat,2010,Net value,Value of production less total costs listed,dollars per planted acre,-35.17
+wheat,2010,Operating costs,Chemicals,dollars per planted acre,13.78
+wheat,2010,Operating costs,Custom services,dollars per planted acre,9.42
+wheat,2010,Operating costs,Fertilizer,dollars per planted acre,32.56
+wheat,2010,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,15.36
+wheat,2010,Operating costs,Interest on operating inputs,dollars per planted acre,0.1
+wheat,2010,Operating costs,Other variable expenses,dollars per planted acre,0.59
+wheat,2010,Operating costs,Repairs,dollars per planted acre,19.9
+wheat,2010,Operating costs,Seed,dollars per planted acre,11.07
+wheat,2010,Operating costs,"Total, operating costs",dollars per planted acre,102.78
+wheat,2010,Production practices,Dryland,percent of acres,95.0
+wheat,2010,Production practices,Durum wheat,percent of acres,5.0
+wheat,2010,Production practices,Irrigated,percent of acres,5.0
+wheat,2010,Production practices,Spring wheat,percent of acres,26.0
+wheat,2010,Production practices,Winter wheat,percent of acres,69.0
+wheat,2010,Supporting information,Enterprise size,planted acres,443.0
+wheat,2010,Supporting information,Price,dollars per bushel at harvest,4.75
+wheat,2010,Supporting information,Yield,bushels per planted acre,45.0
+wheat,2011,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,77.37
+wheat,2011,Allocated overhead,General farm overhead,dollars per planted acre,10.84
+wheat,2011,Allocated overhead,Hired labor,dollars per planted acre,2.1
+wheat,2011,Allocated overhead,Opportunity cost of land,dollars per planted acre,52.65
+wheat,2011,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.36
+wheat,2011,Allocated overhead,Taxes and insurance,dollars per planted acre,6.36
+wheat,2011,Allocated overhead,"Total, allocated overhead",dollars per planted acre,165.68
+wheat,2011,Costs listed,"Total, costs listed",dollars per planted acre,287.57
+wheat,2011,Gross value of production,"Primary product, grain",dollars per planted acre,276.36
+wheat,2011,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,9.35
+wheat,2011,Gross value of production,"Total, gross value of production",dollars per planted acre,285.71
+wheat,2011,Net value,Value of production less operating costs,dollars per planted acre,163.82
+wheat,2011,Net value,Value of production less total costs listed,dollars per planted acre,-1.86
+wheat,2011,Operating costs,Chemicals,dollars per planted acre,13.49
+wheat,2011,Operating costs,Custom services,dollars per planted acre,9.96
+wheat,2011,Operating costs,Fertilizer,dollars per planted acre,44.32
+wheat,2011,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.71
+wheat,2011,Operating costs,Interest on operating inputs,dollars per planted acre,0.06
+wheat,2011,Operating costs,Other variable expenses,dollars per planted acre,0.63
+wheat,2011,Operating costs,Repairs,dollars per planted acre,20.33
+wheat,2011,Operating costs,Seed,dollars per planted acre,13.39
+wheat,2011,Operating costs,"Total, operating costs",dollars per planted acre,121.89
+wheat,2011,Production practices,Dryland,percent of acres,95.0
+wheat,2011,Production practices,Durum wheat,percent of acres,4.0
+wheat,2011,Production practices,Irrigated,percent of acres,5.0
+wheat,2011,Production practices,Spring wheat,percent of acres,26.0
+wheat,2011,Production practices,Winter wheat,percent of acres,69.0
+wheat,2011,Supporting information,Enterprise size,planted acres,443.0
+wheat,2011,Supporting information,Price,dollars per bushel at harvest,7.35
+wheat,2011,Supporting information,Yield,bushels per planted acre,38.0
+wheat,2012,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,81.21
+wheat,2012,Allocated overhead,General farm overhead,dollars per planted acre,11.01
+wheat,2012,Allocated overhead,Hired labor,dollars per planted acre,2.13
+wheat,2012,Allocated overhead,Opportunity cost of land,dollars per planted acre,57.58
+wheat,2012,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.93
+wheat,2012,Allocated overhead,Taxes and insurance,dollars per planted acre,6.42
+wheat,2012,Allocated overhead,"Total, allocated overhead",dollars per planted acre,175.28
+wheat,2012,Costs listed,"Total, costs listed",dollars per planted acre,302.0
+wheat,2012,Gross value of production,"Primary product, grain",dollars per planted acre,332.0
+wheat,2012,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,10.7
+wheat,2012,Gross value of production,"Total, gross value of production",dollars per planted acre,342.7
+wheat,2012,Net value,Value of production less operating costs,dollars per planted acre,215.98
+wheat,2012,Net value,Value of production less total costs listed,dollars per planted acre,40.7
+wheat,2012,Operating costs,Chemicals,dollars per planted acre,14.16
+wheat,2012,Operating costs,Custom services,dollars per planted acre,10.13
+wheat,2012,Operating costs,Fertilizer,dollars per planted acre,46.08
+wheat,2012,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.42
+wheat,2012,Operating costs,Interest on operating inputs,dollars per planted acre,0.08
+wheat,2012,Operating costs,Other variable expenses,dollars per planted acre,0.59
+wheat,2012,Operating costs,Repairs,dollars per planted acre,20.93
+wheat,2012,Operating costs,Seed,dollars per planted acre,15.33
+wheat,2012,Operating costs,"Total, operating costs",dollars per planted acre,126.72
+wheat,2012,Production practices,Dryland,percent of acres,95.0
+wheat,2012,Production practices,Durum wheat,percent of acres,4.0
+wheat,2012,Production practices,Irrigated,percent of acres,5.0
+wheat,2012,Production practices,Spring wheat,percent of acres,26.0
+wheat,2012,Production practices,Winter wheat,percent of acres,69.0
+wheat,2012,Supporting information,Enterprise size,planted acres,443.0
+wheat,2012,Supporting information,Price,dollars per bushel at harvest,7.58
+wheat,2012,Supporting information,Yield,bushels per planted acre,44.0
+wheat,2013,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,82.96
+wheat,2013,Allocated overhead,General farm overhead,dollars per planted acre,11.18
+wheat,2013,Allocated overhead,Hired labor,dollars per planted acre,2.18
+wheat,2013,Allocated overhead,Opportunity cost of land,dollars per planted acre,63.7
+wheat,2013,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.39
+wheat,2013,Allocated overhead,Taxes and insurance,dollars per planted acre,6.47
+wheat,2013,Allocated overhead,"Total, allocated overhead",dollars per planted acre,183.88
+wheat,2013,Costs listed,"Total, costs listed",dollars per planted acre,312.03
+wheat,2013,Gross value of production,"Primary product, grain",dollars per planted acre,275.8
+wheat,2013,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,10.83
+wheat,2013,Gross value of production,"Total, gross value of production",dollars per planted acre,286.63
+wheat,2013,Net value,Value of production less operating costs,dollars per planted acre,158.48
+wheat,2013,Net value,Value of production less total costs listed,dollars per planted acre,-25.4
+wheat,2013,Operating costs,Chemicals,dollars per planted acre,14.22
+wheat,2013,Operating costs,Custom services,dollars per planted acre,10.59
+wheat,2013,Operating costs,Fertilizer,dollars per planted acre,46.15
+wheat,2013,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.38
+wheat,2013,Operating costs,Interest on operating inputs,dollars per planted acre,0.06
+wheat,2013,Operating costs,Other variable expenses,dollars per planted acre,0.62
+wheat,2013,Operating costs,Repairs,dollars per planted acre,21.07
+wheat,2013,Operating costs,Seed,dollars per planted acre,16.06
+wheat,2013,Operating costs,"Total, operating costs",dollars per planted acre,128.15
+wheat,2013,Production practices,Dryland,percent of acres,95.0
+wheat,2013,Production practices,Durum wheat,percent of acres,4.0
+wheat,2013,Production practices,Irrigated,percent of acres,5.0
+wheat,2013,Production practices,Spring wheat,percent of acres,26.0
+wheat,2013,Production practices,Winter wheat,percent of acres,69.0
+wheat,2013,Supporting information,Enterprise size,planted acres,443.0
+wheat,2013,Supporting information,Price,dollars per bushel at harvest,7.09
+wheat,2013,Supporting information,Yield,bushels per planted acre,39.0
+wheat,2014,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,86.5
+wheat,2014,Allocated overhead,General farm overhead,dollars per planted acre,11.3
+wheat,2014,Allocated overhead,Hired labor,dollars per planted acre,2.2
+wheat,2014,Allocated overhead,Opportunity cost of land,dollars per planted acre,65.06
+wheat,2014,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.58
+wheat,2014,Allocated overhead,Taxes and insurance,dollars per planted acre,7.31
+wheat,2014,Allocated overhead,"Total, allocated overhead",dollars per planted acre,189.95
+wheat,2014,Costs listed,"Total, costs listed",dollars per planted acre,316.28
+wheat,2014,Gross value of production,"Primary product, grain",dollars per planted acre,237.64
+wheat,2014,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,9.89
+wheat,2014,Gross value of production,"Total, gross value of production",dollars per planted acre,247.53
+wheat,2014,Net value,Value of production less operating costs,dollars per planted acre,121.2
+wheat,2014,Net value,Value of production less total costs listed,dollars per planted acre,-68.75
+wheat,2014,Operating costs,Chemicals,dollars per planted acre,14.86
+wheat,2014,Operating costs,Custom services,dollars per planted acre,10.86
+wheat,2014,Operating costs,Fertilizer,dollars per planted acre,43.52
+wheat,2014,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,19.17
+wheat,2014,Operating costs,Interest on operating inputs,dollars per planted acre,0.04
+wheat,2014,Operating costs,Other variable expenses,dollars per planted acre,0.62
+wheat,2014,Operating costs,Repairs,dollars per planted acre,21.44
+wheat,2014,Operating costs,Seed,dollars per planted acre,15.82
+wheat,2014,Operating costs,"Total, operating costs",dollars per planted acre,126.33
+wheat,2014,Production practices,Dryland,percent of acres,95.0
+wheat,2014,Production practices,Durum wheat,percent of acres,4.0
+wheat,2014,Production practices,Irrigated,percent of acres,5.0
+wheat,2014,Production practices,Spring wheat,percent of acres,26.0
+wheat,2014,Production practices,Winter wheat,percent of acres,69.0
+wheat,2014,Supporting information,Enterprise size,planted acres,443.0
+wheat,2014,Supporting information,Price,dollars per bushel at harvest,6.44
+wheat,2014,Supporting information,Yield,bushels per planted acre,37.0
+wheat,2015,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,88.65
+wheat,2015,Allocated overhead,General farm overhead,dollars per planted acre,11.28
+wheat,2015,Allocated overhead,Hired labor,dollars per planted acre,2.28
+wheat,2015,Allocated overhead,Opportunity cost of land,dollars per planted acre,65.99
+wheat,2015,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.19
+wheat,2015,Allocated overhead,Taxes and insurance,dollars per planted acre,7.76
+wheat,2015,Allocated overhead,"Total, allocated overhead",dollars per planted acre,194.15
+wheat,2015,Costs listed,"Total, costs listed",dollars per planted acre,310.5
+wheat,2015,Gross value of production,"Primary product, grain",dollars per planted acre,204.8
+wheat,2015,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,9.1
+wheat,2015,Gross value of production,"Total, gross value of production",dollars per planted acre,213.9
+wheat,2015,Net value,Value of production less operating costs,dollars per planted acre,97.55
+wheat,2015,Net value,Value of production less total costs listed,dollars per planted acre,-96.6
+wheat,2015,Operating costs,Chemicals,dollars per planted acre,14.37
+wheat,2015,Operating costs,Custom services,dollars per planted acre,11.1
+wheat,2015,Operating costs,Fertilizer,dollars per planted acre,40.1
+wheat,2015,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.43
+wheat,2015,Operating costs,Interest on operating inputs,dollars per planted acre,0.1
+wheat,2015,Operating costs,Other variable expenses,dollars per planted acre,0.65
+wheat,2015,Operating costs,Repairs,dollars per planted acre,21.48
+wheat,2015,Operating costs,Seed,dollars per planted acre,16.12
+wheat,2015,Operating costs,"Total, operating costs",dollars per planted acre,116.35
+wheat,2015,Production practices,Dryland,percent of acres,95.0
+wheat,2015,Production practices,Durum wheat,percent of acres,4.0
+wheat,2015,Production practices,Irrigated,percent of acres,5.0
+wheat,2015,Production practices,Spring wheat,percent of acres,26.0
+wheat,2015,Production practices,Winter wheat,percent of acres,69.0
+wheat,2015,Supporting information,Enterprise size,planted acres,443.0
+wheat,2015,Supporting information,Price,dollars per bushel at harvest,5.12
+wheat,2015,Supporting information,Yield,bushels per planted acre,40.0
+wheat,2016,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,89.39
+wheat,2016,Allocated overhead,General farm overhead,dollars per planted acre,11.37
+wheat,2016,Allocated overhead,Hired labor,dollars per planted acre,2.39
+wheat,2016,Allocated overhead,Opportunity cost of land,dollars per planted acre,62.89
+wheat,2016,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.86
+wheat,2016,Allocated overhead,Taxes and insurance,dollars per planted acre,7.24
+wheat,2016,Allocated overhead,"Total, allocated overhead",dollars per planted acre,192.14
+wheat,2016,Costs listed,"Total, costs listed",dollars per planted acre,300.94
+wheat,2016,Gross value of production,"Primary product, grain",dollars per planted acre,199.64
+wheat,2016,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,8.82
+wheat,2016,Gross value of production,"Total, gross value of production",dollars per planted acre,208.46
+wheat,2016,Net value,Value of production less operating costs,dollars per planted acre,99.66
+wheat,2016,Net value,Value of production less total costs listed,dollars per planted acre,-92.48
+wheat,2016,Operating costs,Chemicals,dollars per planted acre,14.89
+wheat,2016,Operating costs,Custom services,dollars per planted acre,11.08
+wheat,2016,Operating costs,Fertilizer,dollars per planted acre,34.18
+wheat,2016,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,10.9
+wheat,2016,Operating costs,Interest on operating inputs,dollars per planted acre,0.25
+wheat,2016,Operating costs,Other variable expenses,dollars per planted acre,0.69
+wheat,2016,Operating costs,Repairs,dollars per planted acre,21.55
+wheat,2016,Operating costs,Seed,dollars per planted acre,15.26
+wheat,2016,Operating costs,"Total, operating costs",dollars per planted acre,108.8
+wheat,2016,Production practices,Dryland,percent of acres,95.0
+wheat,2016,Production practices,Durum wheat,percent of acres,4.0
+wheat,2016,Production practices,Irrigated,percent of acres,5.0
+wheat,2016,Production practices,Spring wheat,percent of acres,26.0
+wheat,2016,Production practices,Winter wheat,percent of acres,69.0
+wheat,2016,Supporting information,Enterprise size,planted acres,443.0
+wheat,2016,Supporting information,Price,dollars per bushel at harvest,3.93
+wheat,2016,Supporting information,Yield,bushels per planted acre,51.0
+wheat,2017,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,92.3
+wheat,2017,Allocated overhead,General farm overhead,dollars per planted acre,8.67
+wheat,2017,Allocated overhead,Hired labor,dollars per planted acre,3.66
+wheat,2017,Allocated overhead,Opportunity cost of land,dollars per planted acre,57.55
+wheat,2017,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.44
+wheat,2017,Allocated overhead,Taxes and insurance,dollars per planted acre,6.25
+wheat,2017,Allocated overhead,"Total, allocated overhead",dollars per planted acre,183.87
+wheat,2017,Costs listed,"Total, costs listed",dollars per planted acre,306.76
+wheat,2017,Gross value of production,"Primary product, grain",dollars per planted acre,219.36
+wheat,2017,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,5.25
+wheat,2017,Gross value of production,"Total, gross value of production",dollars per planted acre,224.61
+wheat,2017,Net value,Value of production less operating costs,dollars per planted acre,101.72
+wheat,2017,Net value,Value of production less total costs listed,dollars per planted acre,-82.15
+wheat,2017,Operating costs,Chemicals,dollars per planted acre,16.74
+wheat,2017,Operating costs,Custom services,dollars per planted acre,13.53
+wheat,2017,Operating costs,Fertilizer,dollars per planted acre,42.52
+wheat,2017,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,10.73
+wheat,2017,Operating costs,Interest on operating inputs,dollars per planted acre,0.64
+wheat,2017,Operating costs,Other variable expenses,dollars per planted acre,0.79
+wheat,2017,Operating costs,Repairs,dollars per planted acre,23.83
+wheat,2017,Operating costs,Seed,dollars per planted acre,14.11
+wheat,2017,Operating costs,"Total, operating costs",dollars per planted acre,122.89
+wheat,2017,Production practices,Dryland,percent of acres,95.0
+wheat,2017,Production practices,Durum wheat,percent of acres,6.0
+wheat,2017,Production practices,Irrigated,percent of acres,5.0
+wheat,2017,Production practices,Spring wheat,percent of acres,26.0
+wheat,2017,Production practices,Winter wheat,percent of acres,68.0
+wheat,2017,Supporting information,Enterprise size,planted acres,562.0
+wheat,2017,Supporting information,Price,dollars per bushel at harvest,4.8
+wheat,2017,Supporting information,Yield,bushels per planted acre,46.0
+wheat,2018,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,98.55
+wheat,2018,Allocated overhead,General farm overhead,dollars per planted acre,9.12
+wheat,2018,Allocated overhead,Hired labor,dollars per planted acre,3.85
+wheat,2018,Allocated overhead,Opportunity cost of land,dollars per planted acre,59.47
+wheat,2018,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.27
+wheat,2018,Allocated overhead,Taxes and insurance,dollars per planted acre,6.48
+wheat,2018,Allocated overhead,"Total, allocated overhead",dollars per planted acre,193.74
+wheat,2018,Costs listed,"Total, costs listed",dollars per planted acre,322.5
+wheat,2018,Gross value of production,"Primary product, grain",dollars per planted acre,253.44
+wheat,2018,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,4.84
+wheat,2018,Gross value of production,"Total, gross value of production",dollars per planted acre,258.28
+wheat,2018,Net value,Value of production less operating costs,dollars per planted acre,129.52
+wheat,2018,Net value,Value of production less total costs listed,dollars per planted acre,-64.22
+wheat,2018,Operating costs,Chemicals,dollars per planted acre,16.88
+wheat,2018,Operating costs,Custom services,dollars per planted acre,13.61
+wheat,2018,Operating costs,Fertilizer,dollars per planted acre,44.61
+wheat,2018,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.03
+wheat,2018,Operating costs,Interest on operating inputs,dollars per planted acre,1.33
+wheat,2018,Operating costs,Other variable expenses,dollars per planted acre,0.78
+wheat,2018,Operating costs,Repairs,dollars per planted acre,24.69
+wheat,2018,Operating costs,Seed,dollars per planted acre,14.83
+wheat,2018,Operating costs,"Total, operating costs",dollars per planted acre,128.76
+wheat,2018,Production practices,Dryland,percent of acres,95.0
+wheat,2018,Production practices,Durum wheat,percent of acres,6.0
+wheat,2018,Production practices,Irrigated,percent of acres,5.0
+wheat,2018,Production practices,Spring wheat,percent of acres,29.0
+wheat,2018,Production practices,Winter wheat,percent of acres,65.0
+wheat,2018,Supporting information,Enterprise size,planted acres,562.0
+wheat,2018,Supporting information,Price,dollars per bushel at harvest,5.21
+wheat,2018,Supporting information,Yield,bushels per planted acre,49.0
+wheat,2019,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,97.41
+wheat,2019,Allocated overhead,General farm overhead,dollars per planted acre,9.37
+wheat,2019,Allocated overhead,Hired labor,dollars per planted acre,4.03
+wheat,2019,Allocated overhead,Opportunity cost of land,dollars per planted acre,59.73
+wheat,2019,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.14
+wheat,2019,Allocated overhead,Taxes and insurance,dollars per planted acre,6.66
+wheat,2019,Allocated overhead,"Total, allocated overhead",dollars per planted acre,194.34
+wheat,2019,Costs listed,"Total, costs listed",dollars per planted acre,326.57
+wheat,2019,Gross value of production,"Primary product, grain",dollars per planted acre,247.11
+wheat,2019,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,5.53
+wheat,2019,Gross value of production,"Total, gross value of production",dollars per planted acre,252.63
+wheat,2019,Net value,Value of production less operating costs,dollars per planted acre,120.4
+wheat,2019,Net value,Value of production less total costs listed,dollars per planted acre,-73.94
+wheat,2019,Operating costs,Chemicals,dollars per planted acre,16.6
+wheat,2019,Operating costs,Custom services,dollars per planted acre,13.72
+wheat,2019,Operating costs,Fertilizer,dollars per planted acre,48.17
+wheat,2019,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,11.44
+wheat,2019,Operating costs,Interest on operating inputs,dollars per planted acre,1.35
+wheat,2019,Operating costs,Other variable expenses,dollars per planted acre,0.75
+wheat,2019,Operating costs,Repairs,dollars per planted acre,25.37
+wheat,2019,Operating costs,Seed,dollars per planted acre,14.83
+wheat,2019,Operating costs,"Total, operating costs",dollars per planted acre,132.23
+wheat,2019,Production practices,Dryland,percent of acres,95.0
+wheat,2019,Production practices,Durum wheat,percent of acres,6.0
+wheat,2019,Production practices,Irrigated,percent of acres,5.0
+wheat,2019,Production practices,Spring wheat,percent of acres,29.0
+wheat,2019,Production practices,Winter wheat,percent of acres,65.0
+wheat,2019,Supporting information,Enterprise size,planted acres,562.0
+wheat,2019,Supporting information,Price,dollars per bushel at harvest,4.64
+wheat,2019,Supporting information,Yield,bushels per planted acre,53.0
+wheat,2020,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,98.4
+wheat,2020,Allocated overhead,General farm overhead,dollars per planted acre,9.45
+wheat,2020,Allocated overhead,Hired labor,dollars per planted acre,4.23
+wheat,2020,Allocated overhead,Opportunity cost of land,dollars per planted acre,60.04
+wheat,2020,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.77
+wheat,2020,Allocated overhead,Taxes and insurance,dollars per planted acre,6.93
+wheat,2020,Allocated overhead,"Total, allocated overhead",dollars per planted acre,196.82
+wheat,2020,Costs listed,"Total, costs listed",dollars per planted acre,319.74
+wheat,2020,Gross value of production,"Primary product, grain",dollars per planted acre,237.33
+wheat,2020,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,4.99
+wheat,2020,Gross value of production,"Total, gross value of production",dollars per planted acre,242.31
+wheat,2020,Net value,Value of production less operating costs,dollars per planted acre,119.39
+wheat,2020,Net value,Value of production less total costs listed,dollars per planted acre,-77.43
+wheat,2020,Operating costs,Chemicals,dollars per planted acre,15.56
+wheat,2020,Operating costs,Custom services,dollars per planted acre,13.7
+wheat,2020,Operating costs,Fertilizer,dollars per planted acre,42.95
+wheat,2020,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,9.79
+wheat,2020,Operating costs,Interest on operating inputs,dollars per planted acre,0.24
+wheat,2020,Operating costs,Other variable expenses,dollars per planted acre,0.79
+wheat,2020,Operating costs,Repairs,dollars per planted acre,25.73
+wheat,2020,Operating costs,Seed,dollars per planted acre,14.16
+wheat,2020,Operating costs,"Total, operating costs",dollars per planted acre,122.92
+wheat,2020,Production practices,Dryland,percent of acres,95.0
+wheat,2020,Production practices,Durum wheat,percent of acres,6.0
+wheat,2020,Production practices,Irrigated,percent of acres,5.0
+wheat,2020,Production practices,Spring wheat,percent of acres,28.0
+wheat,2020,Production practices,Winter wheat,percent of acres,66.0
+wheat,2020,Supporting information,Enterprise size,planted acres,562.0
+wheat,2020,Supporting information,Price,dollars per bushel at harvest,4.61
+wheat,2020,Supporting information,Yield,bushels per planted acre,52.0
+wheat,2021,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,114.14
+wheat,2021,Allocated overhead,General farm overhead,dollars per planted acre,9.99
+wheat,2021,Allocated overhead,Hired labor,dollars per planted acre,4.44
+wheat,2021,Allocated overhead,Opportunity cost of land,dollars per planted acre,62.13
+wheat,2021,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,18.9
+wheat,2021,Allocated overhead,Taxes and insurance,dollars per planted acre,7.14
+wheat,2021,Allocated overhead,"Total, allocated overhead",dollars per planted acre,216.74
+wheat,2021,Costs listed,"Total, costs listed",dollars per planted acre,353.76
+wheat,2021,Gross value of production,"Primary product, grain",dollars per planted acre,282.15
+wheat,2021,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,6.5
+wheat,2021,Gross value of production,"Total, gross value of production",dollars per planted acre,288.65
+wheat,2021,Net value,Value of production less operating costs,dollars per planted acre,151.63
+wheat,2021,Net value,Value of production less total costs listed,dollars per planted acre,-65.11
+wheat,2021,Operating costs,Chemicals,dollars per planted acre,15.79
+wheat,2021,Operating costs,Custom services,dollars per planted acre,14.34
+wheat,2021,Operating costs,Fertilizer,dollars per planted acre,50.41
+wheat,2021,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.01
+wheat,2021,Operating costs,Interest on operating inputs,dollars per planted acre,0.04
+wheat,2021,Operating costs,Other variable expenses,dollars per planted acre,0.81
+wheat,2021,Operating costs,Repairs,dollars per planted acre,27.51
+wheat,2021,Operating costs,Seed,dollars per planted acre,15.11
+wheat,2021,Operating costs,"Total, operating costs",dollars per planted acre,137.02
+wheat,2021,Production practices,Dryland,percent of acres,95.0
+wheat,2021,Production practices,Durum wheat,percent of acres,6.0
+wheat,2021,Production practices,Irrigated,percent of acres,5.0
+wheat,2021,Production practices,Spring wheat,percent of acres,26.0
+wheat,2021,Production practices,Winter wheat,percent of acres,69.0
+wheat,2021,Supporting information,Enterprise size,planted acres,562.0
+wheat,2021,Supporting information,Price,dollars per bushel at harvest,6.67
+wheat,2021,Supporting information,Yield,bushels per planted acre,42.0
+wheat,2022,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,121.08
+wheat,2022,Allocated overhead,General farm overhead,dollars per planted acre,11.66
+wheat,2022,Allocated overhead,Hired labor,dollars per planted acre,2.68
+wheat,2022,Allocated overhead,Opportunity cost of land,dollars per planted acre,63.56
+wheat,2022,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,15.59
+wheat,2022,Allocated overhead,Taxes and insurance,dollars per planted acre,7.16
+wheat,2022,Allocated overhead,"Total, allocated overhead",dollars per planted acre,221.73
+wheat,2022,Costs listed,"Total, costs listed",dollars per planted acre,409.43
+wheat,2022,Gross value of production,"Primary product, grain",dollars per planted acre,377.2
+wheat,2022,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,8.48
+wheat,2022,Gross value of production,"Total, gross value of production",dollars per planted acre,385.67
+wheat,2022,Net value,Value of production less operating costs,dollars per planted acre,197.97
+wheat,2022,Net value,Value of production less total costs listed,dollars per planted acre,-23.76
+wheat,2022,Operating costs,Chemicals,dollars per planted acre,22.51
+wheat,2022,Operating costs,Custom services,dollars per planted acre,14.12
+wheat,2022,Operating costs,Fertilizer,dollars per planted acre,83.35
+wheat,2022,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,15.82
+wheat,2022,Operating costs,Interest on operating inputs,dollars per planted acre,2.25
+wheat,2022,Operating costs,Other variable expenses,dollars per planted acre,0.74
+wheat,2022,Operating costs,Repairs,dollars per planted acre,30.37
+wheat,2022,Operating costs,Seed,dollars per planted acre,18.54
+wheat,2022,Operating costs,"Total, operating costs",dollars per planted acre,187.7
+wheat,2022,Production practices,Dryland,percent of acres,97.0
+wheat,2022,Production practices,Durum wheat,percent of acres,4.0
+wheat,2022,Production practices,Irrigated,percent of acres,3.0
+wheat,2022,Production practices,Spring wheat,percent of acres,26.0
+wheat,2022,Production practices,Winter wheat,percent of acres,70.0
+wheat,2022,Supporting information,Enterprise size,planted acres,440.0
+wheat,2022,Supporting information,Price,dollars per bushel at harvest,8.91
+wheat,2022,Supporting information,Yield,bushels per planted acre,42.0
+wheat,2023,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,128.47
+wheat,2023,Allocated overhead,General farm overhead,dollars per planted acre,11.97
+wheat,2023,Allocated overhead,Hired labor,dollars per planted acre,2.83
+wheat,2023,Allocated overhead,Opportunity cost of land,dollars per planted acre,65.62
+wheat,2023,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.47
+wheat,2023,Allocated overhead,Taxes and insurance,dollars per planted acre,7.32
+wheat,2023,Allocated overhead,"Total, allocated overhead",dollars per planted acre,232.68
+wheat,2023,Costs listed,"Total, costs listed",dollars per planted acre,404.94
+wheat,2023,Gross value of production,"Primary product, grain",dollars per planted acre,324.62
+wheat,2023,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,9.07
+wheat,2023,Gross value of production,"Total, gross value of production",dollars per planted acre,333.7
+wheat,2023,Net value,Value of production less operating costs,dollars per planted acre,161.44
+wheat,2023,Net value,Value of production less total costs listed,dollars per planted acre,-71.24
+wheat,2023,Operating costs,Chemicals,dollars per planted acre,21.51
+wheat,2023,Operating costs,Custom services,dollars per planted acre,14.9
+wheat,2023,Operating costs,Fertilizer,dollars per planted acre,66.5
+wheat,2023,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,13.64
+wheat,2023,Operating costs,Interest on operating inputs,dollars per planted acre,4.27
+wheat,2023,Operating costs,Other variable expenses,dollars per planted acre,0.73
+wheat,2023,Operating costs,Repairs,dollars per planted acre,31.43
+wheat,2023,Operating costs,Seed,dollars per planted acre,19.28
+wheat,2023,Operating costs,"Total, operating costs",dollars per planted acre,172.26
+wheat,2023,Production practices,Dryland,percent of acres,97.0
+wheat,2023,Production practices,Durum wheat,percent of acres,3.0
+wheat,2023,Production practices,Irrigated,percent of acres,3.0
+wheat,2023,Production practices,Spring wheat,percent of acres,25.0
+wheat,2023,Production practices,Winter wheat,percent of acres,72.0
+wheat,2023,Supporting information,Enterprise size,planted acres,440.0
+wheat,2023,Supporting information,Price,dollars per bushel at harvest,7.54
+wheat,2023,Supporting information,Yield,bushels per planted acre,43.0
+wheat,2024,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,134.68
+wheat,2024,Allocated overhead,General farm overhead,dollars per planted acre,12.17
+wheat,2024,Allocated overhead,Hired labor,dollars per planted acre,2.91
+wheat,2024,Allocated overhead,Opportunity cost of land,dollars per planted acre,67.46
+wheat,2024,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,16.97
+wheat,2024,Allocated overhead,Taxes and insurance,dollars per planted acre,7.87
+wheat,2024,Allocated overhead,"Total, allocated overhead",dollars per planted acre,242.06
+wheat,2024,Costs listed,"Total, costs listed",dollars per planted acre,398.35
+wheat,2024,Gross value of production,"Primary product, grain",dollars per planted acre,289.41
+wheat,2024,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,7.49
+wheat,2024,Gross value of production,"Total, gross value of production",dollars per planted acre,296.91
+wheat,2024,Net value,Value of production less operating costs,dollars per planted acre,140.62
+wheat,2024,Net value,Value of production less total costs listed,dollars per planted acre,-101.44
+wheat,2024,Operating costs,Chemicals,dollars per planted acre,17.35
+wheat,2024,Operating costs,Custom services,dollars per planted acre,15.43
+wheat,2024,Operating costs,Fertilizer,dollars per planted acre,56.51
+wheat,2024,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.74
+wheat,2024,Operating costs,Interest on operating inputs,dollars per planted acre,3.67
+wheat,2024,Operating costs,Other variable expenses,dollars per planted acre,0.77
+wheat,2024,Operating costs,Repairs,dollars per planted acre,31.78
+wheat,2024,Operating costs,Seed,dollars per planted acre,18.04
+wheat,2024,Operating costs,"Total, operating costs",dollars per planted acre,156.29
+wheat,2024,Production practices,Dryland,percent of acres,97.0
+wheat,2024,Production practices,Durum wheat,percent of acres,4.0
+wheat,2024,Production practices,Irrigated,percent of acres,3.0
+wheat,2024,Production practices,Spring wheat,percent of acres,26.0
+wheat,2024,Production practices,Winter wheat,percent of acres,70.0
+wheat,2024,Supporting information,Enterprise size,planted acres,440.0
+wheat,2024,Supporting information,Price,dollars per bushel at harvest,5.54
+wheat,2024,Supporting information,Yield,bushels per planted acre,52.0
+wheat,2025,Allocated overhead,Capital recovery of machinery and equipment,dollars per planted acre,135.12
+wheat,2025,Allocated overhead,General farm overhead,dollars per planted acre,12.45
+wheat,2025,Allocated overhead,Hired labor,dollars per planted acre,2.99
+wheat,2025,Allocated overhead,Opportunity cost of land,dollars per planted acre,69.41
+wheat,2025,Allocated overhead,Opportunity cost of unpaid labor,dollars per planted acre,17.36
+wheat,2025,Allocated overhead,Taxes and insurance,dollars per planted acre,8.26
+wheat,2025,Allocated overhead,"Total, allocated overhead",dollars per planted acre,245.59
+wheat,2025,Costs listed,"Total, costs listed",dollars per planted acre,408.55
+wheat,2025,Gross value of production,"Primary product, grain",dollars per planted acre,273.38
+wheat,2025,Gross value of production,"Secondary product, silage/straw/grazing",dollars per planted acre,6.94
+wheat,2025,Gross value of production,"Total, gross value of production",dollars per planted acre,280.32
+wheat,2025,Net value,Value of production less operating costs,dollars per planted acre,117.36
+wheat,2025,Net value,Value of production less total costs listed,dollars per planted acre,-128.23
+wheat,2025,Operating costs,Chemicals,dollars per planted acre,17.54
+wheat,2025,Operating costs,Custom services,dollars per planted acre,15.83
+wheat,2025,Operating costs,Fertilizer,dollars per planted acre,63.93
+wheat,2025,Operating costs,"Fuel, lube, and electricity",dollars per planted acre,12.3
+wheat,2025,Operating costs,Interest on operating inputs,dollars per planted acre,3.16
+wheat,2025,Operating costs,Other variable expenses,dollars per planted acre,0.81
+wheat,2025,Operating costs,Repairs,dollars per planted acre,32.46
+wheat,2025,Operating costs,Seed,dollars per planted acre,16.93
+wheat,2025,Operating costs,"Total, operating costs",dollars per planted acre,162.96
+wheat,2025,Production practices,Dryland,percent of acres,97.0
+wheat,2025,Production practices,Durum wheat,percent of acres,4.0
+wheat,2025,Production practices,Irrigated,percent of acres,3.0
+wheat,2025,Production practices,Spring wheat,percent of acres,26.0
+wheat,2025,Production practices,Winter wheat,percent of acres,70.0
+wheat,2025,Supporting information,Enterprise size,planted acres,440.0
+wheat,2025,Supporting information,Price,dollars per bushel at harvest,5.07
+wheat,2025,Supporting information,Yield,bushels per planted acre,54.0
