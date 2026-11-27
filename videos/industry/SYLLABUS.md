@@ -2560,6 +2560,7 @@ scored in Part 64 and at each refresh.
 | 26 · Property | done 2026-11-27 (about 80 Register rows; the 10-Ks for 2025 of Prologis, BXP, Simon, Realty Income, SL Green, Hudson Pacific, American Tower, Equinix, Blackstone and CBRE; BXP's 10-Ks since 2017 and Realty Income's since 2015; WeWork's S-1 and Chapter 11 8-K; the Fed's Financial Stability Reports of 2023 and 2026; Gupta, Mittal and Van Nieuwerburgh (2022); the SEC extract of thirty-four companies; the Fed's price index, bank loans and delinquencies, Treasury yields, construction spending, e-commerce and rents via FRED) | `works/building.py` | 13 scenes, with office towers whose windows go dark, warehouses, malls, masts and leases | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 27 · Shipping and Ports | done 2026-11-27 (about 70 Register rows; ZIM's 20-Fs for 2020, 2021, 2023 and 2025 and its 2026 releases, with Alphaliner's statistics as quoted; Frontline's 20-F and third-quarter 2026 report; Matson's 10-K; E2open's 10-K on the Ever Given; Greenwood and Hanson; the SEC extract of twenty-two companies and Maersk's ESEF filings; IMF PortWatch's chokepoint transits; the World Bank's port traffic; FRED's freight, oil and imports) | `works/ship.py` | 13 scenes, with containers, quay cranes, ships, tankers, a shoebox and a world map of chokepoints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 28 · Airlines | done 2026-11-27 (about 50 Register rows; Delta's 10-K for 2025 and its four 2026 results releases; the 10-Ks for 2025 of Southwest, American, Spirit Aviation Holdings and Alaska; the Airline Deregulation Act and the CARES Act; Littlewood (1972); Berkshire's letter for 2007; the SEC extract of seventeen airlines, lessors and Sabre; FRED's BTS traffic, EIA jet fuel, BLS fares and jobs) | `works/airline.py` | 12 scenes, with aircraft, cabins whose seats fill by fare, and the flight's revenue curves | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 29 · Rail, Trucks and Parcels | done 2026-11-27 (about 75 Register rows; the 10-Ks for 2025 of Union Pacific, UPS, Old Dominion, Knight-Swift, J.B. Hunt and Aurora, Union Pacific's third-quarter 10-Q, FedEx's 10-K for fiscal 2026, Aurora's 2021 10-K and 2026 letter, Yellow's last 10-K and bankruptcy 8-K; the Postal Service's 10-K; the Staggers Act; FMCSA's carrier census; the SEC extract of twenty-five companies; FRED's traffic, prices, jobs, diesel and e-commerce) | `works/freight.py` | 13 scenes, with trains of hoppers, boxcars, tank and well cars, tractor-trailers, vans, parcels, service centers and a hub-and-spoke network | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2915,3 +2916,15 @@ Act's payroll support), 2026's fuel shock and fares, Southwest's bag fees and as
 the SkyMiles liability and the lessors' scale. *Called it?* reads the Deregulation Act's own purpose and Delta's 2026
 forecasts in place of the deregulators' predictions and IATA's 2020 forecasts, which were not found in primary sources.
 Written as code only and checked from snapshots; not rendered.
+
+Part 29 follows its draft's question. FedEx's first night of 1973 (186 packages) was not checked against a primary source
+and is left out; the hook is the Staggers Act's own finding on railway earnings, the railways' and truckers' operating
+ratios, and FMCSA's register of carriers, counted for this film. Run it is the draft's lane with a full load out and
+nothing booked back (`works/freight.py`: a truck's cost a mile, the trip home, a backhaul, the rate needed by share of
+empty miles), with a trucking market of fast entry and slow exit, a railway calibrated to Union Pacific and a delivery
+route. The STB's R-1 reports and waybill samples were not read; the unit and the railway come from the companies' own
+statistics. Passenger rail, Japan's and Europe's railways, China's express firms and India's corridors are left to the map
+and later parts. Added: Yellow's bankruptcy, UPS's Amazon cut and network reductions, FedEx Freight's spin-off, the Postal
+Service's pieces per delivery point, and Union Pacific's agreement to buy Norfolk Southern, on which *Called it?* makes
+its call; Aurora's launch date stands in for the driverless forecasts of 2016-18, which were not found in primary
+sources. Written as code only and checked from snapshots; not rendered.

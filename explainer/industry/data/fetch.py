@@ -2227,10 +2227,10 @@ def sec_air():
                   _sec_table(AIR_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
 
 
-FRED_AIR = {"ASM": "Available seat-miles, US air carriers, domestic and international, scheduled passenger flights (thousands, monthly, SA; BTS)",
-            "RPM": "Revenue passenger-miles, US air carriers, domestic and international (thousands, monthly, SA; BTS)",
-            "LOADFACTOR": "Load factor, US air carriers, domestic and international (percent, monthly, SA; BTS)",
-            "ENPLANE": "Enplanements, US air carriers, domestic and international (thousands, monthly, SA; BTS)",
+FRED_AIR = {"ASM": "Available seat-miles, US air carriers, domestic and international, scheduled passenger flights (thousands, monthly, NSA; BTS)",
+            "RPM": "Revenue passenger-miles, US air carriers, domestic and international (thousands, monthly, NSA; BTS)",
+            "LOADFACTOR": "Load factor, US air carriers, domestic and international (percent, monthly, NSA; BTS)",
+            "ENPLANE": "Enplanements, US air carriers, domestic and international (thousands, monthly, NSA; BTS)",
             "MJFUELUSGULF": "Kerosene-type jet fuel, US Gulf Coast ($ a gallon, monthly; EIA)",
             "CUUR0000SETG01": "CPI-U: airline fares (1982-84 = 100, NSA; BLS)",
             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
@@ -2240,6 +2240,55 @@ FRED_AIR = {"ASM": "Available seat-miles, US air carriers, domestic and internat
 
 def fred_air():
     return _fred_write("fred_air", FRED_AIR)
+
+
+FREIGHT_COMPANIES = [(100885, "UNP", "USD"), (934612, "BNSF", "USD"), (277948, "CSX", "USD"), (702165, "NSC", "USD"),
+                     (16868, "CNI", "CAD"), (16875, "CP", "CAD"), (1090727, "UPS", "USD"), (1048911, "FDX", "USD"),
+                     (728535, "JBHT", "USD"), (1492691, "KNX", "USD"), (878927, "ODFL", "USD"), (1177702, "SAIA", "USD"),
+                     (1166003, "XPO", "USD"), (1692063, "SNDR", "USD"), (793074, "WERN", "USD"), (1929561, "RXO", "USD"),
+                     (853816, "LSTR", "USD"), (894405, "ARCB", "USD"), (1852244, "GXO", "USD"), (940942, "HUBG", "USD"),
+                     (799233, "HTLD", "USD"), (1588823, "TFII", "USD"), (716006, "YELL", "USD"), (1677250, "ZTO", "CNY"),
+                     (799167, "MRTN", "USD"), (1828108, "AUR", "USD")]
+
+
+def sec_freight():
+    """Annual figures of America's and Canada's freight railways (BNSF Railway's parent files its own 10-K), the parcel
+    integrators, truckload, less-than-truckload and intermodal carriers, brokers, a contract-logistics firm, China's
+    largest express firm and a driverless-truck developer, from their Forms 10-K, 40-F and 20-F (SEC company facts), in
+    their reporting currency (billions; CN and CPKC in Canadian dollars, ZTO in yuan), with ``sec_fashion``'s items."""
+    rows = _sec_table(FREIGHT_COMPANIES, FASHION_ITEMS)
+    # BNSF tags only its related-party revenue as Revenues: take revenue as operating expenses plus operating income
+    bnsf = _sec_table([(934612, "BNSF", "USD")], {"opex": [("us-gaap", "OperatingExpenses")],
+                                                  "opinc": [("us-gaap", "OperatingIncomeLoss")]})
+    fix = {r[1]: r[3] + r[4] for r in bnsf if r[3] is not None and r[4] is not None}
+    k = 3 + list(FASHION_ITEMS).index("revenue")
+    for r in rows:
+        if r[0] == "BNSF":
+            r[k] = fix.get(r[1])
+    return _write("sec_freight", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS), rows,
+                  [_sec_source(FASHION_ITEMS) + "; BNSF's revenue is its operating expenses plus operating income"])
+
+
+FRED_FREIGHT = {"RAILFRTCARLOADSD11": "Rail freight carloads (monthly, SA; BTS)",
+                "RAILFRTINTERMODALD11": "Rail freight intermodal traffic, containers and trailers (monthly, SA; BTS)",
+                "TRUCKD11": "Truck tonnage index (2015 = 100, SA; American Trucking Associations via BTS)",
+                "FRGSHPUSM649NCIS": "Cass Freight Index: shipments (January 1990 = 1, NSA; Cass Information Systems)",
+                "FRGEXPUSM649NCIS": "Cass Freight Index: expenditures (January 1990 = 1, NSA; Cass Information Systems)",
+                "TSIFRGHT": "Transportation Services Index: freight (2000 = 100, SA; BTS)",
+                "PCU484121484121": "PPI by industry: general freight trucking, long-distance truckload (Dec 2003 = 100, NSA; BLS)",
+                "PCU484122484122": "PPI by industry: general freight trucking, long-distance less than truckload (Dec 2003 = 100, NSA; BLS)",
+                "PCU482111482111": "PPI by industry: line-haul railroads (Dec 1996 = 100, NSA; BLS)",
+                "PCU492110492110": "PPI by industry: couriers and express delivery services (Dec 2003 = 100, NSA; BLS)",
+                "CES4348400001": "All employees: truck transportation (thousands, SA; BLS)",
+                "CES4348200001": "All employees: rail transportation (thousands, SA; BLS)",
+                "CES4349200001": "All employees: couriers and messengers (thousands, SA; BLS)",
+                "GASDESW": "US No 2 diesel retail price ($ a gallon, weekly; EIA)",
+                "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+                "ECOMSA": "E-commerce retail sales ($ million a quarter, SA; Census Bureau)"}
+
+
+def fred_freight():
+    return _fred_write("fred_freight", FRED_FREIGHT)
 
 
 SHIP_COMPANIES = [(1654126, "ZIM", "USD"), (3453, "MATX", "USD"), (56047, "KEX", "USD"), (913290, "FRO", "USD"),
@@ -2585,7 +2634,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

@@ -2821,3 +2821,117 @@ def shoebox(w: float = 1.0, color: str = "#F2A65A") -> VGroup:
     lid = Rectangle(width=1.04 * w, height=0.1 * w, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to([0, 0.44 * w, 0])
     shoe = sneaker(0.5 * w).move_to([0, 0.2 * w, 0])
     return VGroup(box, lid, shoe)
+
+
+def semi(w: float = 3.0, color: str = "#E8EAED", cab_color: str = "#E8554E", box: bool = True) -> VGroup:
+    """A tractor-trailer in side view, facing right: ``w`` is its length; a 53-foot box trailer (``box``) or a flat
+    chassis for a container (``g.deck``); ``g.trailer`` and ``g.tractor`` for colouring."""
+    def wheel(x, r=0.035 * w):
+        return VGroup(Circle(radius=r, stroke_width=0, fill_color="#20242C", fill_opacity=1).move_to([x, r, 0]),
+                      Circle(radius=0.45 * r, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to([x, r, 0]))
+    tl = 0.76 * w
+    trailer = Rectangle(width=tl, height=0.2 * w if box else 0.02 * w, stroke_color="#0E1117", stroke_width=1,
+                        fill_color=color if box else "#5C6472", fill_opacity=1)
+    trailer.move_to([-w / 2 + tl / 2, (0.1 * w if box else 0.01 * w) + 0.075 * w, 0])
+    skirt = Rectangle(width=0.3 * tl, height=0.025 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to(
+        [-w / 2 + 0.55 * tl, 0.068 * w, 0])
+    hood = RoundedRectangle(corner_radius=0.015 * w, width=0.12 * w, height=0.09 * w, stroke_width=0, fill_color=cab_color,
+                            fill_opacity=1).move_to([w / 2 - 0.06 * w, 0.1 * w, 0])
+    cabin = RoundedRectangle(corner_radius=0.02 * w, width=0.13 * w, height=0.17 * w, stroke_width=0, fill_color=cab_color,
+                             fill_opacity=1).move_to([w / 2 - 0.17 * w, 0.14 * w, 0])
+    glass = Polygon([w / 2 - 0.11 * w, 0.2 * w, 0], [w / 2 - 0.12 * w, 0.165 * w, 0], [w / 2 - 0.17 * w, 0.165 * w, 0],
+                    [w / 2 - 0.17 * w, 0.2 * w, 0], stroke_width=0, fill_color=GLASS, fill_opacity=1)
+    stack = Rectangle(width=0.008 * w, height=0.12 * w, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [w / 2 - 0.235 * w, 0.2 * w, 0])
+    frame = Rectangle(width=0.28 * w, height=0.015 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to(
+        [w / 2 - 0.14 * w, 0.06 * w, 0])
+    wheels = VGroup(*[wheel(x) for x in (-w / 2 + 0.06 * w, -w / 2 + 0.14 * w, w / 2 - 0.3 * w, w / 2 - 0.22 * w,
+                                         w / 2 - 0.06 * w)])
+    tractor = VGroup(frame, hood, cabin, glass, stack)
+    g = VGroup(trailer, skirt, tractor, wheels)
+    g.trailer, g.tractor, g.deck = trailer, tractor, trailer
+    return g
+
+
+def locomotive(w: float = 2.0, color: str = "#F6C453") -> VGroup:
+    """A diesel-electric freight locomotive in side view, cab at the right; ``w`` is its length."""
+    body = Rectangle(width=0.78 * w, height=0.2 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [-0.08 * w, 0.17 * w, 0])
+    cab = Polygon([0.31 * w, 0.07 * w, 0], [0.48 * w, 0.07 * w, 0], [0.48 * w, 0.2 * w, 0], [0.42 * w, 0.29 * w, 0],
+                  [0.31 * w, 0.29 * w, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    win = Polygon([0.42 * w, 0.27 * w, 0], [0.46 * w, 0.21 * w, 0], [0.38 * w, 0.21 * w, 0], [0.38 * w, 0.27 * w, 0],
+                  stroke_width=0, fill_color=GLASS, fill_opacity=1)
+    stripe = Rectangle(width=0.95 * w, height=0.02 * w, stroke_width=0, fill_color="#E8554E", fill_opacity=1).move_to(
+        [0.0, 0.11 * w, 0])
+    frame = Rectangle(width=0.98 * w, height=0.03 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to([0, 0.06 * w, 0])
+    louvres = VGroup(*[Line([-0.4 * w + k * 0.06 * w, 0.14 * w, 0], [-0.4 * w + k * 0.06 * w, 0.24 * w, 0],
+                            stroke_color="#0E1117", stroke_width=1, stroke_opacity=0.4) for k in range(10)])
+    trucks_ = VGroup(*[VGroup(*[Circle(radius=0.03 * w, stroke_width=0, fill_color="#20242C", fill_opacity=1).move_to(
+        [c + d * w, 0.03 * w, 0]) for d in (-0.07, 0.0, 0.07)]) for c in (-0.3 * w, 0.28 * w)])
+    return VGroup(body, cab, win, stripe, louvres, frame, trucks_)
+
+
+def railcar(w: float = 1.6, kind: str = "box", color: str = "#B58CFF") -> VGroup:
+    """A freight car in side view: ``kind`` is box, hopper (coal or grain), tank or well (a double-stacked container car)."""
+    frame = Rectangle(width=w, height=0.025 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to([0, 0.07 * w, 0])
+    wheels = VGroup(*[Circle(radius=0.035 * w, stroke_width=0, fill_color="#20242C", fill_opacity=1).move_to([x * w, 0.035 * w, 0])
+                      for x in (-0.42, -0.32, 0.32, 0.42)])
+    if kind == "hopper":
+        body = Polygon([-0.48 * w, 0.32 * w, 0], [0.48 * w, 0.32 * w, 0], [0.42 * w, 0.1 * w, 0], [0.12 * w, 0.08 * w, 0],
+                       [-0.12 * w, 0.08 * w, 0], [-0.42 * w, 0.1 * w, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+        load = Polygon([-0.46 * w, 0.32 * w, 0], [0.46 * w, 0.32 * w, 0], [0.3 * w, 0.37 * w, 0], [-0.3 * w, 0.37 * w, 0],
+                       stroke_width=0, fill_color="#20242C", fill_opacity=1)
+        body = VGroup(body, load)
+    elif kind == "tank":
+        body = RoundedRectangle(corner_radius=0.1 * w, width=0.96 * w, height=0.22 * w, stroke_width=0, fill_color=color,
+                                fill_opacity=1).move_to([0, 0.2 * w, 0])
+    elif kind == "well":
+        a = container(0.46 * w, color=color, feet=40).move_to([-0.24 * w, 0.14 * w, 0])
+        b = container(0.46 * w, color="#7EC8F5", feet=40).move_to([0.24 * w, 0.14 * w, 0])
+        c = container(0.92 * w, color="#F2A65A", feet=40).next_to(VGroup(a, b), UP, buff=0.004 * w)
+        body = VGroup(a, b, c)
+    else:
+        body = Rectangle(width=0.96 * w, height=0.26 * w, stroke_color="#0E1117", stroke_width=1, fill_color=color,
+                         fill_opacity=1).move_to([0, 0.215 * w, 0])
+        door = Rectangle(width=0.16 * w, height=0.22 * w, stroke_color="#0E1117", stroke_width=1, fill_opacity=0).move_to(
+            [0, 0.215 * w, 0])
+        body = VGroup(body, door)
+    return VGroup(body, frame, wheels)
+
+
+def train(n: int = 8, car_w: float = 1.0, kinds=("hopper",), colors=("#B58CFF",), loco_color: str = "#F6C453") -> VGroup:
+    """A locomotive at the front (right) and ``n`` cars behind it (``g.cars``), all on one line."""
+    loco = locomotive(1.25 * car_w, color=loco_color)
+    cars = VGroup(*[railcar(car_w, kind=kinds[i % len(kinds)], color=colors[i % len(colors)]) for i in range(n)])
+    cars.arrange(LEFT, buff=0.04 * car_w, aligned_edge=DOWN)
+    g = VGroup(cars, loco)
+    loco.next_to(cars, RIGHT, buff=0.04 * car_w, aligned_edge=DOWN)
+    g.cars, g.loco = cars, loco
+    return g
+
+
+def van(w: float = 1.6, color: str = "#8B5E3C") -> VGroup:
+    """A delivery van in side view, facing right."""
+    body = Polygon([-0.5 * w, 0.08 * w, 0], [0.5 * w, 0.08 * w, 0], [0.5 * w, 0.22 * w, 0], [0.4 * w, 0.42 * w, 0],
+                   [-0.5 * w, 0.42 * w, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    glass = Polygon([0.37 * w, 0.4 * w, 0], [0.46 * w, 0.24 * w, 0], [0.3 * w, 0.24 * w, 0], [0.3 * w, 0.4 * w, 0],
+                    stroke_width=0, fill_color=GLASS, fill_opacity=1)
+    door = Rectangle(width=0.18 * w, height=0.3 * w, stroke_color="#0E1117", stroke_width=1, fill_opacity=0).move_to(
+        [0.08 * w, 0.25 * w, 0])
+    wheels = VGroup(*[_wheel(0.075 * w).move_to([x * w, 0.075 * w, 0]) for x in (-0.32, 0.32)])
+    return VGroup(body, glass, door, wheels)
+
+
+def parcel(w: float = 0.6, color: str = "#C89F6A") -> VGroup:
+    """A cardboard parcel, three-quarter view, with tape and a label."""
+    front = Polygon([-0.5 * w, 0, 0], [0.3 * w, 0, 0], [0.3 * w, 0.6 * w, 0], [-0.5 * w, 0.6 * w, 0], stroke_width=0,
+                    fill_color=color, fill_opacity=1)
+    side = Polygon([0.3 * w, 0, 0], [0.5 * w, 0.15 * w, 0], [0.5 * w, 0.75 * w, 0], [0.3 * w, 0.6 * w, 0], stroke_width=0,
+                   fill_color="#A87F4E", fill_opacity=1)
+    top = Polygon([-0.5 * w, 0.6 * w, 0], [0.3 * w, 0.6 * w, 0], [0.5 * w, 0.75 * w, 0], [-0.3 * w, 0.75 * w, 0], stroke_width=0,
+                  fill_color="#DDB98A", fill_opacity=1)
+    tape = Polygon([-0.14 * w, 0.6 * w, 0], [-0.02 * w, 0.6 * w, 0], [0.18 * w, 0.75 * w, 0], [0.06 * w, 0.75 * w, 0],
+                   stroke_width=0, fill_color="#E8E2D4", fill_opacity=0.9)
+    label = Rectangle(width=0.28 * w, height=0.18 * w, stroke_width=0, fill_color="#F5F5F5", fill_opacity=1).move_to(
+        [-0.12 * w, 0.3 * w, 0])
+    return VGroup(front, side, top, tape, label)

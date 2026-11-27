@@ -494,6 +494,28 @@ CALLS = [
          rule="The EIA's monthly Gulf Coast kerosene-type jet fuel price (FRED: MJFUELUSGULF), the mean of January to December "
               "2027 as first published; true if above $3.00",
          due="2028-02", ours=True),
+    Call(29, "The United States Congress", "1980-10-14",
+         "The Staggers Rail Act: 'The purpose of this Act is to provide for the restoration, maintenance, and improvement of "
+         "the physical facilities and financial stability of the rail system of the United States'",
+         "Public Law 96-448, 94 Stat. 1895",
+         outcome="Financial stability, achieved: the four large American railways' operating ratios fell from about 75% in "
+                 "2009 to 59.8-67.9% in 2025 (Forms 10-K), against truckload carriers' 97-100%; rail prices after inflation "
+                 "fell 32% from 1981 to 2001 and in 2025 were 13% below 1981's (BLS PPI and CPI)"),
+    Call(29, "Aurora Innovation", "2022-03",
+         "'We plan to initially launch Aurora Horizon, our driverless trucking product, in late 2023 in Texas'",
+         "Aurora Innovation, Form 10-K for 2021",
+         outcome="Launched in April 2025 with Hirschbach and Uber Freight (Form 10-K for 2025); 500,000 driverless miles by "
+                 "September 2026 and 20+ driverless trucks built; Aurora now aims 'to exit 2027 with more than 1,000 "
+                 "driverless trucks in operation' (third-quarter 2026 letter), to be scored in 2028"),
+    Call(29, "Industry, Built", "2026-11-27",
+         "Union Pacific will complete its acquisition of Norfolk Southern on or before 31 December 2027. Probability: 40%.",
+         "This series, Part 29, chapter 10; reasoning: both companies' shareholders approved in November 2025, the Surface "
+         "Transportation Board accepted the revised application on 28 May 2026 and adopted a procedural schedule on 18 August, "
+         "and the companies expect completion 'in the second half of 2027'; against: the first application was rejected as "
+         "incomplete, parties moved to dismiss, and a review of this size with conditions to negotiate can run past 2027",
+         rule="Union Pacific's or Norfolk Southern's announcements: true if the acquisition is completed on or before "
+              "31 December 2027",
+         due="2028-01", ours=True),
 ]
 
 
