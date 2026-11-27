@@ -152,4 +152,54 @@ PARTS = [
               ("The plant, the platform, the duel and the loan", "explainer/industry/works/auto.py"),
               ("The SEC, FRED, Census, UN Comtrade, EIA and IEA extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=18, level="U", widget="airframer", prereq=(4, 5, 6, 17),
+        question="Why are there only two makers of large airliners, and why does the engine maker sell at a loss?",
+        story="The part opens on 2025: Airbus delivered 793 airliners and Boeing 600, Airbus had 8,754 more on order, Boeing "
+              "had lost $36bn from 2019 to 2024, and GE's commercial engine business sold $8.3bn of new engines against "
+              "$25.0bn of spare parts and servicing. The viewer chooses between a new airliner ($20bn, seven years, 20% less "
+              "fuel) and new engines on the old one ($3bn, four years, 14%) while a rival chooses too: re-engining is the "
+              "better reply either way, as Airbus and Boeing chose in 2010-11, but with a bigger leap both build new and both "
+              "end worse off. An airliner is assembled from sections, wings and engines made in many places; Boeing bought "
+              "Spirit AeroSystems, its 737 fuselage maker, for $8.4bn in December 2025. In the Works' programme the first "
+              "aircraft costs $450m against a $110m price, the learning curve brings the 137th below the price, and the "
+              "programme spends $20bn before its first delivery, bottoms out at -$25.7bn and breaks even in year 15 after "
+              "990 aircraft; at 90% learning it never does. Program accounting books each delivery at the average cost and "
+              "defers the rest ($2.7bn on the undelivered 777X); the 777X, promised for 2020, is now expected in 2027 after "
+              "$8.4bn of reach-forward losses. The two makers hold 11.0 and 10.2 years of orders; a newcomer far up its "
+              "learning curve needs about $100m a jet to break even, while an incumbent's 9,240th costs about $33m. Launch "
+              "aid moves a flop's losses to governments; the WTO let America tax $7.5bn of European goods a year and Europe "
+              "$4.0bn of American ones, until a 2025 agreement restored tariff-free trade in aircraft. A turbofan's fan "
+              "pushes most of its air around the core; the Works' engine sold $3m below cost pays back in year 14 from "
+              "servicing. TransDigm, with 90% proprietary parts and 55% aftermarket sales, kept 18.4 cents of each dollar "
+              "since 2015 while Boeing lost 2.1 and Spirit 5.5. AerCap owns 1,501 aircraft and sold 108 old ones for $819m "
+              "above book. Lockheed takes 72% of its sales from the US government and 27% from the F-35; defence primes keep "
+              "5% to 10%; America spent $1,125bn on defence in 2025 and the world $2.77tn (SIPRI). Boeing's 787 was three "
+              "years late and the 777X seven; the series gives the first 777-9 delivery by the end of 2027 55%.",
+        handoff="Part 19, machinery, turns to the industry that makes the machines that make everything else.",
+        outside="Percentages and present value; Part 4's learning curve and fixed costs; Part 5's moats; Part 6's cycle; "
+                "Part 17's duel; Economics, Built's game theory and Part 44 on industrial organization.",
+        objectives={
+            "U": ["Explain why a new airliner takes tens of billions and a thousand aircraft to pay back.",
+                  "Explain why the industry has only two makers of large airliners.",
+                  "Explain why engines and many parts are sold for the servicing that follows."],
+            "M": ["Compute unit costs on a learning curve and the unit at which cost falls below price.",
+                  "Value an engine sold below cost from its discounted servicing, and find its payback year.",
+                  "Solve the new-or-re-engine game and show how a parameter flips it into a dilemma."],
+            "D": ["Score Boeing's first-delivery targets for the 787 and 777X against outcomes.",
+                  "Make and state a dated, scorable forecast of a first delivery."],
+            "I": ["Read program accounting: accounting quantities, deferred production costs and reach-forward losses.",
+                  "Read a defence contractor's customer and contract mix, and SIPRI's budgets."],
+        },
+        results=[
+            ("Wright's learning curve", r"c(n) = c_1\,n^{\log_2 \ell}"),
+            ("Unit at which cost falls below price", r"n^* = (c_1/p)^{1/(-\log_2 \ell)}"),
+            ("Present value of servicing", r"PV = s\,\frac{1 - (1+r)^{-T}}{r}"),
+            ("Buyers' split by fuel burn", r"s_i = \frac{b_i^{-k}}{\sum_j b_j^{-k}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11), I=(12,), D=(13,),
+        also=(("The Register's rows for Part 18", "explainer/industry/data/rows_p18.py"),
+              ("The programme, the engine, launch aid and the duel", "explainer/industry/works/aircraft.py"),
+              ("The SEC, FRED and SIPRI extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

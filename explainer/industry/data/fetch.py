@@ -1752,20 +1752,17 @@ AUTO_ITEMS = {"revenue": [("ifrs-full", "Revenue"), ("us-gaap", "Revenues"),
               "assets": [("ifrs-full", "Assets"), ("us-gaap", "Assets")]}
 
 
-def sec_auto():
-    """Annual figures of carmakers, suppliers and dealers from their Forms 10-K, 20-F and 40-F (SEC company facts), in
-    their reporting currency (billions): for each item the first tag present in a year wins, IFRS before US GAAP (Toyota
-    and Honda moved from US GAAP to IFRS).  Duration items need a year-long period; balance items are taken at year end.
-    Profit is attributable to the parent where tagged (Stellantis tags only profit including non-controlling interests;
-    Ford tags only that in 2016-2020 and 2025)."""
+def _sec_table(companies, items):
+    """Rows [ticker, year_end, currency, item...] from SEC company facts for (cik, ticker, currency) companies: for each
+    item the first (taxonomy, tag) present in a year wins; duration items need a year-long period."""
     import time
 
     out = []
-    for cik, tic, cur in AUTO_COMPANIES:
+    for cik, tic, cur in companies:
         facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"]
         time.sleep(0.5)
         years: dict = {}
-        for item, tags in AUTO_ITEMS.items():
+        for item, tags in items.items():
             for tax, tag in tags:
                 best: dict = {}
                 for v in facts.get(tax, {}).get(tag, {}).get("units", {}).get(cur, []):
@@ -1781,11 +1778,24 @@ def sec_auto():
                     years.setdefault(end, {}).setdefault(item, v["val"] / 1e9)
         for end in sorted(years):
             if end >= "2009":
-                out.append([tic, end, cur] + [years[end].get(k) for k in AUTO_ITEMS])
-    return _write("sec_auto", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS), out,
-                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 10-K, 20-F and 40-F; billions of the reporting "
-                   "currency; tags in order of preference: " + "; ".join(f"{k}: {'/'.join(t for _, t in v)}"
-                                                                         for k, v in AUTO_ITEMS.items()) + ")"])
+                out.append([tic, end, cur] + [years[end].get(k) for k in items])
+    return out
+
+
+def _sec_source(items) -> str:
+    return ("https://data.sec.gov/api/xbrl/companyfacts/ (Forms 10-K, 20-F and 40-F; billions of the reporting "
+            "currency; tags in order of preference: " + "; ".join(f"{k}: {'/'.join(t for _, t in v)}"
+                                                                 for k, v in items.items()) + ")")
+
+
+def sec_auto():
+    """Annual figures of carmakers, suppliers and dealers from their Forms 10-K, 20-F and 40-F (SEC company facts), in
+    their reporting currency (billions): for each item the first tag present in a year wins, IFRS before US GAAP (Toyota
+    and Honda moved from US GAAP to IFRS).  Duration items need a year-long period; balance items are taken at year end.
+    Profit is attributable to the parent where tagged (Stellantis tags only profit including non-controlling interests;
+    Ford tags only that in 2016-2020 and 2025)."""
+    return _write("sec_auto", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS),
+                  _sec_table(AUTO_COMPANIES, AUTO_ITEMS), [_sec_source(AUTO_ITEMS)])
 
 
 FRED_AUTO = {"TOTALSA": "Total vehicle sales (millions, seasonally adjusted annual rate; BEA)",
@@ -1951,7 +1961,92 @@ def census_auto():
                    "product codes; withheld cells blank)"])
 
 
-JOBS = {"census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
+# Part 18: aerospace and defence
+AERO_COMPANIES = [(12927, "BA", "USD"), (40545, "GE", "USD"), (101829, "RTX", "USD"), (936468, "LMT", "USD"),
+                  (1133421, "NOC", "USD"), (40533, "GD", "USD"), (202058, "LHX", "USD"), (1501585, "HII", "USD"),
+                  (4281, "HWM", "USD"), (1260221, "TDG", "USD"), (46619, "HEI", "USD"), (1364885, "SPR", "USD"),
+                  (217346, "TXT", "USD"), (1378789, "AER", "USD"), (1355444, "ERJ", "USD")]
+
+
+def sec_aero():
+    """Annual figures of airframers, engine makers, defence primes, suppliers and a lessor from their Forms 10-K and
+    20-F (SEC company facts), in US dollars (billions), with the same items and tag preferences as ``sec_auto``."""
+    return _write("sec_aero", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS),
+                  _sec_table(AERO_COMPANIES, AUTO_ITEMS), [_sec_source(AUTO_ITEMS)])
+
+
+def _fred_rows(series: dict) -> list:
+    out = []
+    for sid in series:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return out
+
+
+def _fred_write(name: str, series: dict) -> Path:
+    return _write(name, ["series", "month", "value"], _fred_rows(series),
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in series.items()) + ")"])
+
+
+FRED_AERO = {"ANAPNO": "New orders: nondefense aircraft and parts ($ million a month, SA; Census M3)",
+             "ANAPVS": "Shipments: nondefense aircraft and parts ($ million a month, SA; Census M3)",
+             "ADAPNO": "New orders: defense aircraft and parts ($ million a month, SA; Census M3)",
+             "ADAPVS": "Shipments: defense aircraft and parts ($ million a month, SA; Census M3)",
+             "IPG3364S": "Industrial production: aerospace products and parts (2017 = 100; Federal Reserve G.17)",
+             "PCU336411336411": "PPI: aircraft manufacturing (Dec 1985 = 100; BLS)",
+             "FDEFX": "Federal government: national defense consumption expenditures and gross investment ($ billion, "
+                      "SAAR; BEA)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_aero():
+    """Monthly series for Part 18 (via FRED): orders and shipments of civil and defence aircraft since 1992, aerospace
+    output since 1972, aircraft producer prices since 1985, and America's defence spending since 1947."""
+    return _fred_write("fred_aero", FRED_AERO)
+
+
+SIPRI = "https://www.sipri.org/sites/default/files/SIPRI-Milex-data-1949-2025_v1.2.xlsx"
+
+
+def sipri_milex():
+    """SIPRI's military expenditure by country, 1949-2025: constant (2024) US$ million, and share of GDP (sheets of the
+    SIPRI Military Expenditure Database, release of April 2026, v1.2)."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(io.BytesIO(_get(SIPRI)), read_only=True, data_only=True)
+    out = []
+    for sheet, measure in (("Constant (2024) US$", "usd2024_m"), ("Share of GDP", "share_gdp")):
+        ws = wb[sheet]
+        years = None
+        for r in ws.iter_rows(values_only=True):
+            if r and r[0] == "Country":
+                years = r
+                continue
+            if years is None or not r or not r[0] or not isinstance(r[0], str):
+                continue
+            for y, v in zip(years, r):
+                if isinstance(y, int) and isinstance(v, (int, float)):
+                    out.append([measure, r[0].strip(), y, round(float(v), 6)])
+    ws = wb["Regional totals"]
+    years = None
+    for r in ws.iter_rows(values_only=True):
+        if r and r[0] == "Region":
+            years = r
+            continue
+        if years is not None and r and isinstance(r[0], str) and r[0].strip() == "World":
+            for y, v in zip(years, r):
+                if isinstance(y, int) and isinstance(v, (int, float)):
+                    out.append(["usd2024_m", "World", y, round(float(v) * 1000, 3)])
+            break
+    return _write("sipri_milex", ["measure", "country", "year", "value"], out,
+                  [SIPRI + " (SIPRI Military Expenditure Database; constant 2024 US$ m and share of GDP; SIPRI "
+                   "estimates included as published)"])
+
+
+JOBS = {"sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
         "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":

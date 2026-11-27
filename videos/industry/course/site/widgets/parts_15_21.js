@@ -211,4 +211,67 @@
     });
   };
 
+  // Part 18: build an airliner programme (the Works' Programme in explainer/industry/works/aircraft.py)
+  W.airframer = function (el) {
+    var FIRST = 450, DEV_YEARS = 6, RAMP = [0.15, 0.4, 0.7, 1.0], YEARS = 25, R = 0.08;
+    function unit(n, learn) { return FIRST * Math.pow(n, Math.log(learn) / Math.LN2); }
+    function run(v) {
+      var cum = 0, built = 0, npv = 0, out = [], be = null, trough = 0, t, k;
+      for (t = 0; t < DEV_YEARS; t++) {
+        cum -= v.dev / DEV_YEARS; npv -= v.dev / DEV_YEARS / Math.pow(1 + R, t);
+        out.push(cum); trough = Math.min(trough, cum);
+      }
+      for (k = 0; k < YEARS; k++) {
+        var n = Math.round(v.rate * (k < RAMP.length ? RAMP[k] : 1)), cost = 0, i;
+        for (i = 1; i <= n; i++) cost += unit(built + i, v.learn);
+        built += n;
+        var cash = (n * v.price - cost) / 1000;
+        cum += cash; npv += cash / Math.pow(1 + R, DEV_YEARS + k);
+        out.push(cum); trough = Math.min(trough, cum);
+        if (be === null && cum >= 0) be = { year: DEV_YEARS + k, units: built };
+      }
+      var cross = Math.pow(FIRST / v.price, 1 / (-Math.log(v.learn) / Math.LN2));
+      return { cum: out, npv: npv, be: be, trough: trough, cross: cross, built: built };
+    }
+    QB.widget(el, {
+      title: "Build an airliner programme",
+      sub: "The first aircraft off your new line costs $450m to build. Each time the number built doubles, the next one costs a fixed share of what it did: the learning rate. You spend the development cost over six years before the first delivery, then ramp up to your production rate and sell for 25 years. Set the price, the learning rate, the development cost and the rate.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "price", label: "Price per aircraft, $m", min: 60, max: 160, step: 5, value: 110, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "learn", label: "Learning rate (cost after each doubling)", min: 0.75, max: 0.95, step: 0.01, value: 0.82, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "dev", label: "Development cost, $bn", min: 5, max: 40, step: 1, value: 20, fmt: function (x) { return "$" + x + "bn"; } },
+        { k: "rate", label: "Production rate, aircraft a year", min: 40, max: 400, step: 10, value: 120, fmt: function (x) { return x + " a year"; } },
+      ],
+      draw: function (g, v, s) {
+        var r = run(v), xs = [], ys = [], i;
+        for (i = 0; i <= 60; i++) { var lx = i * 3.5 / 60; xs.push(lx); ys.push(unit(Math.pow(10, lx), v.learn)); }
+        var ax = g[0].axes({ x: [0, 3.5], y: [0, 480], title: "Cost to build the n-th aircraft, $m (log scale of n)",
+                             xticks: [0, 1, 2, 3], xfmt: function (x) { return Math.round(Math.pow(10, x)).toLocaleString(); },
+                             yfmt: function (y) { return "$" + Math.round(y); } });
+        ax.line(xs, ys, { color: "#b58cff", width: 2.4 });
+        ax.hline(v.price, { color: "#f6c453", width: 1.6 });
+        if (r.cross <= 3000) ax.dots([Math.log(r.cross) / Math.LN10], [v.price], { color: C.p, r: 5 });
+        ax.legend([["cost of the n-th", "#b58cff"], ["price", "#f6c453"]], { pos: "tr" });
+        var yr = [], lo = Math.min.apply(null, r.cum), hi = Math.max.apply(null, r.cum);
+        for (i = 0; i < r.cum.length; i++) yr.push(i);
+        var bx = g[1].axes({ x: [0, r.cum.length - 1], y: [Math.min(lo * 1.1, -5), Math.max(hi * 1.1, 5)],
+                             title: "Cumulative cash, $bn, by year", xticks: [0, 6, 15, 30], xfmt: function (x) { return "yr " + x; },
+                             yfmt: function (y) { return Math.round(y); } });
+        bx.hline(0, { color: C.muted });
+        bx.line(yr, r.cum, { color: r.npv >= 0 ? C.p : C.loss, width: 2.4 });
+        if (r.be) bx.dots([r.be.year], [r.cum[r.be.year]], { color: C.p, r: 5 });
+        s.r = r;
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["each aircraft costs less than its price", r.cross <= 1e6 ? "from the " + Math.round(r.cross).toLocaleString() + "th" : "never"],
+                ["the deepest point of the valley", "$" + r.trough.toFixed(1) + "bn"],
+                ["cash back to zero", r.be ? "year " + r.be.year + ", after " + r.be.units.toLocaleString() + " aircraft" : "not within 31 years"],
+                ["value today at 8%", "$" + r.npv.toFixed(1) + "bn"]];
+      },
+      note: "The Works' programme, as in the film: with a $110m price, 82% learning, $20bn of development and 120 aircraft a year, the 137th aircraft is the first to cost less than its price, the cash bottoms out near -$26bn, comes back to zero in year 15 after 990 aircraft, and the programme is worth about $9bn today. Slow the learning to 90% and it never pays back. Cut the price by a quarter, as an incumbent far down its own curve could, and see what is left for a newcomer.",
+    });
+  };
+
 })();

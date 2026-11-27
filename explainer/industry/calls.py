@@ -296,6 +296,23 @@ CALLS = [
          rule="IEA, Global EV Outlook 2027 (or its data explorer), world electric car sales share for 2026 as first "
               "published; true if below 32%",
          due="2027-06", ours=True),
+    Call(18, "The Boeing Company", "2006-02",
+         "\"In early 2004, we received the initial launch order for the 787 ... Entry into service is targeted for 2008.\"",
+         "The Boeing Company, Form 10-K 2005",
+         outcome="\"We delivered the first 787-8 airplane in September 2011\" (Form 10-K 2011): three years late"),
+    Call(18, "The Boeing Company", "2014-02",
+         "\"In November 2013 we launched the 777X and first delivery is expected in 2020.\"",
+         "The Boeing Company, Form 10-K 2013",
+         outcome="Not delivered by November 2026; 'We continue to expect first delivery of the 777-9 to occur in 2027' (Form "
+                 "10-Q, third quarter of 2026), after reach-forward losses of $3.5bn in 2024 and $4.9bn in 2025"),
+    Call(18, "Industry, Built", "2026-11-27",
+         "Boeing will deliver its first 777-9 to a customer by 31 December 2027, as it now expects. Probability: 55%.",
+         "This series, Part 18, chapter 13; reasoning: Boeing's last two new-model targets slipped three and seven years, "
+         "but this one is a year away, with the final phases of flight testing expected to be approved by the end of 2026 "
+         "and an engine durability fix still to certify",
+         rule="The Boeing Company, Form 10-K 2027: true if it reports one or more 777X (777-9) deliveries in 2027 or a first "
+              "777-9 delivery dated in 2027",
+         due="2028-02", ours=True),
 ]
 
 

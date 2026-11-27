@@ -62,7 +62,7 @@ def tex_inline(text: str) -> str:
     return esc(text)
 
 
-NARRATING = {"rows_scene": 3}  # scene helpers that speak a script passed as this positional argument
+NARRATING = {"rows_scene": 3, "beat": 1}  # scene helpers that speak a script passed as this positional argument
 
 
 def narration_words(path: Path, cls: str) -> int:

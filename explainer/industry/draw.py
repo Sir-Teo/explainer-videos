@@ -29,6 +29,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`press` (``.ram`` comes down ``.stroke`` on the ``.blank``), :func:`robot_arm` (``.lower``/``.upper`` about
   ``.shoulder``/``.elbow``), :func:`paint_booth` (``.mist``), :func:`engine` (``.pistons``), :func:`battery_pack`
   (``.modules``), :func:`showroom` (``.car``, ``.bay``), :func:`car_carrier`, :func:`wrench`, :func:`kanban`;
+* aerospace: :func:`turbofan` (a cutaway: ``.fan``, ``.core``, ``.flame``, ``.bypass``), :func:`fan_face` (``.rotor``
+  turns with :func:`spin` about ``.hub``), :func:`fighter`, :func:`missile`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2046,3 +2048,76 @@ def kanban(w: float = 0.9, color: str = "#F6C453", text: str = "") -> VGroup:
         g.add(tx(text, 12, "#0E1117", bold=True).move_to([0, 0.2 * w, 0]))
         lines.shift(DOWN * 0.05 * w)
     return g
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Aerospace (Part 18)
+# ---------------------------------------------------------------------------------------------------------------
+def turbofan(w: float = 3.0, color: str = "#B58CFF") -> VGroup:
+    """A turbofan in side cutaway, intake to the left: the nacelle, the ``.fan``, the ``.core`` (compressor stages,
+    ``.flame`` in the combustor, turbine stages) and the ``.bypass`` streams that carry most of the thrust."""
+    nac_top = Polygon([-0.5 * w, 0.34 * w, 0], [0.3 * w, 0.3 * w, 0], [0.32 * w, 0.24 * w, 0], [-0.46 * w, 0.27 * w, 0],
+                      stroke_width=0, fill_color=STEEL, fill_opacity=1)
+    nac_bot = nac_top.copy().flip(RIGHT, about_point=ORIGIN)
+    blades = VGroup(*[Polygon([-0.395 * w, (y + 0.02) * w, 0], [-0.355 * w, (y + 0.035) * w, 0], [-0.355 * w, (y - 0.005) * w, 0],
+                              [-0.395 * w, (y - 0.02) * w, 0], stroke_width=0, fill_color=color, fill_opacity=0.9)
+                      for y in np.linspace(-0.23, 0.23, 9)])
+    hub = Polygon([-0.46 * w, 0, 0], [-0.36 * w, 0.06 * w, 0], [-0.36 * w, -0.06 * w, 0], stroke_width=0,
+                  fill_color="#C9D3E0", fill_opacity=1)
+    fan = VGroup(blades, hub)
+    casing = Polygon([-0.32 * w, 0.11 * w, 0], [0.38 * w, 0.08 * w, 0], [0.5 * w, 0.04 * w, 0], [0.5 * w, -0.04 * w, 0],
+                     [0.38 * w, -0.08 * w, 0], [-0.32 * w, -0.11 * w, 0], stroke_width=0, fill_color="#3A4152", fill_opacity=1)
+    comp = VGroup(*[Line([x * w, (0.09 - 0.05 * k / 6) * w, 0], [x * w, -(0.09 - 0.05 * k / 6) * w, 0], stroke_color="#7EC8F5",
+                         stroke_width=2) for k, x in enumerate(np.linspace(-0.28, -0.04, 7))])
+    flame = VGroup(*[Ellipse(width=0.07 * w, height=0.03 * w, stroke_width=0, fill_color=c, fill_opacity=0.95).move_to([0.03 * w, y * w, 0])
+                     for c, y in (("#F6C453", 0.035), ("#F2A65A", 0.0), ("#F6C453", -0.035))])
+    turb = VGroup(*[Line([x * w, 0.07 * w, 0], [x * w, -0.07 * w, 0], stroke_color="#F2A65A", stroke_width=2.5)
+                    for x in np.linspace(0.12, 0.3, 4)])
+    shaft = Line([-0.36 * w, 0, 0], [0.42 * w, 0, 0], stroke_color="#C9D3E0", stroke_width=2)
+    core = VGroup(casing, comp, flame, turb, shaft)
+    bypass = VGroup(*[Line([-0.3 * w, s * 0.18 * w, 0], [0.38 * w, s * 0.17 * w, 0], stroke_color="#7EC8F5", stroke_width=2,
+                           stroke_opacity=0.7).add_tip(tip_length=0.06 * w) for s in (1, -1)])
+    g = VGroup(nac_top, nac_bot, core, fan, bypass)
+    g.fan, g.core, g.flame, g.bypass, g.blades = fan, core, flame, bypass, blades
+    return g
+
+
+def fan_face(r: float = 1.0, color: str = "#B58CFF", blades: int = 18) -> VGroup:
+    """A jet engine seen from the front: the nacelle lip and the fan (``.rotor``, turned by :func:`spin` about
+    ``.hub``)."""
+    lip = Circle(radius=r, stroke_color=STEEL, stroke_width=0.14 * r * 40, fill_color="#0E1117", fill_opacity=1)
+    rotor = VGroup(*[Polygon([0, 0, 0], [0.95 * r * np.cos(a), 0.95 * r * np.sin(a), 0],
+                             [0.95 * r * np.cos(a + 0.18), 0.95 * r * np.sin(a + 0.18), 0], stroke_width=0, fill_color=color,
+                             fill_opacity=0.85) for a in np.linspace(0, TAU, blades, endpoint=False)])
+    hub = Circle(radius=0.18 * r, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1)
+    swirl = Line([0, 0, 0], [0.12 * r, 0, 0], stroke_color="#0E1117", stroke_width=3)
+    g = VGroup(lip, rotor, hub, swirl)
+    g.rotor, g.hub = VGroup(rotor, swirl), hub
+    return g
+
+
+def fighter(length: float = 3.0, color: str = "#7BD88F") -> VGroup:
+    """A fighter jet seen from above, nose to the right."""
+    L = length
+    body = Polygon([0.5 * L, 0, 0], [0.3 * L, 0.05 * L, 0], [-0.45 * L, 0.06 * L, 0], [-0.5 * L, 0.03 * L, 0],
+                   [-0.5 * L, -0.03 * L, 0], [-0.45 * L, -0.06 * L, 0], [0.3 * L, -0.05 * L, 0], stroke_width=0,
+                   fill_color=color, fill_opacity=1)
+    wings = Polygon([0.1 * L, 0.05 * L, 0], [-0.2 * L, 0.36 * L, 0], [-0.3 * L, 0.36 * L, 0], [-0.22 * L, 0.05 * L, 0],
+                    [-0.22 * L, -0.05 * L, 0], [-0.3 * L, -0.36 * L, 0], [-0.2 * L, -0.36 * L, 0], [0.1 * L, -0.05 * L, 0],
+                    stroke_width=0, fill_color=color, fill_opacity=0.85)
+    tails = Polygon([-0.36 * L, 0.05 * L, 0], [-0.48 * L, 0.17 * L, 0], [-0.52 * L, 0.17 * L, 0], [-0.47 * L, 0.04 * L, 0],
+                    [-0.47 * L, -0.04 * L, 0], [-0.52 * L, -0.17 * L, 0], [-0.48 * L, -0.17 * L, 0], [-0.36 * L, -0.05 * L, 0],
+                    stroke_width=0, fill_color=color, fill_opacity=0.85)
+    canopy = Ellipse(width=0.14 * L, height=0.04 * L, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to([0.28 * L, 0, 0])
+    return VGroup(wings, tails, body, canopy)
+
+
+def missile(length: float = 2.0, color: str = "#C9D3E0") -> VGroup:
+    """A missile in side view, nose to the right."""
+    L = length
+    body = Rectangle(width=0.8 * L, height=0.07 * L, stroke_width=0, fill_color=color, fill_opacity=1)
+    nose = Polygon([0.4 * L, 0.035 * L, 0], [0.52 * L, 0, 0], [0.4 * L, -0.035 * L, 0], stroke_width=0, fill_color=color,
+                   fill_opacity=1)
+    fins = VGroup(*[Polygon([-0.4 * L, s * 0.035 * L, 0], [-0.28 * L, s * 0.035 * L, 0], [-0.42 * L, s * 0.12 * L, 0],
+                            stroke_width=0, fill_color="#E8554E", fill_opacity=1) for s in (1, -1)])
+    return VGroup(body, nose, fins)

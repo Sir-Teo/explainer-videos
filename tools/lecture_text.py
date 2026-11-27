@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 BOOKMARK = re.compile(r"<bookmark[^>]*/>")
 GAP_OPEN, GAP_CLOSE = "\x02", "\x03"  # a computed value inside a paragraph: GAP_OPEN expression GAP_CLOSE
-NARRATING = {"rows_scene": 3}  # helpers that speak a script passed as this positional argument (also tools/lecture_length.py)
+NARRATING = {"rows_scene": 3, "beat": 1}  # helpers that speak a script passed as this positional argument (also tools/lecture_length.py)
 CHAPTER_CARDS = {"card_section": 3, "chapter": 3}  # helpers that open a chapter: (scene, n, title, question)
 NUMBER_WORDS = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
                 "sixteen seventeen eighteen nineteen twenty").split()

@@ -2549,6 +2549,7 @@ scored in Part 64 and at each refresh.
 | 15 · Semiconductors | done 2026-11-27 (124 Register rows; Moore's articles of 1965 and 1975; TSMC's 20-F 2025, its fab table and its third quarter 2026 results; ASML's 20-F; the 10-Ks of Nvidia, Intel, Micron and fifteen more chip companies and three foreign filers' accounts; GM's 2021 10-K; the Federal Reserve's chip output and the BLS's chip prices; Rupp's transistor counts; WSTS's forecasts and SIA's monthly sales; six BIS rules in the Federal Register) | `works/fab.py` | 16 scenes, with car, phone, chip-fab and government-building glyphs and a map of TSMC's fabs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 16 · Electronics | done 2026-11-27 (78 Register rows; Stan Shih's oral history; Hon Hai's audited 2025 statements; the 10-Ks of Apple, Intel, HP, Dell, Jabil and Flex and the SEC extract of nine more assemblers, brands and component makers, with Sony's, LG Display's and ASE's 20-Fs; UN Comtrade's US imports by partner; the BLS's price indexes and electronics jobs; the Section 301 notices; CBS's transcript of the Commerce Secretary) | `works/device.py` | 16 scenes, with a surface-mount line, circuit boards and a map of Hon Hai's assets | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 17 · Automobiles | done 2026-11-27 (about 150 Register rows; Ford's *My Life and Work*; Toyota's plant and TPS pages; the 10-Ks of GM, Ford, Tesla, Rivian, Lucid and AutoNation, the 20-Fs of Toyota, Honda, Stellantis and Ferrari, Tesla's 2016 and Lucid's 2026 8-Ks; Volkswagen's Annual Report 2025 and BYD's 2025 results; the 2022 Economic Census of assembly, parts and dealers; FRED's sales, capacity use, months of supply, prices, jobs and loan rates; UN Comtrade's car exports; the DOE's battery costs, the IEA's EV shares and the EIA's 2017 outlook; China's 2017 and 2020 plans and CAAM's results; the USTR and EU duties) | `works/auto.py` | 18 scenes, with Ford's line, a press, welding robots, a paint booth, pickups, battery packs, showrooms and car carriers | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 18 · Aerospace and Defence | done 2026-11-27 (about 110 Register rows; the 10-Ks of Boeing (2005, 2011, 2013, 2025), GE Aerospace, RTX, Lockheed Martin and TransDigm, Boeing's 10-Q for the third quarter of 2026 and AerCap's 20-F; Airbus's Annual Report 2025 (ESEF); the WTO's DS316 and DS353; the SEC extract of fifteen aerospace and defence companies; FRED's aircraft orders and shipments and US defence spending; SIPRI's military expenditure) | `works/aircraft.py` | 16 scenes, with a turbofan cutaway, a fan face, a fighter, airliners assembled from their sections and the `beats.py` charts | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2747,3 +2748,18 @@ world's electric share in 2026. Hyundai-Kia, BMW, Mercedes-Benz, Renault-Nissan,
 map by name only, since they report outside the SEC and were not read for this part; Volkswagen and BYD were read from
 their annual reports. The 2023 strike is measured from GM's 10-K; Ford's own estimate of its cost was not found in its
 10-K.
+
+Part 18 departs from its draft's story: the 747 and Pan Am's order of 1966 are not used, since Boeing's history pages could
+not be read and no other primary source was; the hook is 2025 instead (Airbus 793 deliveries against Boeing's 600, Boeing's
+$36bn of losses from 2019 to 2024, GE's $25.0bn of servicing against $8.3bn of new engines). Run it became the choice the
+duopoly faced in 2010-11, a new airliner or new engines on the old one, against a rival choosing too; a few points of fuel
+flip it into a prisoner's dilemma. The programme's arithmetic, program accounting and the newcomer's price are the Works'
+(`works/aircraft.py`), set beside Boeing's accounting quantities, deferred production costs and reach-forward losses; the
+737's and 787's firm orders already exceed their accounting quantities, so only the 777X's estimate counts on unsold
+aircraft (90). Launch aid is measured in the Works and the WTO's summaries; the 2021 truce was not read, so the film ends
+the dispute with Airbus's report of the 2025 agreement. The A380's launch forecast was not found in a primary source, so
+*Called it?* uses Boeing's own first-delivery targets (the 787 for 2008, delivered 2011; the 777X for 2020, now 2027) and the
+series' call on the first 777-9 by the end of 2027 (55%). The defence chapters read Lockheed's 10-K and SIPRI (the
+Pentagon's budget pages refused automated requests). COMAC, Safran, Rolls-Royce, BAE Systems, Leonardo and Thales appear
+on the map by name only. The part was written as code only: its beats were checked from snapshots of every beat's final
+frame, and it has not been rendered.

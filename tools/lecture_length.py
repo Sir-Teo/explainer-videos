@@ -50,7 +50,7 @@ KIT_SPEECH = {"ask": ("say", "reveal"), "predict": ("narration",), "reveal": ("n
               "checkpoint": ("narration", "answers_narration"), "wrong_idea": ("narration", "right_narration"),
               "chapter": ("said",)}
 KIT_PAUSE = {"ask": 12, "predict": 10, "checkpoint": 16, "wrong_idea": 5, "chapter": 6, "title": 16}
-NARRATING = {"rows_scene": 3}  # scene helpers that speak a script passed as this positional argument
+NARRATING = {"rows_scene": 3, "beat": 1}  # scene helpers that speak a script passed as this positional argument
 
 
 def narration_words(path: Path, cls: str) -> int:
