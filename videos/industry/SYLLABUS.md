@@ -2567,6 +2567,7 @@ scored in Part 64 and at each refresh.
 | 33 · The Middlemen | done 2026-11-28 (about 60 Register rows; the 10-Ks for fiscal 2026 of McKesson, Cencora, Cardinal Health and Sysco and for 2025 of US Foods, Grainger and Bunge; Mitsui & Co.'s results for the year to March 2026 and the half to September 2026; Chemdex's 1999 prospectus and Ventro's 2000 10-K; the SEC extract of twenty-nine distributors and traders; the Census Bureau's wholesale trade and the BLS's wholesale jobs and margin prices) | `works/distributor.py` | 13 scenes, with factories, warehouses, pallets, shelves, invoices, vans, a town's delivery routes, chips and ships | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 34 · Restaurants and Franchising | done 2026-11-28 (about 65 Register rows; the 10-Ks for 2025 of McDonald's, Chipotle, Wingstop, Domino's, Yum! Brands and DoorDash and for fiscal 2026 of Darden; McDonald's 10-Q for the third quarter of 2026; Arcos Dorados's 20-F for 2025; DoorDash's 2020 prospectus; the SEC extract of twenty-eight restaurant companies and DoorDash; the Census Bureau's restaurant and grocery sales, the BLS's food prices, restaurant jobs and leisure wages, the federal minimum wage) | `works/franchise.py` | 13 scenes, with drive-through restaurants, burgers, shops, phones, vans and the world map | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 35 · Travel and Hotels | done 2026-11-28 (about 170 Register rows; the 10-Ks for 2025 of Marriott, Hilton, Host, Booking, Expedia, Airbnb, Royal Caribbean and Las Vegas Sands, Carnival's for fiscal 2025 and Disney's for fiscal 2026; Marriott's and Booking's 10-Qs for 2026 Q3; Host Marriott's 1993 10-K; Park's, Booking's, Carnival's and Sands' pandemic-era 10-Ks; the Nevada Gaming Control Board's 2025 report; the SEC extract of thirty-two travel companies; the BLS's and BTS's travel series) | `works/hotel.py` | 13 scenes, with hotel towers lit by occupancy, beds, a booking page, cruise ships, chips, a Ferris wheel and cranes | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 36 · Software | done 2026-11-28 (about 75 Register rows; the 10-Ks of Microsoft, Atlassian, Oracle, Salesforce, Snowflake, CrowdStrike and Workday for fiscal 2026, Adobe for fiscal 2025 and 2013, ServiceNow and Datadog for 2025; Microsoft's and Salesforce's latest 10-Qs; Salesforce's investor-day 8-Ks of 2021 and 2022; the SEC extract of thirty-one software companies; the BEA's software investment, the BLS's software prices and jobs) | `works/saas.py` | 13 scenes, with laptops, server racks, a layer cake of cohorts, an invoice calendar, a system-of-record diagram and crowds | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -3005,3 +3006,16 @@ through Disney's Experiences segment and its Tokyo royalty; tour operators, Chin
 and Oriental Land's own accounts are left to the map. UN Tourism's 2021 forecasts of the recovery could not be read from
 its site (it refuses automated reading), so *Called it?* uses Booking Holdings' own warning in its 10-K for 2020; the
 series' call is on Booking's room nights. Written as code only and checked from snapshots; not rendered.
+
+Part 36 follows its draft's question. Gates's 1976 letter and Salesforce's founding logo were not checked against
+primary sources and are left out; the hook is the free copy and Microsoft's own accounts, in which licences and devices
+cost 19 cents a dollar to deliver and services 35. Run it is the draft's budget choice (`works/saas.py`: a subscription
+company run quarter by quarter, with churn, expansion, salespeople who ramp and crowd the market, engineering that builds
+a decaying product stock, a price rise and deferred revenue), with cohorts and a licence-to-subscription J-curve beside
+it; Adobe's switch in 2013 is the real J-curve. Retention comes from the companies that disclose it (Snowflake, Datadog;
+Salesforce no longer reports its attrition rate). Open source, platforms and vertical software are told briefly; the
+bundling of Office and Teams through Microsoft 365's seats against its revenue; Europe's, China's and India's software
+companies are left to the map. Added is the chapter on AI's cost: Microsoft's capital spending, its cloud gross margin and
+Oracle's negative free cash flow. *Called it?* uses Salesforce's $50bn target for fiscal 2026 in place of 'software is
+eating the world', which was not read from a primary source; the series' call is on Microsoft Cloud revenue. Written as
+code only and checked from snapshots; not rendered.

@@ -2860,7 +2860,52 @@ def fred_travel():
     return _fred_write("fred_travel", FRED_TRAVEL)
 
 
-JOBS = {"sec_travel": sec_travel, "fred_travel": fred_travel, "sec_rest": sec_rest, "fred_rest": fred_rest, "sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+SOFT_COMPANIES = [(789019, "MSFT", "USD"), (1341439, "ORCL", "USD"), (1108524, "CRM", "USD"), (796343, "ADBE", "USD"),
+                  (1373715, "NOW", "USD"), (1327811, "WDAY", "USD"), (896878, "INTU", "USD"), (1640147, "SNOW", "USD"),
+                  (1650372, "TEAM", "USD"), (1327567, "PANW", "USD"), (1535527, "CRWD", "USD"), (1561550, "DDOG", "USD"),
+                  (1441816, "MDB", "USD"), (1713683, "ZS", "USD"), (1404655, "HUBS", "USD"), (1261333, "DOCU", "USD"),
+                  (1585521, "ZM", "USD"), (1660134, "OKTA", "USD"), (1447669, "TWLO", "USD"), (1544522, "FRSH", "USD"),
+                  (769397, "ADSK", "USD"), (813672, "CDNS", "USD"), (883241, "SNPS", "USD"), (1393052, "VEEV", "USD"),
+                  (860731, "TYL", "USD"), (1321655, "PLTR", "USD"), (1477333, "NET", "USD"), (1653482, "GTLB", "USD"),
+                  (1000184, "SAP", "EUR"), (1773383, "DT", "USD"), (1372612, "BOX", "USD")]
+
+
+def _soft_items() -> dict:
+    return dict(_ecom_items(),
+                deferred=[("us-gaap", "ContractWithCustomerLiabilityCurrent"), ("us-gaap", "DeferredRevenueCurrent"),
+                          ("ifrs-full", "CurrentContractLiabilities")],
+                rpo=[("us-gaap", "RevenueRemainingPerformanceObligation")],
+                sbc=[("us-gaap", "ShareBasedCompensation"), ("us-gaap", "AllocatedShareBasedCompensationExpense"),
+                     ("ifrs-full", "AdjustmentsForSharebasedPayments")])
+
+
+def sec_soft():
+    """Annual figures of software companies (platforms, applications, data, security, design and developer tools) and SAP,
+    from their Forms 10-K and 20-F (SEC company facts), in billions of the reporting currency (SAP in euros under IFRS),
+    with ``sec_ecom``'s items (marketing is sales and marketing where tagged), current deferred revenue, remaining
+    performance obligations and stock-based compensation.  Fiscal years end in June (Microsoft, Atlassian), May (Oracle),
+    January (Salesforce, Workday, Snowflake, CrowdStrike, Zscaler (July), Okta, GitLab, Box, DocuSign, Zoom, Veeva, Autodesk),
+    July (Intuit, Palo Alto Networks), late November or early December (Adobe) or December."""
+    items = _soft_items()
+    return _write("sec_soft", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(SOFT_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_SOFT = {"B985RC1Q027SBEA": "Private fixed investment: intellectual property products: software (billions of dollars, SAAR; BEA)",
+             "A679RC1Q027SBEA": "Private fixed investment in information processing equipment and software (billions, SAAR; BEA)",
+             "CES6054150001": "All employees: computer systems design and related services (thousands, SA; BLS)",
+             "USINFO": "All employees: information (thousands, SA; BLS)",
+             "PCU511210511210": "PPI: software publishers (December 1997 = 100, NSA; BLS)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+             "GDP": "Gross domestic product (billions of dollars, SAAR; BEA)",
+             "AEXUSEU": "US dollars to one euro, annual average (Federal Reserve H.10)"}
+
+
+def fred_soft():
+    return _fred_write("fred_soft", FRED_SOFT)
+
+
+JOBS = {"sec_soft": sec_soft, "fred_soft": fred_soft, "sec_travel": sec_travel, "fred_travel": fred_travel, "sec_rest": sec_rest, "fred_rest": fred_rest, "sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

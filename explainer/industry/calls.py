@@ -615,6 +615,22 @@ CALLS = [
          "in 2027, faster than this year; for: flights, alternative accommodation and Asia are growing faster than the whole",
          rule="Booking Holdings' Form 10-K for 2027: room nights for the year as reported; true if 1,400 million or more",
          due="2028-02", ours=True),
+    Call(36, "Salesforce", "2021-09",
+         "'$50B+ FY26 Target': revenue of more than $50bn for the year to January 2026, set at its investor day of September "
+         "2021 and restated in September 2022 as '$50B FY26 Target', '17% CAGR', with a foreign-exchange headwind of about $2bn",
+         "Salesforce, investor-day presentations, Forms 8-K of 24 September 2021 and 21 September 2022",
+         outcome="Revenue for the year to January 2026 was $41.5bn, about 17% short; growth slowed from 25% in the year to "
+                 "January 2022 to about 10%, while the operating margin rose from 2% to 20% as sales and marketing fell from "
+                 "45 to 35 cents a dollar (Form 10-K for fiscal 2026; SEC company facts)"),
+    Call(36, "Industry, Built", "2026-11-28",
+         "Microsoft will report Microsoft Cloud revenue of at least $275bn for fiscal 2027 (the year to 30 June 2027). "
+         "Probability: 55%.",
+         "This series, Part 36, chapter 10; reasoning: Microsoft Cloud revenue was $214.4bn in fiscal 2026, up 27%, and "
+         "$63.9bn in the first quarter of fiscal 2027, up 30%; reaching $275bn needs 28.3% for the year, so 27.7% in the other "
+         "three quarters; against: data-centre capacity and power limit how fast AI services can be sold, and the comparison "
+         "base grows each quarter",
+         rule="Microsoft's Form 10-K for fiscal 2027: Microsoft Cloud revenue as reported; true if $275bn or more",
+         due="2027-08", ours=True),
 ]
 
 
