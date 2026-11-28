@@ -566,6 +566,25 @@ CALLS = [
          rule="The Census Bureau's quarterly e-commerce report (FRED: ECOMPCTSA, seasonally adjusted), the first published "
               "value for 2027 Q4; true if 19.0 or more",
          due="2028-02", ours=True),
+    Call(33, "Chemdex", "1999-07",
+         "'The life sciences research products industry is particularly well suited for business-to-business e-commerce "
+         "because of its high degree of fragmentation and because of the inefficiencies inherent in its traditional "
+         "paper-based purchasing process'; the Chemdex Marketplace 'will appeal to suppliers as being less costly than "
+         "traditional distribution'",
+         "Chemdex, prospectus (Form 424B4), July 1999",
+         outcome="'In December 2000 the Board of Directors concluded that the Chemdex Marketplace would be discontinued', "
+                 "citing 'revenue and gross margin growth below expectations' and the need to keep investing cash; customer "
+                 "shutdowns were to be completed by 31 March 2001, and the net loss from continuing operations was $93.5m in "
+                 "2000 (Ventro, Form 10-K for 2000). The distributors it set out to bypass remain"),
+    Call(33, "Industry, Built", "2026-11-28",
+         "Mitsui & Co. will report profit attributable to owners of the parent of at least ¥1,050bn for its year to 31 March "
+         "2027. Probability: 55%.",
+         "This series, Part 33, chapter 10; reasoning: it earned ¥574.9bn in the first half and needs ¥475.1bn in the second, "
+         "and it raised its forecast from ¥920bn in May to ¥1,050bn in November; against: more than half its core operating "
+         "cash flow comes from metals, mines and energy, so a fall in commodity prices would cut the second half",
+         rule="Mitsui & Co.'s consolidated financial results for the year ended 31 March 2027: profit for the year attributable "
+              "to owners of the parent as first reported; true if ¥1,050bn or more",
+         due="2027-05", ours=True),
 ]
 
 

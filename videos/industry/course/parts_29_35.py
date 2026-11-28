@@ -170,4 +170,45 @@ PARTS = [
               ("Amazon's revenue and segment tables", "explainer/industry/data/tables.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=33, level="U", widget="stockcall", prereq=(3, 4, 31),
+        question="If the internet removes the middleman, why are the middlemen among the largest companies in every country?",
+        story="The part opens on McKesson, Cencora and Cardinal Health: $995bn of revenue in their latest years and about $10bn of "
+              "profit, a cent a dollar; McKesson's revenue is four times that of Johnson & Johnson; and on Mitsui & Co., which "
+              "made more than half of its ¥834bn of profit from companies it partly owns. The viewer runs a drug wholesaler with "
+              "McKesson's margins: 96.4 cents of each dollar go to the makers, 2.1 to the warehouse and vans, 1.5 is left; "
+              "suppliers' 56 days of credit fund 18 days of stock and 25 days of customers' debts, so the business needs "
+              "-$160m; profit peaks at 99% of order lines filled; drop-shipping earns $33m against $88m. A wholesaler breaks "
+              "bulk, holds stock, gives credit and delivers, and one middleman turns millions of links into thousands. Net "
+              "margins run from 0.7 cents (Cardinal) to 15 (Fastenal); the drug wholesalers run on negative working capital. "
+              "Density cuts a delivery's cost; CVS buys 24% of McKesson's sales. GLP-1 sales rose $8bn at Cencora but did not "
+              "add meaningfully to Cardinal's profit; the opioid settlements still cost billions. Mitsui's cash comes from "
+              "mines and energy; Grainger's online business keeps 29.9 cents a dollar against 41.7 for its high-touch one; "
+              "Chemdex's 1999 marketplace closed within eighteen months. The series gives 55% that Mitsui meets its raised "
+              "forecast of ¥1,050bn for the year to March 2027.",
+        handoff="Part 34, restaurants and franchising, asks why the brand owner rarely owns the restaurant.",
+        outside="Percentages and working capital; Part 3's balance sheet; Part 4's fixed costs; Part 31's margin times turns; "
+                "Economics, Built's search and intermediaries.",
+        objectives={
+            "U": ["Explain the four services a wholesaler sells: breaking bulk, holding stock, credit and delivery.",
+                  "Explain why a thin margin can be a good business when suppliers' credit funds the stock.",
+                  "Explain why delivery density leads to a few large distributors in each market."],
+            "M": ["Compute days of stock, receivables and payables, and the money a distributor needs.",
+                  "Compute the safety stock and fill rate that maximize profit after the cost of capital.",
+                  "Compute the number of links with and without a middleman, and a delivery's cost by share."],
+            "D": ["Read a dot-com prospectus against its later shutdown, and make and state a dated, scorable forecast."],
+            "I": ["Read a distributor's customer and supplier concentration, segment margins and settlement payments in its filings.",
+                  "Read a Japanese trading house's results release: equity-method profit and cash flow by segment."],
+        },
+        results=[
+            ("Money tied up", r"C = \frac{\text{COGS}}{365} d_{\text{inv}} + \frac{S}{365} d_{\text{rec}} - \frac{\text{COGS}}{365} d_{\text{pay}}"),
+            ("Days of stock", r"d_{\text{inv}} = \frac{R}{2} + z\,\sigma\sqrt{L + R}"),
+            ("Fill rate", r"F = \Phi(z)"),
+            ("Links with a middleman", r"m \times n \;\to\; m + n"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 33", "explainer/industry/data/rows_p33.py"),
+              ("The distributor and the route", "explainer/industry/works/distributor.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

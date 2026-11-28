@@ -247,4 +247,56 @@
     });
   };
 
+  W.stockcall = function (el) {
+    var GM = 0.0361, OPEX = 0.0207, SALES = 5e9, REVIEW = 14, CV = 1.0, WACC = 0.08;
+    function erf(x) {
+      var t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+      return x >= 0 ? y : -y;
+    }
+    function phi(x) { return 0.5 * (1 + erf(x / Math.SQRT2)); }
+    function year(v, z) {
+      var fill = phi(z), days = REVIEW / 2 + Math.max(z, 0) * CV * Math.sqrt(v.lead + REVIEW);
+      var vol = Math.max(1 - v.loss / 100 * Math.max(0, 99 - 100 * fill), 0), s = SALES * vol, cogs = s * (1 - GM);
+      var op = s - cogs - OPEX * SALES, inv = cogs / 365 * days, rec = s / 365 * v.recv, ap = cogs / 365 * v.pay, cap = inv + rec - ap;
+      return { fill: fill, days: days, sales: s, op: op, inv: inv, rec: rec, ap: ap, cap: cap, profit: op - WACC * cap };
+    }
+    QB.widget(el, {
+      title: "Run a distributor for a year",
+      sub: "A drug wholesaler with McKesson's margins: $5bn of sales if every order is filled, 3.6 cents kept of each dollar. Choose how much safety stock to hold, and set the maker's lead time, how fast your customers pay you and how slowly you pay the makers.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "z", label: "Safety stock (standard deviations of demand)", min: 0.5, max: 3.5, step: 0.05, value: 2.0, fmt: function (x) { return x.toFixed(2); } },
+        { k: "lead", label: "Maker's lead time, days", min: 3, max: 28, step: 1, value: 14, fmt: function (x) { return x + " days"; } },
+        { k: "recv", label: "Days your customers take to pay", min: 5, max: 60, step: 1, value: 25, fmt: function (x) { return x + " days"; } },
+        { k: "pay", label: "Days you take to pay the makers", min: 10, max: 75, step: 1, value: 56, fmt: function (x) { return x + " days"; } },
+        { k: "loss", label: "Sales lost per point of fill rate below 99%", min: 0.5, max: 4, step: 0.1, value: 2, fmt: function (x) { return x.toFixed(1) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        var xs = [], ys = [], k, best = { z: 0, p: -1e18 };
+        for (k = 0; k <= 60; k++) { var z = 0.5 + 0.05 * k, r = year(v, z); xs.push(r.days); ys.push(r.profit / 1e6); if (r.profit > best.p) best = { z: z, p: r.profit }; }
+        var lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
+        var a = g[0].axes({ x: [xs[0], xs[xs.length - 1]], y: [Math.max(lo, -150) - 5, hi + 10], title: "Profit after the cost of capital, $m, by days of stock",
+                            xfmt: function (x) { return x.toFixed(0) + "d"; }, yfmt: function (y) { return "$" + y.toFixed(0) + "m"; } });
+        a.hline(0, { color: C.muted, dash: [4, 4], width: 1 });
+        a.line(xs, ys, { color: C.gain, width: 2.4 });
+        var cur = year(v, v.z);
+        a.vline(cur.days, { color: C.spot, dash: [5, 4], width: 1.4 });
+        var b = g[1].axes({ x: [0, 4], y: [-900, 900], title: "Money tied up, $m: stock, customers' debts, owed to makers, net",
+                            xfmt: function () { return ""; }, yfmt: function (y) { return y.toFixed(0); } });
+        b.bars([0.5, 1.5, 2.5, 3.5], [cur.inv / 1e6, cur.rec / 1e6, -cur.ap / 1e6, cur.cap / 1e6], 0.7,
+               { color: function (i) { return [C.spot, C.p, C.loss, cur.cap < 0 ? C.gain : C.loss][i]; } });
+        b.hline(0, { color: C.muted, width: 1 });
+        s.r = cur; s.best = year(v, best.z);
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["order lines filled; days of stock", (100 * r.fill).toFixed(1) + "%; " + r.days.toFixed(1)],
+                ["money the business needs", (r.cap < 0 ? "-" : "") + "$" + Math.abs(r.cap / 1e6).toFixed(0) + "m"],
+                ["profit after the cost of capital", (r.profit < 0 ? "-" : "") + "$" + Math.abs(r.profit / 1e6).toFixed(0) + "m"],
+                ["the best stock here", s.best.days.toFixed(1) + " days, " + (100 * s.best.fill).toFixed(1) + "% filled, $" + (s.best.profit / 1e6).toFixed(0) + "m"]];
+      },
+      note: "As in the film: with 18 days of stock the distributor fills 97.7% of lines and makes $85m after the cost of capital; 19 days (99% filled) makes $88m; 26 days (every line) $82m; because it pays the makers in 56 days but is paid in 25, its money tied up is negative, about -$160m. Margins and payment days are McKesson's; the rest are this series' assumptions.",
+    });
+  };
+
 })();

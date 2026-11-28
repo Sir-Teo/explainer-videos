@@ -2993,3 +2993,39 @@ def drive_robot(w: float = 0.7, color: str = "#F2A65A", pod: bool = True) -> VGr
         g.pod = VGroup(legs, bins)
         g.add(g.pod)
     return g
+
+
+def pallet(w: float = 1.4, rows: int = 3, cols: int = 4, color: str = "#C89F6A") -> VGroup:
+    """A wooden pallet with cases stacked on it (``g.cases``, bottom row first), front view; sits on y = 0."""
+    base = VGroup(*[Rectangle(width=w, height=0.035 * w, stroke_width=0, fill_color="#8B6B43", fill_opacity=1).move_to(
+        [0, y * w, 0]) for y in (0.0175, 0.1)])
+    legs = VGroup(*[Rectangle(width=0.1 * w, height=0.05 * w, stroke_width=0, fill_color="#6E5233", fill_opacity=1).move_to(
+        [x * w, 0.06 * w, 0]) for x in (-0.42, 0, 0.42)])
+    cw, ch = 0.96 * w / cols, 0.2 * w
+    cases = VGroup()
+    for r_ in range(rows):
+        for c_ in range(cols):
+            box = Rectangle(width=cw * 0.96, height=ch * 0.94, stroke_color="#0E1117", stroke_width=1, fill_color=color,
+                            fill_opacity=1).move_to([-0.48 * w + cw * (c_ + 0.5), 0.12 * w + ch * (r_ + 0.5), 0])
+            tape = Line(box.get_top() + DOWN * 0.001, box.get_top() + DOWN * ch * 0.3, stroke_color="#E8E2D4", stroke_width=2)
+            cases.add(VGroup(box, tape))
+    g = VGroup(base, legs, cases)
+    g.cases = cases
+    return g
+
+
+def invoice(w: float = 1.0, terms: str = "net 30", color: str = "#E8EAED") -> VGroup:
+    """A paper invoice with a heading bar, line items, a total and its payment terms (``g.terms``)."""
+    h = 1.3 * w
+    paper = Polygon([-0.5 * w, -0.5 * h, 0], [0.5 * w, -0.5 * h, 0], [0.5 * w, 0.38 * h, 0], [0.38 * w, 0.5 * h, 0],
+                    [-0.5 * w, 0.5 * h, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    bar = Rectangle(width=0.8 * w, height=0.08 * h, stroke_width=0, fill_color="#7EC8F5", fill_opacity=1).move_to([-0.05 * w, 0.36 * h, 0])
+    lines = VGroup(*[Line([-0.4 * w, y * h, 0], [0.3 * w, y * h, 0], stroke_color="#9AA3B2", stroke_width=2) for y in (0.18, 0.08, -0.02, -0.12)])
+    total = Line([0.05 * w, -0.24 * h, 0], [0.4 * w, -0.24 * h, 0], stroke_color="#20242C", stroke_width=4)
+    t = tx(terms, 22 * w, "#E8554E", bold=True)
+    if t.width > 0.55 * w:
+        t.scale_to_fit_width(0.55 * w)
+    t.move_to([-0.15 * w, -0.38 * h, 0])
+    g = VGroup(paper, bar, lines, total, t)
+    g.terms = t
+    return g

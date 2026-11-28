@@ -2274,6 +2274,49 @@ def fred_grocery():
     return _fred_write("fred_grocery", FRED_GROCERY)
 
 
+MIDDLE_COMPANIES = [(927653, "MCK", "USD"), (1140859, "COR", "USD"), (721371, "CAH", "USD"), (1000228, "HSIC", "USD"),
+                    (75252, "OMI", "USD"), (96021, "SYY", "USD"), (1665918, "USFD", "USD"), (1618673, "PFGC", "USD"),
+                    (1020859, "UNFI", "USD"), (1517175, "CHEF", "USD"), (7536, "ARW", "USD"), (8858, "AVT", "USD"),
+                    (1177394, "SNX", "USD"), (918965, "SCSC", "USD"), (1402057, "CDW", "USD"), (929008, "WCC", "USD"),
+                    (277135, "GWW", "USD"), (815556, "FAST", "USD"), (1003078, "MSM", "USD"), (109563, "AIT", "USD"),
+                    (945114, "GIC", "USD"), (40987, "GPC", "USD"), (1856525, "CNM", "USD"), (105016, "WSO", "USD"),
+                    (945841, "POOL", "USD"), (1650729, "SITE", "USD"), (1996862, "BG", "USD"), (7084, "ADM", "USD"),
+                    (821026, "ANDE", "USD")]
+
+
+def _middle_items() -> dict:
+    return dict(_grocery_items(), receivables=[("us-gaap", "AccountsReceivableNetCurrent"),
+                                               ("us-gaap", "ReceivablesNetCurrent")])
+
+
+def sec_middle():
+    """Annual figures of American distributors and wholesalers (drugs, medical and dental supplies, food service,
+    electronics and IT, electrical, industrial MRO, auto parts, water, HVAC, pool and landscape supplies) and three
+    agricultural traders, from their Forms 10-K (SEC company facts), in billions of dollars, with ``sec_grocery``'s items
+    and receivables.  McKesson's fiscal years end in March, Cardinal's, Sysco's and Avnet's around June, Cencora's in
+    September; Bunge is Bunge Global SA's filings (from 2023; earlier years as restated in them)."""
+    items = _middle_items()
+    return _write("sec_middle", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(MIDDLE_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_MIDDLE = {"WHLSLRSMSA": "Merchant wholesalers except manufacturers' sales branches: sales ($ million a month, SA; Census Bureau)",
+               "I42IMSM144SCEN": "Merchant wholesalers: inventories ($ million, SA; Census Bureau)",
+               "WHLSLRIRSA": "Merchant wholesalers: inventories to sales ratio (SA; Census Bureau)",
+               "S4242SM144SCEN": "Merchant wholesalers: drugs and druggists' sundries, sales ($ million a month, SA; Census Bureau)",
+               "S4244SM144SCEN": "Merchant wholesalers: grocery and related products, sales ($ million a month, SA; Census Bureau)",
+               "S4236SM144SCEN": "Merchant wholesalers: electrical and electronic goods, sales ($ million a month, SA; Census Bureau)",
+               "S4238SM144SCEN": "Merchant wholesalers: machinery, equipment and supplies, sales ($ million a month, SA; Census Bureau)",
+               "USWTRADE": "All employees: wholesale trade (thousands, SA; BLS)",
+               "PCU423423": "PPI by industry: merchant wholesalers, durable goods (margins; June 2004 = 100, NSA; BLS)",
+               "PCU424424": "PPI by industry: merchant wholesalers, nondurable goods (margins; June 2005 = 100, NSA; BLS)",
+               "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_middle():
+    return _fred_write("fred_middle", FRED_MIDDLE)
+
+
 ECOM_COMPANIES = [(1018724, "AMZN", "USD"), (1065088, "EBAY", "USD"), (1370637, "ETSY", "USD"), (1594805, "SHOP", "USD"),
                   (1616707, "W", "USD"), (1766502, "CHWY", "USD"), (1099590, "MELI", "USD"), (1834584, "CPNG", "USD"),
                   (1737806, "PDD", "CNY"), (1549802, "JD", "CNY"), (1577552, "BABA", "CNY"), (1703399, "SE", "USD"),
@@ -2737,7 +2780,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

@@ -2564,6 +2564,7 @@ scored in Part 64 and at each refresh.
 | 30 · Telecoms | done 2026-11-28 (about 60 Register rows; the 10-Ks for 2025 of Verizon, AT&T, T-Mobile, Charter, Comcast, American Tower, EchoStar and AST SpaceMobile; three 2026 10-Qs; Verizon's 2020 and AT&T's 2021 10-Ks on C-Band; DISH's 2019 10-K; the SEC extract of thirty-four companies; FRED's phone prices and telecom jobs) | `works/telco.py` | 13 scenes, with towers whose antennas light by tenant, phones, racks and a network diagram | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 31 · Grocery and Mass Retail | done 2026-11-28 (about 40 Register rows and Part 22's suppliers' rows; the Forms 10-K of Walmart and Costco for fiscal 2026, Kroger for fiscal 2025 and fiscal 2020, Albertsons and Dollar General for fiscal 2025, and Target; the SEC extract of nineteen grocers, mass merchants, clubs, dollar and convenience chains and Amazon, with inventory and payables; FRED's grocery sales, food prices, retail jobs and e-commerce share) | `works/store.py` | 13 scenes, with storefronts, shelves, trolleys, a warehouse, houses, a delivery van and parcels | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 32 · E-commerce | done 2026-11-28 (about 60 Register rows and Amazon's revenue, segment and shipping tables; Amazon's letters for 1997 and 2000, its 10-Ks for 2017-2025 and 10-Qs for 2025 and 2026; the 10-Ks for 2025 of eBay, Etsy, Shopify, MercadoLibre, Coupang, Wayfair and Chewy; the 20-Fs of PDD, JD.com, Alibaba and Sea; Wish's S-1 and 10-Ks; the FTC's 2023 release; Amazon's seller fees; the SEC extract of twenty-five companies; the Census Bureau's e-commerce series and the BLS's warehouse and courier jobs) | `works/marketplace.py` | 13 scenes, with a shop page whose sponsored tiles light up, warehouse robots, a conveyor of parcels, vans, a laptop and a world map | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 33 · The Middlemen | done 2026-11-28 (about 60 Register rows; the 10-Ks for fiscal 2026 of McKesson, Cencora, Cardinal Health and Sysco and for 2025 of US Foods, Grainger and Bunge; Mitsui & Co.'s results for the year to March 2026 and the half to September 2026; Chemdex's 1999 prospectus and Ventro's 2000 10-K; the SEC extract of twenty-nine distributors and traders; the Census Bureau's wholesale trade and the BLS's wholesale jobs and margin prices) | `works/distributor.py` | 13 scenes, with factories, warehouses, pallets, shelves, invoices, vans, a town's delivery routes, chips and ships | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2964,3 +2965,15 @@ delivery and Shein are left to the map. Added are the FTC's and 22 states' Augus
 the cloud's profit against the shops'. *Called it?* uses Wish's 2020 prospectus in place of the e-commerce forecasts of 1999
 and 2020, which were not found in primary sources; the series' call is on the Census Bureau's own share. Written as code only
 and checked from snapshots; not rendered.
+
+Part 33 follows its draft's question. The trading houses' history since 1868 was not checked against primary sources and is
+left out; the hook is the three American drug wholesalers' revenue and profit, which the sweep confirmed (about a penny on the
+dollar), against Johnson & Johnson's revenue, and Mitsui & Co.'s results, in which more than half the profit came from
+companies it partly owns. Run it is the draft's choice between holding stock and drop-shipping (`works/distributor.py`: safety
+stock, fill rate and lost customers, working capital charged at the cost of capital, and a delivery route whose cost falls
+with local share). Group purchasing appears through McKesson's and Cencora's concentration and Cardinal's Red Oak Sourcing
+venture with CVS; commodity traders through Bunge and ADM; Hong Kong's sourcing agents and India's stockists are left to the
+map. Added are the GLP-1 pass-through and the opioid settlements. *Called it?* uses Chemdex's 1999 prospectus, scored against
+Ventro's closure of the marketplace in December 2000, in place of the late-1990s disintermediation forecasts, which were not
+found in primary sources; the series' call is on Mitsui's own raised forecast. Written as code only and checked from
+snapshots; not rendered.
