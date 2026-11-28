@@ -89,4 +89,44 @@ PARTS = [
               ("The auction, the subscriber and the tower", "explainer/industry/works/telco.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=31, level="U", widget="storeyear", prereq=(3, 4, 22),
+        question="How does a business that keeps two or three cents of every dollar become one of the largest on earth?",
+        story="The part opens on Walmart: $713bn of revenue in the year to January 2026, 2.1 million people and $21.9bn of "
+              "profit, about three cents a dollar; and on Costco, whose $5.9bn of membership fees came to almost two-thirds of "
+              "its $9.2bn of profit. The viewer runs a supermarket on $50m of sales at Kroger's 23.3% gross margin and keeps "
+              "$1.15m; prices set by rivals nearby leave little room either way; a 1% price cut needs 6.1% more sales; staffing "
+              "too thin or too thick costs profit; a 10% fall in sales cuts profit by seven-tenths. Walmart's dollar is 75.8 "
+              "cents of goods, 20.9 of running costs and 4.2 of operating profit; clubs keep 13-19 cents after the goods and "
+              "dollar stores over 30, but almost all end with one to seven cents. Goods sit 40 days at Walmart and are paid for "
+              "after 43; suppliers fund $4bn of Walmart's stock and $84bn of Amazon's. Costco sells about three times as much "
+              "per square foot as Walmart's American stores; its fees are half its operating income; 92.3% of members renew. "
+              "Clorox sells 26% of its goods to Walmart. A court blocked Kroger and Albertsons in December 2024; Kroger "
+              "closed its Ocado warehouses and took $2.5bn of charges. The series gives 55% that Costco reports more than "
+              "87 million paid members at the end of fiscal 2027.",
+        handoff="Part 32, e-commerce, asks whether selling online is a shop, a toll road or an advertising business.",
+        outside="Percentages and fixed costs; Part 3's accounts; Part 4's fixed costs; Part 22's brands and buyers; Economics, "
+                "Built's pricing (uniform chain prices, high-low against everyday low prices) and mergers.",
+        objectives={
+            "U": ["Explain why a grocer's margin is set by the rivals nearby, and why price wars are so costly.",
+                  "Explain how fast-turning stock and slow payment let suppliers fund a retailer.",
+                  "Explain the warehouse club's model: goods near cost, profit from the fee."],
+            "M": ["Compute the extra sales a price cut needs to break even, and a store's operating leverage.",
+                  "Compute inventory and payables days and the cash suppliers fund.",
+                  "Compute a return on assets as margin times turns."],
+            "D": ["Read a company's plan against its later write-down, and make and state a dated, scorable forecast."],
+            "I": ["Read a retailer's segment sales, store counts, square feet and margins in its filings.",
+                  "Read a supplier's largest-customer disclosure and a club's membership statistics."],
+        },
+        results=[
+            ("Break-even volume for a price cut", r"\Delta V = \frac{\pi + F}{S\,[(1 - c)(1 - o) - (1 - g)]} - 1"),
+            ("Days of stock and of payables", r"d_{\text{inv}} = \frac{I}{\text{COGS}/365}, \quad d_{\text{pay}} = \frac{AP}{\text{COGS}/365}"),
+            ("Return on assets", r"\text{ROA} = \frac{\text{profit}}{\text{sales}} \times \frac{\text{sales}}{\text{assets}}"),
+            ("Sales density", r"\frac{\text{sales}}{\text{square feet}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 31", "explainer/industry/data/rows_p31.py"),
+              ("The store and the float", "explainer/industry/works/store.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

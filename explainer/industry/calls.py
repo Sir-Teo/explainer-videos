@@ -532,6 +532,23 @@ CALLS = [
          rule="Comcast's Form 10-K for 2027: total domestic broadband customers at the two year-ends as reported; unscored if "
               "Comcast no longer reports the figure",
          due="2028-02", ours=True),
+    Call(31, "Kroger", "2021-03",
+         "'The future success of the digital business will also depend on the efficiency and cost effectiveness of "
+         "fulfilling orders across our modalities, whether in store, in pickup-only locations, and through customer "
+         "fulfillment centers powered by Ocado'",
+         "Kroger, Form 10-K for fiscal 2020",
+         outcome="In January 2026 Kroger closed its automated fulfillment centers in Pleasant Prairie, Frederick and Groveland, "
+                 "which 'had not met operational or financial expectations', cancelled the Charlotte site and recorded $2.5bn "
+                 "of impairment and related charges; it will deliver online orders 'using our store footprint, third-party "
+                 "delivery providers and automated fulfillment facilities where applicable' (Form 10-K for fiscal 2025)"),
+    Call(31, "Industry, Built", "2026-11-28",
+         "Costco will report more than 87.0 million paid members at the end of its 2027 fiscal year. Probability: 55%.",
+         "This series, Part 31, chapter 10; reasoning: paid members rose from 76.2 million (2024) to 81.0 million (2025) and "
+         "84.1 million (2026), so it needs 2.9 million more, a little less than the 3.1 million it added last year; renewals are 92.3% in the US and "
+         "Canada and new warehouses keep opening; against: the yearly gain slowed from 4.8 million to 3.1 million, and a "
+         "weaker economy or a fee rise could slow it further",
+         rule="Costco's Form 10-K for fiscal 2027: paid members at the fiscal year-end as reported; true if above 87.0 million",
+         due="2027-10", ours=True),
 ]
 
 

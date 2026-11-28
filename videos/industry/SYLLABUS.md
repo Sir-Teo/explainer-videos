@@ -2562,6 +2562,7 @@ scored in Part 64 and at each refresh.
 | 28 · Airlines | done 2026-11-27 (about 50 Register rows; Delta's 10-K for 2025 and its four 2026 results releases; the 10-Ks for 2025 of Southwest, American, Spirit Aviation Holdings and Alaska; the Airline Deregulation Act and the CARES Act; Littlewood (1972); Berkshire's letter for 2007; the SEC extract of seventeen airlines, lessors and Sabre; FRED's BTS traffic, EIA jet fuel, BLS fares and jobs) | `works/airline.py` | 12 scenes, with aircraft, cabins whose seats fill by fare, and the flight's revenue curves | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 29 · Rail, Trucks and Parcels | done 2026-11-27 (about 75 Register rows; the 10-Ks for 2025 of Union Pacific, UPS, Old Dominion, Knight-Swift, J.B. Hunt and Aurora, Union Pacific's third-quarter 10-Q, FedEx's 10-K for fiscal 2026, Aurora's 2021 10-K and 2026 letter, Yellow's last 10-K and bankruptcy 8-K; the Postal Service's 10-K; the Staggers Act; FMCSA's carrier census; the SEC extract of twenty-five companies; FRED's traffic, prices, jobs, diesel and e-commerce) | `works/freight.py` | 13 scenes, with trains of hoppers, boxcars, tank and well cars, tractor-trailers, vans, parcels, service centers and a hub-and-spoke network | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 30 · Telecoms | done 2026-11-28 (about 60 Register rows; the 10-Ks for 2025 of Verizon, AT&T, T-Mobile, Charter, Comcast, American Tower, EchoStar and AST SpaceMobile; three 2026 10-Qs; Verizon's 2020 and AT&T's 2021 10-Ks on C-Band; DISH's 2019 10-K; the SEC extract of thirty-four companies; FRED's phone prices and telecom jobs) | `works/telco.py` | 13 scenes, with towers whose antennas light by tenant, phones, racks and a network diagram | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 31 · Grocery and Mass Retail | done 2026-11-28 (about 40 Register rows and Part 22's suppliers' rows; the Forms 10-K of Walmart and Costco for fiscal 2026, Kroger for fiscal 2025 and fiscal 2020, Albertsons and Dollar General for fiscal 2025, and Target; the SEC extract of nineteen grocers, mass merchants, clubs, dollar and convenience chains and Amazon, with inventory and payables; FRED's grocery sales, food prices, retail jobs and e-commerce share) | `works/store.py` | 13 scenes, with storefronts, shelves, trolleys, a warehouse, houses, a delivery van and parcels | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2940,3 +2941,14 @@ and net neutrality are left to the map and later parts; added are EchoStar's sal
 network, cable's broadband losses against fibre and fixed wireless, and the 2025-26 deals. *Called it?* uses DISH's 2019
 commitment in place of the 3G business cases of 2000, which were not found in primary sources. Written as code only and
 checked from snapshots; not rendered.
+
+Part 31 follows its draft's question, with three cents in place of two (Walmart kept 3.1 cents in fiscal 2026). Sam Walton's
+flights and the Albrecht brothers' telephone directory were not checked against primary sources and are left out; the hook
+is Walmart's revenue and profit since 2010 and Costco's fees against its profit. Run it is the draft's store for a year
+(`works/store.py`: a price set against rivals nearby, staffing that loses sales when cut, and operating leverage); range
+is told rather than modelled, and the distribution centre and the club are read from the filings rather than built.
+Margin times turns and the suppliers' float are computed from every company's inventory and payables. Logistics, loyalty
+cards and the international formats (Europe, Japan, China, India) are left to the map and Parts 32 and 33; added are the
+Kroger-Albertsons merger and its injunction, Dollar General's reach, and Amazon passing Walmart's revenue. *Called it?*
+uses Kroger's 2021 bet on Ocado's warehouses, scored against their closure in 2026, in place of the online-share forecasts
+of 2015 and 2020, which were not found in primary sources. Written as code only and checked from snapshots; not rendered.

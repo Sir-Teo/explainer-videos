@@ -2242,6 +2242,38 @@ def fred_air():
     return _fred_write("fred_air", FRED_AIR)
 
 
+GROCERY_COMPANIES = [(104169, "WMT", "USD"), (909832, "COST", "USD"), (56873, "KR", "USD"), (1646972, "ACI", "USD"),
+                     (27419, "TGT", "USD"), (29534, "DG", "USD"), (935703, "DLTR", "USD"), (1531152, "BJ", "USD"),
+                     (1575515, "SFM", "USD"), (105418, "WMK", "USD"), (50493, "IMKTA", "USD"), (1771515, "GO", "USD"),
+                     (726958, "CASY", "USD"), (1177609, "FIVE", "USD"), (1639300, "OLLI", "USD"), (1041803, "PSMT", "USD"),
+                     (103595, "VLGEA", "USD"), (1547459, "NGVC", "USD"), (1018724, "AMZN", "USD")]
+def _grocery_items() -> dict:
+    return dict(FASHION_ITEMS, payables=[("us-gaap", "AccountsPayableCurrent")],
+                inventory=[("us-gaap", "InventoryNet"), ("us-gaap", "RetailRelatedInventoryMerchandise")])
+
+
+def sec_grocery():
+    """Annual figures of American grocers, mass merchants, warehouse clubs, dollar stores, convenience and discount chains
+    and Amazon, from their Forms 10-K (SEC company facts), in billions of dollars, with ``sec_fashion``'s items and
+    accounts payable; most fiscal years end around the end of January (Costco's and PriceSmart's around the end of August)."""
+    items = _grocery_items()
+    return _write("sec_grocery", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(GROCERY_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_GROCERY = {"RSGCS": "Retail sales: grocery stores ($ million a month, SA; Census Bureau)",
+                "RSXFS": "Advance retail sales: retail trade and food services excluding motor vehicles ($ million, SA; Census)",
+                "ECOMPCTSA": "E-commerce retail sales as a percent of total sales (quarterly, SA; Census Bureau)",
+                "CUUR0000SAF11": "CPI-U: food at home (1982-84 = 100, NSA; BLS)",
+                "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+                "CES4244500001": "All employees: food and beverage stores (thousands, SA; BLS)",
+                "USTRADE": "All employees: retail trade (thousands, SA; BLS)"}
+
+
+def fred_grocery():
+    return _fred_write("fred_grocery", FRED_GROCERY)
+
+
 TEL_COMPANIES = [(732712, "VZ", "USD"), (732717, "T", "USD"), (1283699, "TMUS", "USD"), (1166691, "CMCSA", "USD"),
                  (1091667, "CHTR", "USD"), (1053507, "AMT", "USD"), (1051470, "CCI", "USD"), (1034054, "SBAC", "USD"),
                  (18926, "LUMN", "USD"), (20520, "FYBR", "USD"), (1051512, "TDS", "USD"), (821130, "USM", "USD"),
@@ -2664,7 +2696,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
