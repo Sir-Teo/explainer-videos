@@ -299,4 +299,62 @@
     });
   };
 
+  W.franchiseyear = function (el) {
+    var FOOD = 0.31, LAB = 0.30, FIXED = 0.6, AD = 0.04, OTHER = 0.10;
+    function erf(x) {
+      var t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+      return x >= 0 ? y : -y;
+    }
+    function phi(x) { return 0.5 * (1 + erf(x / Math.SQRT2)); }
+    function store(v, fee) {
+      var s = v.sales * 1e6, lab = v.wage * LAB * s, apps = v.apps / 100 * v.comm / 100 * s;
+      var profit = s * (1 - FOOD - fee - AD - OTHER) - lab - apps;
+      return { s: s, profit: profit, margin: profit / s, payback: profit > 0 ? v.invest * 1e6 / profit : Infinity,
+               parts: [FOOD * s, lab, fee * s, AD * s, OTHER * s, apps, profit] };
+    }
+    function franchisor(v, fee) {
+      var pb = store(v, fee).payback, rate = isFinite(pb) ? 1 - phi((Math.log(pb) - Math.log(5)) / 0.35) : 0, n = 1000, tot = 0;
+      for (var y = 0; y < 10; y++) { n += 400 * rate; tot += n * v.sales * 1e6 * fee * 0.84 - 60e6; }
+      return { rate: rate, stores: n, total: tot };
+    }
+    QB.widget(el, {
+      title: "Run a franchise for a year",
+      sub: "You run one quick-service restaurant as a franchisee: food and paper take 31 cents of each dollar and crew and managers 30, at McDonald's company-store shares. Set the restaurant's sales, the franchisor's fee, wages, and how much comes through delivery apps; then see what the franchisor's fee does to the whole system.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "fee", label: "Rent and royalties to the franchisor, % of sales", min: 6, max: 18, step: 0.1, value: 12.7, fmt: function (x) { return x.toFixed(1) + "%"; } },
+        { k: "sales", label: "The restaurant's sales a year, $ million", min: 2, max: 6, step: 0.1, value: 4.0, fmt: function (x) { return "$" + x.toFixed(1) + "m"; } },
+        { k: "wage", label: "Wages against today's", min: 0.9, max: 1.4, step: 0.01, value: 1.0, fmt: function (x) { return (x >= 1 ? "+" : "") + Math.round(100 * (x - 1)) + "%"; } },
+        { k: "apps", label: "Share of sales through delivery apps, %", min: 0, max: 40, step: 1, value: 15, fmt: function (x) { return x + "%"; } },
+        { k: "comm", label: "The apps' commission, %", min: 10, max: 30, step: 1, value: 20, fmt: function (x) { return x + "%"; } },
+        { k: "invest", label: "The franchisee's investment, $ million", min: 0.8, max: 3, step: 0.1, value: 1.5, fmt: function (x) { return "$" + x.toFixed(1) + "m"; } },
+      ],
+      draw: function (g, v, s) {
+        var r = store(v, v.fee / 100);
+        var names = ["food", "labour", "fees", "ads", "other", "apps", "profit"];
+        var a = g[0].axes({ x: [-0.5, 6.5], y: [Math.min(0, r.profit / 1e3) - 50, Math.max.apply(null, r.parts) / 1e3 * 1.15], title: "The restaurant's year, $ thousand",
+                            xfmt: function (x) { var i = Math.round(x); return (i >= 0 && i < 7 && Math.abs(x - i) < 0.01) ? names[i] : ""; },
+                            yfmt: function (y) { return y.toFixed(0); } });
+        a.bars([0, 1, 2, 3, 4, 5, 6], r.parts.map(function (p) { return p / 1e3; }), 0.7,
+               { color: function (i) { return i === 6 ? (r.profit >= 0 ? C.gain : C.loss) : (i === 2 ? C.spot : C.p); } });
+        a.hline(0, { color: C.muted, width: 1 });
+        var fs = [], tot = [], best = { f: 0, t: -1e18 };
+        for (var k = 0; k <= 48; k++) { var f = 0.06 + 0.0025 * k, q = franchisor(v, f); fs.push(100 * f); tot.push(q.total / 1e9); if (q.total > best.t) best = { f: f, t: q.total }; }
+        var b = g[1].axes({ x: [6, 18], y: [Math.min.apply(null, tot) - 1, Math.max.apply(null, tot) + 1], title: "Franchisor: ten years' profit, $bn, by its fee",
+                            xfmt: function (x) { return x.toFixed(0) + "%"; }, yfmt: function (y) { return y.toFixed(0); } });
+        b.line(fs, tot, { color: C.spot, width: 2.4 });
+        b.vline(v.fee, { color: C.p, dash: [5, 4], width: 1.4 });
+        s.r = r; s.best = best; s.fr = franchisor(v, v.fee / 100);
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["the franchisee's profit; per dollar", (r.profit < 0 ? "-" : "") + "$" + Math.abs(r.profit / 1e3).toFixed(0) + "k; " + (100 * r.margin).toFixed(1) + "c"],
+                ["years to pay back the investment", isFinite(r.payback) ? r.payback.toFixed(1) : "never"],
+                ["would-be franchisees who open at this fee", (100 * s.fr.rate).toFixed(0) + "%"],
+                ["the franchisor's best fee here", (100 * s.best.f).toFixed(1) + "%"]];
+      },
+      note: "As in the film: at $4.0m of sales and McDonald's 12.7% take, the franchisee keeps about $372k (the film's $371k is at $3.99m), 9.3 cents a dollar, and pays back $1.5m in about four years; wages 20% higher cut that to $132k; with this series' assumptions about franchisees' patience, the franchisor's ten-year profit peaks near 12.5%. Labour here moves fully with wages but not with sales; the film's Works keeps 60% of labour fixed when sales change.",
+    });
+  };
+
 })();

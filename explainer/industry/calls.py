@@ -585,6 +585,20 @@ CALLS = [
          rule="Mitsui & Co.'s consolidated financial results for the year ended 31 March 2027: profit for the year attributable "
               "to owners of the parent as first reported; true if ¥1,050bn or more",
          due="2027-05", ours=True),
+    Call(34, "DoorDash", "2020-12",
+         "'We have a history of net losses, we anticipate increasing expenses in the future, and we may not be able to "
+         "maintain or increase profitability in the future'; it lost $667m in 2019 on $885m of revenue",
+         "DoorDash, prospectus (Form 424B4), December 2020",
+         outcome="Losses continued through 2023 ($1.37bn in 2022, $558m in 2023); it made $123m in 2024 and $935m in 2025, on "
+                 "revenue of $13.7bn and $102bn of Marketplace orders (Forms 10-K for 2021-2025). The warning was fair, and "
+                 "so was the bet: profit came, at about a cent per dollar of orders"),
+    Call(34, "Industry, Built", "2026-11-28",
+         "McDonald's will report at least 50,000 restaurants at 31 December 2027, its stated target. Probability: 25%.",
+         "This series, Part 34, chapter 10; reasoning: it had 45,356 at the end of 2025 after adding 1,655 in 2024 and 1,879 "
+         "in 2025, and expects about 2,100 net additions in 2026, which would leave about 2,544 for 2027 alone, more than in "
+         "any recent year; for: it calls the plan the fastest unit growth in its history and has been accelerating",
+         rule="McDonald's Form 10-K for 2027: total restaurants at 31 December 2027 as reported; true if 50,000 or more",
+         due="2028-02", ours=True),
 ]
 
 

@@ -3029,3 +3029,41 @@ def invoice(w: float = 1.0, terms: str = "net 30", color: str = "#E8EAED") -> VG
     g = VGroup(paper, bar, lines, total, t)
     g.terms = t
     return g
+
+
+def restaurant(w: float = 2.0, color: str = "#E8554E", sign: str = "#F6C453") -> VGroup:
+    """A quick-service restaurant in side view: a low building with a band of colour, big windows, a door, a pole sign
+    (``g.sign``) and a drive-through lane with a car at the window (``g.car``); sits on y = 0."""
+    h = 0.34 * w
+    body = Rectangle(width=0.7 * w, height=h, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to([0, h / 2, 0])
+    band = Rectangle(width=0.74 * w, height=0.08 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, h + 0.02 * w, 0])
+    roof = Polygon([-0.37 * w, h + 0.06 * w, 0], [0.37 * w, h + 0.06 * w, 0], [0.3 * w, h + 0.12 * w, 0], [-0.3 * w, h + 0.12 * w, 0],
+                   stroke_width=0, fill_color="#9AA3B2", fill_opacity=1)
+    wins = VGroup(*[Rectangle(width=0.12 * w, height=0.14 * w, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to(
+        [x * w, 0.18 * w, 0]) for x in (-0.24, -0.1, 0.04)])
+    door = Rectangle(width=0.07 * w, height=0.2 * w, stroke_width=0, fill_color="#5A6577", fill_opacity=1).move_to([0.2 * w, 0.1 * w, 0])
+    pole = Rectangle(width=0.02 * w, height=0.55 * w, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to([-0.48 * w, 0.275 * w, 0])
+    board = RoundedRectangle(corner_radius=0.02 * w, width=0.16 * w, height=0.12 * w, stroke_width=0, fill_color=sign,
+                             fill_opacity=1).move_to([-0.48 * w, 0.58 * w, 0])
+    lane = Line([0.36 * w, 0.0, 0], [0.62 * w, 0.0, 0], stroke_color="#6B7486", stroke_width=3)
+    car_ = car(0.2 * w, color="#7EC8F5").move_to([0.5 * w, 0.045 * w, 0])
+    g = VGroup(body, band, roof, wins, door, pole, board, lane, car_)
+    g.sign, g.car = board, car_
+    return g
+
+
+def burger(w: float = 0.8) -> VGroup:
+    """A hamburger, front view: bun, lettuce, cheese, patty and the bottom bun."""
+    top = Polygon(*[[0.5 * w * np.cos(t), 0.28 * w + 0.3 * w * np.sin(t), 0] for t in np.linspace(0, PI, 24)], stroke_width=0,
+                  fill_color="#D9A35B", fill_opacity=1)
+    top_base = Rectangle(width=w, height=0.04 * w, stroke_width=0, fill_color="#D9A35B", fill_opacity=1).move_to([0, 0.28 * w, 0])
+    seeds = VGroup(*[Ellipse(width=0.06 * w, height=0.03 * w, stroke_width=0, fill_color="#F5E6C8", fill_opacity=1).move_to(
+        [x * w, y * w, 0]) for x, y in ((-0.2, 0.5), (0.0, 0.58), (0.2, 0.5), (-0.08, 0.42), (0.12, 0.4))])
+    lettuce = Rectangle(width=1.04 * w, height=0.05 * w, stroke_width=0, fill_color="#7BD88F", fill_opacity=1).move_to([0, 0.235 * w, 0])
+    cheese = Polygon([-0.5 * w, 0.21 * w, 0], [0.5 * w, 0.21 * w, 0], [0.38 * w, 0.15 * w, 0], [-0.38 * w, 0.15 * w, 0], stroke_width=0,
+                     fill_color="#F6C453", fill_opacity=1)
+    patty = RoundedRectangle(corner_radius=0.04 * w, width=w, height=0.12 * w, stroke_width=0, fill_color="#6B3E26", fill_opacity=1).move_to(
+        [0, 0.13 * w, 0])
+    bottom = RoundedRectangle(corner_radius=0.05 * w, width=0.96 * w, height=0.1 * w, stroke_width=0, fill_color="#C88E4A",
+                              fill_opacity=1).move_to([0, 0.03 * w, 0])
+    return VGroup(bottom, patty, cheese, lettuce, top, top_base, seeds)

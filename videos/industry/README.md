@@ -9,8 +9,8 @@ Waste*](industry14/README.md), [*Semiconductors*](industry15/README.md), [*Elect
 [*Automobiles*](industry17/README.md), [*Aerospace and Defence*](industry18/README.md),
 [*Machinery*](industry19/README.md), [*Pharmaceuticals*](industry20/README.md), [*Medical
 Technology*](industry21/README.md), [*Consumer Goods*](industry22/README.md), [*Fashion and
-Luxury*](industry23/README.md), [*Construction*](industry24/README.md), [*Homes*](industry25/README.md), [*Property*](industry26/README.md), [*Shipping and Ports*](industry27/README.md), [*Airlines*](industry28/README.md), [*Rail, Trucks and Parcels*](industry29/README.md), [*Telecoms*](industry30/README.md), [*Grocery and Mass Retail*](industry31/README.md), [*E-commerce*](industry32/README.md) and [*The Middlemen*](industry33/README.md), are built, in English, with their labs and
-interactives: Acts I to V are complete and Act VI has begun. Parts 34-64 are planned.** This file is the plan. The standard every part meets, the
+Luxury*](industry23/README.md), [*Construction*](industry24/README.md), [*Homes*](industry25/README.md), [*Property*](industry26/README.md), [*Shipping and Ports*](industry27/README.md), [*Airlines*](industry28/README.md), [*Rail, Trucks and Parcels*](industry29/README.md), [*Telecoms*](industry30/README.md), [*Grocery and Mass Retail*](industry31/README.md), [*E-commerce*](industry32/README.md), [*The Middlemen*](industry33/README.md) and [*Restaurants and Franchising*](industry34/README.md), are built, in English, with their labs and
+interactives: Acts I to V are complete and Act VI has begun. Parts 35-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 

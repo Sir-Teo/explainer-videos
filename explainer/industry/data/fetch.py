@@ -2274,6 +2274,39 @@ def fred_grocery():
     return _fred_write("fred_grocery", FRED_GROCERY)
 
 
+REST_COMPANIES = [(63908, "MCD", "USD"), (1041061, "YUM", "USD"), (1618756, "QSR", "USD"), (1286681, "DPZ", "USD"),
+                  (1058090, "CMG", "USD"), (829224, "SBUX", "USD"), (940944, "DRI", "USD"), (1636222, "WING", "USD"),
+                  (901491, "PZZA", "USD"), (30697, "WEN", "USD"), (807882, "JACK", "USD"), (1620533, "SHAK", "USD"),
+                  (1477815, "SG", "USD"), (1639438, "CAVA", "USD"), (1289460, "TXRH", "USD"), (703351, "EAT", "USD"),
+                  (49754, "DIN", "USD"), (1508478, "ARCO", "USD"), (1673358, "YUMC", "USD"), (1866581, "BROS", "USD"),
+                  (887596, "CAKE", "USD"), (1546417, "BLMN", "USD"), (1067294, "CBRL", "USD"), (1871509, "PTLO", "USD"),
+                  (1606366, "LOCO", "USD"), (1789940, "FWRG", "USD"), (1857154, "DNUT", "USD"), (1792789, "DASH", "USD")]
+
+
+def sec_rest():
+    """Annual figures of restaurant franchisors and chains (quick service, coffee, pizza, fast casual and full service),
+    two master franchisees (Arcos Dorados and Yum China) and DoorDash, from their Forms 10-K and 20-F (SEC company facts),
+    in billions of dollars, with ``sec_ecom``'s items.  Darden's fiscal years end in late May, Starbucks's around the end of
+    September, Jack in the Box's around the end of September, Cracker Barrel's around the end of July."""
+    items = _ecom_items()
+    return _write("sec_rest", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(REST_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_REST = {"RSFSDP": "Advance retail sales: food services and drinking places ($ million a month, SA; Census Bureau)",
+             "MRTSSM7225USN": "Retail sales: restaurants and other eating places ($ million a month, NSA; Census Bureau)",
+             "CUUR0000SEFV": "CPI-U: food away from home (1982-84 = 100, NSA; BLS)",
+             "CUUR0000SAF11": "CPI-U: food at home (1982-84 = 100, NSA; BLS)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+             "CES7072200001": "All employees: food services and drinking places (thousands, SA; BLS)",
+             "CES7000000003": "Average hourly earnings of all employees: leisure and hospitality ($, SA; BLS)",
+             "FEDMINNFRWG": "Federal minimum hourly wage for nonfarm workers ($; Department of Labor)"}
+
+
+def fred_rest():
+    return _fred_write("fred_rest", FRED_REST)
+
+
 MIDDLE_COMPANIES = [(927653, "MCK", "USD"), (1140859, "COR", "USD"), (721371, "CAH", "USD"), (1000228, "HSIC", "USD"),
                     (75252, "OMI", "USD"), (96021, "SYY", "USD"), (1665918, "USFD", "USD"), (1618673, "PFGC", "USD"),
                     (1020859, "UNFI", "USD"), (1517175, "CHEF", "USD"), (7536, "ARW", "USD"), (8858, "AVT", "USD"),
@@ -2780,7 +2813,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_rest": sec_rest, "fred_rest": fred_rest, "sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

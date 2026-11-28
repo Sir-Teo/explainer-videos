@@ -2565,6 +2565,7 @@ scored in Part 64 and at each refresh.
 | 31 · Grocery and Mass Retail | done 2026-11-28 (about 40 Register rows and Part 22's suppliers' rows; the Forms 10-K of Walmart and Costco for fiscal 2026, Kroger for fiscal 2025 and fiscal 2020, Albertsons and Dollar General for fiscal 2025, and Target; the SEC extract of nineteen grocers, mass merchants, clubs, dollar and convenience chains and Amazon, with inventory and payables; FRED's grocery sales, food prices, retail jobs and e-commerce share) | `works/store.py` | 13 scenes, with storefronts, shelves, trolleys, a warehouse, houses, a delivery van and parcels | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 32 · E-commerce | done 2026-11-28 (about 60 Register rows and Amazon's revenue, segment and shipping tables; Amazon's letters for 1997 and 2000, its 10-Ks for 2017-2025 and 10-Qs for 2025 and 2026; the 10-Ks for 2025 of eBay, Etsy, Shopify, MercadoLibre, Coupang, Wayfair and Chewy; the 20-Fs of PDD, JD.com, Alibaba and Sea; Wish's S-1 and 10-Ks; the FTC's 2023 release; Amazon's seller fees; the SEC extract of twenty-five companies; the Census Bureau's e-commerce series and the BLS's warehouse and courier jobs) | `works/marketplace.py` | 13 scenes, with a shop page whose sponsored tiles light up, warehouse robots, a conveyor of parcels, vans, a laptop and a world map | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 33 · The Middlemen | done 2026-11-28 (about 60 Register rows; the 10-Ks for fiscal 2026 of McKesson, Cencora, Cardinal Health and Sysco and for 2025 of US Foods, Grainger and Bunge; Mitsui & Co.'s results for the year to March 2026 and the half to September 2026; Chemdex's 1999 prospectus and Ventro's 2000 10-K; the SEC extract of twenty-nine distributors and traders; the Census Bureau's wholesale trade and the BLS's wholesale jobs and margin prices) | `works/distributor.py` | 13 scenes, with factories, warehouses, pallets, shelves, invoices, vans, a town's delivery routes, chips and ships | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 34 · Restaurants and Franchising | done 2026-11-28 (about 65 Register rows; the 10-Ks for 2025 of McDonald's, Chipotle, Wingstop, Domino's, Yum! Brands and DoorDash and for fiscal 2026 of Darden; McDonald's 10-Q for the third quarter of 2026; Arcos Dorados's 20-F for 2025; DoorDash's 2020 prospectus; the SEC extract of twenty-eight restaurant companies and DoorDash; the Census Bureau's restaurant and grocery sales, the BLS's food prices, restaurant jobs and leisure wages, the federal minimum wage) | `works/franchise.py` | 13 scenes, with drive-through restaurants, burgers, shops, phones, vans and the world map | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2977,3 +2978,17 @@ map. Added are the GLP-1 pass-through and the opioid settlements. *Called it?* u
 Ventro's closure of the marketplace in December 2000, in place of the late-1990s disintermediation forecasts, which were not
 found in primary sources; the series' call is on Mitsui's own raised forecast. Written as code only and checked from
 snapshots; not rendered.
+
+Part 34 follows its draft's question. Kroc and Sonneborn's 1956 conversation was not checked against primary sources and
+is left out; the hook is McDonald's own 10-K, in which rent is its largest revenue and franchisees' sales are not its
+revenue at all, and its revenue in 2013 against 2025 as it refranchised. Run it is the draft's two sides (`works/franchise.py`:
+a franchised store with part of its labour fixed, fees, an advertising fund and delivery commissions; a franchisor whose
+take slows openings through franchisees' payback, with patience an assumption); the store's daily demand curve and labour
+schedule became the fixed and variable parts of labour. Franchise disclosure documents were not used; unit economics are
+from the 10-Ks (McDonald's company-operated costs, Chipotle's and Darden's restaurant costs, Wingstop's cash-on-cash
+target). The drive-through's seconds, menu engineering, the joint-employer question, ghost kitchens, alcohol and the
+independents' failure rate were left out for want of primary figures; Jubilant FoodWorks, Jollibee, Luckin, Haidilao,
+Meituan, Zomato, Compass and Sodexo are named on the map but not measured. Added are Domino's supply chain, McDonald's
+loyalty goals and DoorDash's path from losses to profit. *Called it?* uses DoorDash's 2020 prospectus for the delivery
+platforms' forecasts; the series' call is on McDonald's own target of 50,000 restaurants. Written as code only and checked
+from snapshots; not rendered.

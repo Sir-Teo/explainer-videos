@@ -211,4 +211,42 @@ PARTS = [
               ("The distributor and the route", "explainer/industry/works/distributor.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=34, level="U", widget="franchiseyear", prereq=(3, 5, 33),
+        question="Who actually owns a fast-food restaurant, and who is making the money?",
+        story="The part opens on McDonald's 45,356 restaurants, 95% run by franchisees whose $130bn of sales are not its revenue; "
+              "its $26.9bn of revenue is mostly $10.4bn of rent, $6.0bn of royalties and $9.7bn of its own restaurants' sales, "
+              "and its operating income was 46 cents a dollar. The viewer runs a franchised restaurant selling $4.0m a year: 31 "
+              "cents of each dollar on food, 30 on labour, 12.7 to the franchisor, 4 to advertising, 10 to other costs, 3 to the "
+              "apps, about 9 left, $371k, paying back $1.5m in four years; a 10% fall in sales, a 20% wage rise or twice the "
+              "delivery orders each take a large share. As franchisor, the ten-year profit peaks near a 12.5% fee. McDonald's "
+              "keeps 84 cents of each franchised dollar against 15 at its own restaurants; franchisors earn 19-46 cents of "
+              "operating income per dollar against 8-16 for operators. Domino's sells $3.0bn of supplies to its stores; "
+              "Americans now spend more at restaurants than at grocery stores; DoorDash carried $102bn of orders and made $935m "
+              "after years of losses. The series gives 25% that McDonald's reaches 50,000 restaurants by the end of 2027.",
+        handoff="Part 35, travel and hotels, asks why the brand on the building is often not its owner either.",
+        outside="Percentages, payback and operating leverage; Part 3's accounts; Part 5's moats; Part 33's middlemen; Economics, "
+                "Built's contracts and incentives and its minimum wage.",
+        objectives={
+            "U": ["Explain the franchise contract: who invests, who runs the restaurant, and what each pays and earns.",
+                  "Explain why franchisors' margins are so much higher than operators', and what the property layer adds.",
+                  "Explain how wages and delivery commissions bear on a restaurant's thin margin."],
+            "M": ["Compute a restaurant's dollar, its profit and its payback from its costs and fees.",
+                  "Compute the effect of a fall in sales, a wage rise and a shift to delivery on a franchisee's profit.",
+                  "Compute a franchisor's take on its franchisees' sales and its margin on that take."],
+            "D": ["Read a company's warning about its own losses against its later results, and make and state a dated, scorable forecast."],
+            "I": ["Read a franchisor's revenue by type, franchised and company-operated margins, and restaurant counts in its filings.",
+                  "Read a restaurant chain's restaurant-level costs and average unit volumes."],
+        },
+        results=[
+            ("A franchisee's profit", r"\pi = S\,(1 - f - r - a - o - d\,c) - L"),
+            ("Payback", r"T = \frac{I}{\pi}"),
+            ("The franchisor's take", r"\tau = \frac{\text{rent} + \text{royalties}}{\text{franchised sales}}"),
+            ("Prime cost", r"\frac{\text{food} + \text{labour}}{\text{sales}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 34", "explainer/industry/data/rows_p34.py"),
+              ("The store and the franchisor", "explainer/industry/works/franchise.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
