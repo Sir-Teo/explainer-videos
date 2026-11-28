@@ -60,4 +60,67 @@
     });
   };
 
+  // ---- Part 30: bid for spectrum (the Works' Auction in explainer/industry/works/telco.py) ----------------------------
+  // A uniform-price ascending clock: the price rises by $0.25bn a block while the blocks wanted exceed the supply; each
+  // bidder wants the blocks it values at or above the price, up to a cap; everyone pays the final price.
+  W.spectrumclock = function (el) {
+    var RIVALS = [[6.0, 4.5, 4.5, 2.0], [10.0, 7.0, 4.0, 1.5], [9.0, 7.5, 7.0, 3.5]], STEP = 0.25;
+    function run(you, cap, supply) {
+      var vals = [you].concat(RIVALS), caps = [cap, 4, 4, 4], p = 0, path = [], d, i;
+      while (true) {
+        d = [];
+        for (i = 0; i < 4; i++) {
+          var n = 0, k;
+          for (k = 0; k < 4; k++) if (vals[i][k] >= p - 1e-9) n++;
+          d.push(Math.min(n, caps[i]));
+        }
+        var tot = d.reduce(function (a, b) { return a + b; }, 0);
+        path.push([p, tot]);
+        if (tot <= supply || p > 50) break;
+        p = Math.round((p + STEP) * 100) / 100;
+      }
+      var sur = d.map(function (n, j) { var v = 0, k; for (k = 0; k < n; k++) v += vals[j][k]; return v - n * p; });
+      return { p: p, d: d, sur: sur, path: path, rev: p * d.reduce(function (a, b) { return a + b; }, 0) };
+    }
+    QB.widget(el, {
+      title: "Bid for spectrum",
+      sub: "Eight blocks of airwaves (or as many as you choose) are sold by a rising clock: each bidder says how many blocks it wants at each price, and when no more are wanted than are on offer, every winner pays that price for each block. Set what the blocks are worth to you and how many you will ask for, and see the price, what you win and what you keep. The three rivals bid honestly, with the film's values.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "cap", label: "Most blocks you ask for", min: 1, max: 4, step: 1, value: 4, fmt: function (x) { return String(x); } },
+        { k: "v1", label: "Your 1st block is worth, $bn", min: 1, max: 12, step: 0.5, value: 9.5, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "v2", label: "Your 2nd block", min: 0.5, max: 12, step: 0.5, value: 9.0, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "v3", label: "Your 3rd block", min: 0.5, max: 12, step: 0.5, value: 7.0, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "v4", label: "Your 4th block", min: 0.5, max: 12, step: 0.5, value: 6.5, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "supply", label: "Blocks on offer", min: 5, max: 12, step: 1, value: 8, fmt: function (x) { return String(x); } },
+      ],
+      draw: function (g, v, s) {
+        var you = [v.v1, v.v2, v.v3, v.v4].sort(function (a, b) { return b - a; });
+        var r = run(you, v.cap, v.supply), xs = [], ys = [], i;
+        for (i = 0; i < r.path.length; i++) { xs.push(r.path[i][0]); ys.push(r.path[i][1]); }
+        var xmax = Math.max(8, r.p + 1);
+        var a = g[0].axes({ x: [0, xmax], y: [0, 17], title: "Blocks wanted as the price rises", xfmt: function (x) { return "$" + x.toFixed(0) + "bn"; },
+                            yfmt: function (y) { return Math.round(y); } });
+        a.hline(v.supply, { color: C.muted, dash: [4, 4], width: 1.2 });
+        a.line(xs, ys, { color: C.p, width: 2.4 });
+        a.vline(r.p, { color: C.spot, dash: [5, 4], width: 1.4 });
+        a.legend([["blocks wanted", C.p], ["blocks on offer", C.muted], ["final price", C.spot]], { pos: "tr" });
+        var caps = [1, 2, 3, 4], sur = caps.map(function (c) { return run(you, c, v.supply).sur[0]; });
+        var hi = Math.max(1, Math.max.apply(null, sur) * 1.2), lo = Math.min(0, Math.min.apply(null, sur) * 1.2);
+        var b = g[1].axes({ x: [0.4, 4.6], y: [lo, hi], title: "What you keep (value less price), by blocks asked for",
+                            xticks: caps, xfmt: function (x) { return Math.round(x) + " max"; }, yfmt: function (y) { return "$" + y.toFixed(1) + "bn"; } });
+        b.bars(caps, sur, 0.6, { color: function (i) { return caps[i] === v.cap ? C.gain : C.spot; }, alpha: 0.9 });
+        s.r = r; s.best = caps[sur.indexOf(Math.max.apply(null, sur))];
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["final price a block", "$" + r.p.toFixed(2) + "bn"],
+                ["blocks won: you, A, B, C", r.d.join(", ")],
+                ["what you keep; the best number to ask for", "$" + r.sur[0].toFixed(2) + "bn; " + s.best],
+                ["what the auction raised", "$" + r.rev.toFixed(1) + "bn"]];
+      },
+      note: "As in the film: bidding honestly for every block you value, the clock stops at $6.75bn and you keep $5.25bn on three blocks; asking for two, it stops at $4.75bn and you keep $9.00bn, and every rival is better off too, while the auction raises $38bn instead of $54bn. The values are an illustration.",
+    });
+  };
+
 })();

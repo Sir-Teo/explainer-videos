@@ -516,6 +516,22 @@ CALLS = [
          rule="Union Pacific's or Norfolk Southern's announcements: true if the acquisition is completed on or before "
               "31 December 2027",
          due="2028-01", ours=True),
+    Call(30, "DISH Network", "2020-02",
+         "'we committed to offer 5G broadband service to at least 70% of the U.S. population and to have deployed a core "
+         "network no later than June 14, 2023' (600 MHz licences), as it set out to become a fourth national network",
+         "DISH Network, Form 10-K for 2019",
+         outcome="The build-out requirements were met, but in August 2025 EchoStar (formerly DISH) 'terminated our deployment of "
+                 "our 5G Network', sold spectrum to AT&T for $22.65bn (closed 28 July 2026) and to SpaceX for about $20bn, "
+                 "and moved its customers onto AT&T's network (EchoStar, Form 10-K for 2025; AT&T, 10-Q for 2026 Q3)"),
+    Call(30, "Industry, Built", "2026-11-27",
+         "Comcast will report fewer total domestic broadband customers at 31 December 2027 than at 31 December 2026. "
+         "Probability: 80%.",
+         "This series, Part 30, chapter 10; reasoning: it lost 411,000 in 2024 and 711,000 in 2025, its 2026 filings attribute "
+         "lower broadband revenue to fewer customers and lower rates, and fixed wireless and fibre keep adding homes; against: "
+         "new pricing and bundles with its mobile service could stop the loss",
+         rule="Comcast's Form 10-K for 2027: total domestic broadband customers at the two year-ends as reported; unscored if "
+              "Comcast no longer reports the figure",
+         due="2028-02", ours=True),
 ]
 
 

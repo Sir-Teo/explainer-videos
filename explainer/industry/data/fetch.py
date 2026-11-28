@@ -2242,6 +2242,36 @@ def fred_air():
     return _fred_write("fred_air", FRED_AIR)
 
 
+TEL_COMPANIES = [(732712, "VZ", "USD"), (732717, "T", "USD"), (1283699, "TMUS", "USD"), (1166691, "CMCSA", "USD"),
+                 (1091667, "CHTR", "USD"), (1053507, "AMT", "USD"), (1051470, "CCI", "USD"), (1034054, "SBAC", "USD"),
+                 (18926, "LUMN", "USD"), (20520, "FYBR", "USD"), (1051512, "TDS", "USD"), (821130, "USM", "USD"),
+                 (1415404, "SATS", "USD"), (1632127, "CABO", "USD"), (1570585, "LBTYA", "USD"), (912958, "TIGO", "USD"),
+                 (839923, "VOD", "EUR"), (814052, "TEF", "EUR"), (1129137, "AMX", "MXN"), (1132924, "CHT", "TWD"),
+                 (1015650, "SKM", "KRW"), (892450, "KT", "KRW"), (868675, "TU", "CAD"), (718940, "BCE", "CAD"),
+                 (733099, "RCI", "CAD"), (717826, "ERIC", "SEK"), (924613, "NOK", "EUR"), (1418819, "IRDM", "USD"),
+                 (797721, "VSAT", "USD"), (1780312, "ASTS", "USD"), (1366868, "GSAT", "USD"), (1652044, "GOOGL", "USD"),
+                 (1326801, "META", "USD"), (1065280, "NFLX", "USD")]
+
+
+def sec_tel():
+    """Annual figures of American and foreign telecom operators, cable companies, tower companies, equipment makers,
+    satellite operators and three companies whose services run over the networks (Alphabet, Meta, Netflix), from their
+    Forms 10-K, 20-F and 40-F (SEC company facts), in their reporting currency (billions), with ``sec_fashion``'s items."""
+    return _write("sec_tel", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(TEL_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_TEL = {"CUUR0000SEED": "CPI-U: telephone services (December 1997 = 100, NSA; BLS)",
+            "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+            "CES5051700001": "All employees: telecommunications (thousands, SA; BLS)",
+            "PCU517311517311": "PPI by industry: wired telecommunications carriers (NSA; BLS)",
+            "PCU517210517210": "PPI by industry: wireless telecommunications carriers (June 1999 = 100, NSA; BLS; ends 2017)"}
+
+
+def fred_tel():
+    return _fred_write("fred_tel", FRED_TEL)
+
+
 FREIGHT_COMPANIES = [(100885, "UNP", "USD"), (934612, "BNSF", "USD"), (277948, "CSX", "USD"), (702165, "NSC", "USD"),
                      (16868, "CNI", "CAD"), (16875, "CP", "CAD"), (1090727, "UPS", "USD"), (1048911, "FDX", "USD"),
                      (728535, "JBHT", "USD"), (1492691, "KNX", "USD"), (878927, "ODFL", "USD"), (1177702, "SAIA", "USD"),
@@ -2634,7 +2664,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

@@ -2561,6 +2561,7 @@ scored in Part 64 and at each refresh.
 | 27 · Shipping and Ports | done 2026-11-27 (about 70 Register rows; ZIM's 20-Fs for 2020, 2021, 2023 and 2025 and its 2026 releases, with Alphaliner's statistics as quoted; Frontline's 20-F and third-quarter 2026 report; Matson's 10-K; E2open's 10-K on the Ever Given; Greenwood and Hanson; the SEC extract of twenty-two companies and Maersk's ESEF filings; IMF PortWatch's chokepoint transits; the World Bank's port traffic; FRED's freight, oil and imports) | `works/ship.py` | 13 scenes, with containers, quay cranes, ships, tankers, a shoebox and a world map of chokepoints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 28 · Airlines | done 2026-11-27 (about 50 Register rows; Delta's 10-K for 2025 and its four 2026 results releases; the 10-Ks for 2025 of Southwest, American, Spirit Aviation Holdings and Alaska; the Airline Deregulation Act and the CARES Act; Littlewood (1972); Berkshire's letter for 2007; the SEC extract of seventeen airlines, lessors and Sabre; FRED's BTS traffic, EIA jet fuel, BLS fares and jobs) | `works/airline.py` | 12 scenes, with aircraft, cabins whose seats fill by fare, and the flight's revenue curves | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 29 · Rail, Trucks and Parcels | done 2026-11-27 (about 75 Register rows; the 10-Ks for 2025 of Union Pacific, UPS, Old Dominion, Knight-Swift, J.B. Hunt and Aurora, Union Pacific's third-quarter 10-Q, FedEx's 10-K for fiscal 2026, Aurora's 2021 10-K and 2026 letter, Yellow's last 10-K and bankruptcy 8-K; the Postal Service's 10-K; the Staggers Act; FMCSA's carrier census; the SEC extract of twenty-five companies; FRED's traffic, prices, jobs, diesel and e-commerce) | `works/freight.py` | 13 scenes, with trains of hoppers, boxcars, tank and well cars, tractor-trailers, vans, parcels, service centers and a hub-and-spoke network | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 30 · Telecoms | done 2026-11-28 (about 60 Register rows; the 10-Ks for 2025 of Verizon, AT&T, T-Mobile, Charter, Comcast, American Tower, EchoStar and AST SpaceMobile; three 2026 10-Qs; Verizon's 2020 and AT&T's 2021 10-Ks on C-Band; DISH's 2019 10-K; the SEC extract of thirty-four companies; FRED's phone prices and telecom jobs) | `works/telco.py` | 13 scenes, with towers whose antennas light by tenant, phones, racks and a network diagram | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2928,3 +2929,14 @@ and later parts. Added: Yellow's bankruptcy, UPS's Amazon cut and network reduct
 Service's pieces per delivery point, and Union Pacific's agreement to buy Norfolk Southern, on which *Called it?* makes
 its call; Aurora's launch date stands in for the driverless forecasts of 2016-18, which were not found in primary
 sources. Written as code only and checked from snapshots; not rendered.
+
+Part 30 follows its draft's question. The Bell System's break-up of 1984 and Britain's 3G auction of 2000 were not checked
+against primary sources and are left out; the hook is the carriers' revenue against Alphabet's, Meta's and Netflix's and
+telephone prices after inflation. Run it is the draft's spectrum auction against three rivals (`works/telco.py`: a
+uniform-price clock with demand reduction), with a subscriber's lifetime worth and a tower's return by tenants; the
+business case's dependence on what rivals win is told rather than modelled. The FCC's auction pages refused automated
+requests, so C-Band is read from Verizon's and AT&T's 10-Ks. India's price war, China's state carriers, open radio networks
+and net neutrality are left to the map and later parts; added are EchoStar's sale of its spectrum and abandonment of its
+network, cable's broadband losses against fibre and fixed wireless, and the 2025-26 deals. *Called it?* uses DISH's 2019
+commitment in place of the 3G business cases of 2000, which were not found in primary sources. Written as code only and
+checked from snapshots; not rendered.
