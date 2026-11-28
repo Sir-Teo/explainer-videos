@@ -129,4 +129,45 @@ PARTS = [
               ("The store and the float", "explainer/industry/works/store.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=32, level="U", widget="marketrun", prereq=(3, 5, 31),
+        question="Is selling online a shop, a toll road or an advertising business?",
+        story="The part opens on Amazon's letter of 1997 (1.5 million customers, $147.8m of revenue, 'Day 1') and of 2000 "
+              "(shares down more than 80%), and on its $717bn of revenue in 2025, of which AWS was 18% but made 57% of the "
+              "operating income. The viewer runs a marketplace: buyers and sellers each come for the other; revenue peaks at a "
+              "take rate near 25% and profit near 30%; ads are nearly pure profit until about 4% of sales; one-day delivery "
+              "pays only at scale. A $40 order on a marketplace leaves the seller about $7.60 after a 15% referral fee, delivery "
+              "fees and ads; the FTC alleged in 2023 that many Amazon sellers pay close to 50%. Take rates run from Shopify's 3% "
+              "to Etsy's 24%. Amazon's shipping costs rose from $11.5bn (2015) to $102.7bn (2025); its advertising, $68.6bn in "
+              "2025, exceeded its shops' whole operating income in every year since 2019; the cloud carried the shops through "
+              "a $10.6bn loss in 2022. Temu lifted PDD's revenue to $62bn before the de minimis exemption ended in 2025. Direct "
+              "brands live or die by the cost of a customer; Wish's users fell 68% when it cut its ads, and it sold its business "
+              "for $162m. The series gives 45% that the Census Bureau's first estimate of e-commerce's share for 2027 Q4 is "
+              "19.0% or more.",
+        handoff="Part 33, the middlemen, asks why wholesalers and distributors are still among the largest companies anywhere.",
+        outside="Percentages, logs and fixed costs; Part 3's accounts; Part 5's network effects; Part 31's retail margins; "
+                "Economics, Built's two-sided platforms, sponsored slots and the commission.",
+        objectives={
+            "U": ["Explain the difference between a retailer and a marketplace, and why it changes what counts as revenue.",
+                  "Explain why a marketplace's take rate is bounded by what both buyers and sellers can do instead.",
+                  "Explain why fast delivery is a fixed-cost game and why on-site advertising is so profitable."],
+            "M": ["Compute a take rate and split an order between the goods, the platform's fees, ads and the seller.",
+                  "Compute the cost of an order as a fixed network spread over volume.",
+                  "Compute a customer's lifetime contribution and payback from the cost of acquiring them."],
+            "D": ["Read a company's description of itself against what followed, and make and state a dated, scorable forecast."],
+            "I": ["Read a platform's GMV, take rate, revenue by kind and segment profit in its filings.",
+                  "Read the Census Bureau's e-commerce series and a fee schedule."],
+        },
+        results=[
+            ("Take rate", r"\tau = \frac{\text{revenue}}{\text{GMV}}"),
+            ("Cost of an order", r"c(n, d) = v + \frac{s}{d} + \frac{K}{d\,n}"),
+            ("A customer's lifetime contribution", r"L = m\,f + m\,r\,\frac{\rho}{1 - \rho} - \text{CAC}"),
+            ("Two-sided participation", r"B = \bar B\,\Lambda(\beta_0 + \beta_s \ln S - \dots), \quad S = \bar S\,\Phi\!\left(\frac{\ln[g(m - \tau - a)] - \mu}{\sigma}\right)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 32", "explainer/industry/data/rows_p32.py"),
+              ("The marketplace and the direct brand", "explainer/industry/works/marketplace.py"),
+              ("Amazon's revenue and segment tables", "explainer/industry/data/tables.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

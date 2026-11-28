@@ -2935,3 +2935,61 @@ def parcel(w: float = 0.6, color: str = "#C89F6A") -> VGroup:
     label = Rectangle(width=0.28 * w, height=0.18 * w, stroke_width=0, fill_color="#F5F5F5", fill_opacity=1).move_to(
         [-0.12 * w, 0.3 * w, 0])
     return VGroup(front, side, top, tape, label)
+
+
+def web_page(w: float = 3.2, cols: int = 4, rows: int = 2, sponsored=(), accent: str = "#F6C453",
+             tile: str = "#2E3645") -> VGroup:
+    """A shop's results page in a browser window: a title bar, a search box and a grid of product tiles (``g.tiles``,
+    row by row), each with a picture, a name line and a price line.  Tiles whose index is in ``sponsored`` carry an
+    ``accent`` outline and a small 'ad' flag (``g.flags``)."""
+    h = 0.62 * w
+    frame = RoundedRectangle(corner_radius=0.03 * w, width=w, height=h, stroke_color="#9AA3B2", stroke_width=2,
+                             fill_color="#161B24", fill_opacity=1)
+    bar = Rectangle(width=w, height=0.07 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to([0, h / 2 - 0.035 * w, 0])
+    dots = VGroup(*[Dot(radius=0.009 * w, color=c).move_to([-0.47 * w + 0.03 * w * k, h / 2 - 0.035 * w, 0])
+                    for k, c in enumerate(("#E8554E", "#F6C453", "#7BD88F"))])
+    search = RoundedRectangle(corner_radius=0.015 * w, width=0.6 * w, height=0.05 * w, stroke_color="#6B7486", stroke_width=1,
+                              fill_color="#0E1117", fill_opacity=1).move_to([0, h / 2 - 0.12 * w, 0])
+    gw, gh = 0.92 * w, h - 0.2 * w
+    tw, th = gw / cols * 0.86, gh / rows * 0.86
+    tiles, flags = VGroup(), VGroup()
+    for i in range(rows * cols):
+        r, c = divmod(i, cols)
+        x = -gw / 2 + gw / cols * (c + 0.5)
+        y = (h / 2 - 0.17 * w) - gh / rows * (r + 0.5)
+        ad = i in sponsored
+        box = RoundedRectangle(corner_radius=0.01 * w, width=tw, height=th, stroke_color=accent if ad else "#3A4250",
+                               stroke_width=2.5 if ad else 1, fill_color=tile, fill_opacity=1).move_to([x, y, 0])
+        pic = Rectangle(width=0.7 * tw, height=0.5 * th, stroke_width=0, fill_color="#4A5568", fill_opacity=1).move_to(
+            [x, y + 0.14 * th, 0])
+        name = Line([x - 0.35 * tw, y - 0.2 * th, 0], [x + 0.3 * tw, y - 0.2 * th, 0], stroke_color="#9AA3B2", stroke_width=2)
+        price = Line([x - 0.35 * tw, y - 0.33 * th, 0], [x - 0.05 * tw, y - 0.33 * th, 0], stroke_color="#7BD88F", stroke_width=3)
+        t = VGroup(box, pic, name, price)
+        if ad:
+            f = RoundedRectangle(corner_radius=0.005 * w, width=0.22 * tw, height=0.12 * th, stroke_width=0, fill_color=accent,
+                                 fill_opacity=1).move_to([x + 0.33 * tw, y + 0.4 * th, 0])
+            flags.add(f)
+            t.add(f)
+        tiles.add(t)
+    g = VGroup(frame, bar, dots, search, tiles)
+    g.tiles, g.flags = tiles, flags
+    return g
+
+
+def drive_robot(w: float = 0.7, color: str = "#F2A65A", pod: bool = True) -> VGroup:
+    """A warehouse drive unit in side view, a low squat robot on wheels; with ``pod``, a shelf pod of bins rides on top
+    (``g.pod``)."""
+    body = RoundedRectangle(corner_radius=0.08 * w, width=w, height=0.22 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.15 * w, 0])
+    wheels = VGroup(*[_wheel(0.05 * w).move_to([x * w, 0.05 * w, 0]) for x in (-0.32, 0.32)])
+    g = VGroup(body, wheels)
+    g.pod = VGroup()
+    if pod:
+        legs = VGroup(*[Rectangle(width=0.04 * w, height=0.12 * w, stroke_width=0, fill_color="#6B7486", fill_opacity=1).move_to(
+            [x * w, 0.32 * w, 0]) for x in (-0.4, 0.4)])
+        bins = VGroup(*[Rectangle(width=0.84 * w, height=0.24 * w, stroke_color="#0E1117", stroke_width=1, fill_color=c,
+                                  fill_opacity=1).move_to([0, 0.5 * w + 0.25 * w * k, 0])
+                        for k, c in enumerate(("#3D7CC9", "#5A8FD0", "#3D7CC9", "#5A8FD0"))])
+        g.pod = VGroup(legs, bins)
+        g.add(g.pod)
+    return g

@@ -180,4 +180,71 @@
     });
   };
 
+  W.marketrun = function (el) {
+    var P = { bmax: 100e6, smax: 1e6, basket: 40, orders: 15, margin: 0.55, pass: 0.5, fmed: 60e3, fsd: 1.2, b0: 0.2, bsel: 0.8,
+              bprice: 0.12, bdays: 0.6, bads: 8.0, sref: 200e3, tref: 0.30, aref: 0.06, svar: 5.0, sspeed: 2.0, net: 4.0e9,
+              pay: 0.025, over: 1.0e9 };
+    function erf(x) {
+      var t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+      return x >= 0 ? y : -y;
+    }
+    function ncdf(x) { return 0.5 * (1 + erf(x / Math.SQRT2)); }
+    function logistic(x) { return 1 / (1 + Math.exp(-x)); }
+    function solve(take, ad, days, scale) {
+      var bmax = P.bmax * scale, smax = P.smax * scale, price = 1 + P.pass * ((take + ad) - (P.tref + P.aref));
+      function bshare(S) { return logistic(P.b0 + P.bsel * Math.log(Math.max(S, 1) / P.sref) - P.bprice * 100 * (price - 1) - P.bdays * (days - 2) - P.bads * (ad - P.aref)); }
+      function opb(S) { return Math.max(P.orders * (1 + 0.15 * Math.log(Math.max(S, 1) / P.sref)) * (1 + 0.12 * (2 - days)), 0); }
+      function sshare(g) { var keep = g * (P.margin - take - ad); return keep <= 0 ? 0 : ncdf((Math.log(keep) - Math.log(P.fmed)) / P.fsd); }
+      var S = 0.2 * smax, B, n, gmv, k;
+      for (k = 0; k < 4000; k++) {
+        B = bmax * bshare(S); n = B * opb(S); gmv = n * P.basket;
+        var Sn = smax * sshare(gmv / Math.max(S, 1));
+        if (Math.abs(Sn - S) < 1) { S = Sn; break; }
+        S = 0.7 * S + 0.3 * Math.max(Sn, 1);
+      }
+      B = bmax * bshare(S); n = B * opb(S); gmv = n * P.basket;
+      var rev = (take + ad) * gmv, ship = n * (P.svar + P.sspeed / days), net = P.net / days;
+      return { B: B, S: S, n: n, gmv: gmv, rev: rev, ads: ad * gmv, profit: rev - ship - net - P.pay * gmv - P.over, cpo: n > 0 ? (ship + net) / n : NaN };
+    }
+    QB.widget(el, {
+      title: "Run a marketplace for a year",
+      sub: "You bring buyers and sellers together and deliver the parcels. Set your take rate, the ads you sell to sellers, your delivery promise and the size of the market you can reach, and watch both sides answer.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "take", label: "Take rate (commission and delivery fees)", min: 0.10, max: 0.45, step: 0.005, value: 0.30, fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "ad", label: "Ads sold, as a share of sales", min: 0, max: 0.14, step: 0.005, value: 0.06, fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "days", label: "Delivery promise, days", min: 1, max: 4, step: 0.5, value: 2, fmt: function (x) { return x.toFixed(1); } },
+        { k: "scale", label: "Size of the market you can reach", min: 0.5, max: 4, step: 0.25, value: 1, fmt: function (x) { return x.toFixed(2) + "x"; } },
+      ],
+      draw: function (g, v, s) {
+        var ts = [], tr = [], tp = [], k;
+        for (k = 0; k <= 35; k++) { var t = 0.10 + 0.01 * k, r = solve(t, v.ad, v.days, v.scale); ts.push(100 * t); tr.push(r.rev / 1e9); tp.push(r.profit / 1e9); }
+        var lo = Math.min.apply(null, tp), hi = Math.max.apply(null, tr);
+        var a = g[0].axes({ x: [10, 45], y: [Math.min(lo, 0) - 0.5, hi * 1.1 + 0.5], title: "Revenue (gold) and profit (green), $bn, by take rate",
+                            xfmt: function (x) { return x.toFixed(0) + "%"; }, yfmt: function (y) { return "$" + y.toFixed(0) + "bn"; } });
+        a.hline(0, { color: C.muted, dash: [4, 4], width: 1 });
+        a.line(ts, tr, { color: C.spot, width: 2.2 });
+        a.line(ts, tp, { color: C.gain, width: 2.4 });
+        a.vline(100 * v.take, { color: C.p, dash: [5, 4], width: 1.4 });
+        var as = [], ap = [], ab = [];
+        for (k = 0; k <= 28; k++) { var d = 0.005 * k, q = solve(v.take, d, v.days, v.scale); as.push(100 * d); ap.push(q.profit / 1e9); ab.push(q.B / 1e6); }
+        var lo2 = Math.min.apply(null, ap), hi2 = Math.max.apply(null, ap);
+        var b = g[1].axes({ x: [0, 14], y: [Math.min(lo2, 0) - 0.5, hi2 + 1], title: "Profit, $bn, by ads sold",
+                            xfmt: function (x) { return x.toFixed(0) + "%"; }, yfmt: function (y) { return "$" + y.toFixed(0) + "bn"; } });
+        b.hline(0, { color: C.muted, dash: [4, 4], width: 1 });
+        b.line(as, ap, { color: C.gain, width: 2.4 });
+        b.vline(100 * v.ad, { color: C.p, dash: [5, 4], width: 1.4 });
+        s.r = solve(v.take, v.ad, v.days, v.scale);
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["buyers; sellers", (r.B / 1e6).toFixed(0) + "m; " + (r.S / 1e3).toFixed(0) + "k"],
+                ["spent by buyers (GMV)", "$" + (r.gmv / 1e9).toFixed(1) + "bn"],
+                ["your fees and ads; profit", "$" + (r.rev / 1e9).toFixed(1) + "bn; " + (r.profit < 0 ? "-" : "") + "$" + Math.abs(r.profit / 1e9).toFixed(1) + "bn"],
+                ["cost of delivering an order", r.n >= 1 ? "$" + r.cpo.toFixed(2) : "no orders: the market has emptied"]];
+      },
+      note: "As in the film: at a 30% take rate, ads of 6% of sales and two-day delivery, 60m buyers and 258k sellers spend $37bn and the platform keeps $3.9bn; revenue peaks at a take rate near 25% and profit near 30%; profit peaks with ads near 4% of sales; at four times the size, one-day delivery costs $7.50 an order against $9.94. Every number is this series' assumption, not any company's.",
+    });
+  };
+
 })();

@@ -2274,6 +2274,47 @@ def fred_grocery():
     return _fred_write("fred_grocery", FRED_GROCERY)
 
 
+ECOM_COMPANIES = [(1018724, "AMZN", "USD"), (1065088, "EBAY", "USD"), (1370637, "ETSY", "USD"), (1594805, "SHOP", "USD"),
+                  (1616707, "W", "USD"), (1766502, "CHWY", "USD"), (1099590, "MELI", "USD"), (1834584, "CPNG", "USD"),
+                  (1737806, "PDD", "CNY"), (1549802, "JD", "CNY"), (1577552, "BABA", "CNY"), (1703399, "SE", "USD"),
+                  (1529192, "VIPS", "CNY"), (1756708, "JMIA", "USD"), (1835963, "GLBE", "USD"), (1746618, "RVLV", "USD"),
+                  (1504776, "WRBY", "USD"), (1653909, "BIRD", "USD"), (1822250, "WISH", "USD"), (1130713, "BYON", "USD"),
+                  (1690820, "CVNA", "USD"), (1579091, "CART", "USD"), (1792789, "DASH", "USD"), (1846576, "FIGS", "USD"),
+                  (104169, "WMT", "USD")]
+
+
+def _ecom_items() -> dict:
+    return dict(FASHION_ITEMS,
+                marketing=[("us-gaap", "SellingAndMarketingExpense"), ("us-gaap", "MarketingExpense"),
+                           ("us-gaap", "MarketingAndAdvertisingExpense"), ("us-gaap", "AdvertisingExpense"),
+                           ("ifrs-full", "SellingExpense")],
+                ocf=[("us-gaap", "NetCashProvidedByUsedInOperatingActivities"),
+                     ("ifrs-full", "CashFlowsFromUsedInOperatingActivities")])
+
+
+def sec_ecom():
+    """Annual figures of online retailers and marketplaces in America, China, Latin America, South Korea, Southeast Asia
+    and Africa, cross-border and delivery platforms, direct-to-consumer brands and Walmart, from their Forms 10-K and 20-F
+    (SEC company facts), in their reporting currency (billions; PDD, JD, Alibaba and Vipshop in yuan), with
+    ``sec_fashion``'s items, selling and marketing expense and cash from operations.  Wish is ContextLogic's filings."""
+    items = _ecom_items()
+    return _write("sec_ecom", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(ECOM_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_ECOM = {"ECOMSA": "E-commerce retail sales ($ million a quarter, SA; Census Bureau)",
+             "ECOMPCTSA": "E-commerce retail sales as a percent of total sales (quarterly, SA; Census Bureau)",
+             "ECOMNSA": "E-commerce retail sales ($ million a quarter, NSA; Census Bureau)",
+             "MRTSSM4541USS": "Retail sales: electronic shopping and mail-order houses ($ million a month, SA; Census Bureau)",
+             "CES4349300001": "All employees: warehousing and storage (thousands, SA; BLS)",
+             "CES4349200001": "All employees: couriers and messengers (thousands, SA; BLS)",
+             "RSXFS": "Advance retail sales: retail trade and food services excluding motor vehicles ($ million, SA; Census)"}
+
+
+def fred_ecom():
+    return _fred_write("fred_ecom", FRED_ECOM)
+
+
 TEL_COMPANIES = [(732712, "VZ", "USD"), (732717, "T", "USD"), (1283699, "TMUS", "USD"), (1166691, "CMCSA", "USD"),
                  (1091667, "CHTR", "USD"), (1053507, "AMT", "USD"), (1051470, "CCI", "USD"), (1034054, "SBAC", "USD"),
                  (18926, "LUMN", "USD"), (20520, "FYBR", "USD"), (1051512, "TDS", "USD"), (821130, "USM", "USD"),
@@ -2696,7 +2737,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

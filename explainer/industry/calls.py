@@ -549,6 +549,23 @@ CALLS = [
          "weaker economy or a fee rise could slow it further",
          rule="Costco's Form 10-K for fiscal 2027: paid members at the fiscal year-end as reported; true if above 87.0 million",
          due="2027-10", ours=True),
+    Call(32, "ContextLogic (Wish)", "2020-11-20",
+         "'We have become one of the largest and fastest growing global ecommerce platforms, connecting more than 100 million "
+         "monthly active users ... in over 100 countries to over 500,000 merchants'",
+         "ContextLogic, Form S-1 of 20 November 2020",
+         outcome="Revenue fell from $2.54bn in 2020 to $0.29bn in 2023; 'MAUs decreased approximately 68%' in 2022, which it "
+                 "attributed 'primarily' to 'our decision to significantly reduce our digital advertising expenditures'; in "
+                 "2024 it sold substantially all its operating assets to Qoo10 for $162m (Forms 10-K for 2020-2024). Its sales "
+                 "and marketing had cost 91% of revenue in 2018 and 78% in 2019"),
+    Call(32, "Industry, Built", "2026-11-28",
+         "The Census Bureau's first estimate of e-commerce's share of US retail sales for the fourth quarter of 2027 will be "
+         "19.0% or more. Probability: 45%.",
+         "This series, Part 32, chapter 10; reasoning: the share has climbed steadily since 2022 and was 17.9% in the third "
+         "quarter of 2026, up 0.8 points in a year; against: it needs 1.1 points in five quarters, a little faster than that, "
+         "and imports have become dearer since the de minimis exemption ended in 2025",
+         rule="The Census Bureau's quarterly e-commerce report (FRED: ECOMPCTSA, seasonally adjusted), the first published "
+              "value for 2027 Q4; true if 19.0 or more",
+         due="2028-02", ours=True),
 ]
 
 

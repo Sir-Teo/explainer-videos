@@ -189,3 +189,48 @@ add(
           {2008: 1000, 2009: 932.5, 2010: 753.25, 2011: 579.8, 2012: 443.6, 2013: 324, 2014: 289, 2015: 264.3,
            2016: 245, 2017: 219, 2018: 197, 2019: 185, 2020: 169, 2021: 157, 2022: 153, 2023: 139}, parts=P17),
 )
+
+
+# ---------------------------------------------------------------------------------------------------------- Part 32
+P32 = (32,)
+AMZN_SRC = ("Amazon.com, Forms 10-K for 2017, 2020, 2021, 2023 and 2025: net sales by groups of similar products and services, "
+            "and segment operating income (loss)")
+AMZN_URL = "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm"
+_Y = range(2015, 2026)
+
+
+def _amzn(key, definition, vals, note=""):
+    return Table(key, "US$ million", definition, AMZN_SRC, AMZN_URL, "2026-11-28",
+                 {y: v for y, v in zip(_Y, vals) if v is not None}, note=note, parts=P32)
+
+
+add(
+    _amzn("amzn.online", "Online stores: product sales and digital media content recorded gross",
+          [76863, 91431, 108354, 122987, 141247, 197346, 222075, 220004, 231872, 247029, 269287]),
+    _amzn("amzn.physical", "Physical stores (from the purchase of Whole Foods Market in August 2017)",
+          [None, None, 5798, 17224, 17192, 16227, 17075, 18963, 20030, 21215, 22561]),
+    _amzn("amzn.3p", "Third-party seller services: commissions, related fulfillment and shipping fees, other seller services",
+          [16086, 22993, 31881, 42745, 53762, 80461, 103366, 117716, 140053, 156146, 172162]),
+    _amzn("amzn.subs", "Subscription services: Prime fees and digital subscriptions",
+          [4467, 6394, 9721, 14168, 19210, 25207, 31768, 35218, 40209, 44374, 49619]),
+    _amzn("amzn.ads", "Advertising services (reported separately from 2019; earlier included in Other)",
+          [None, None, None, None, 12625, 19773, 31160, 37739, 46906, 56214, 68635]),
+    _amzn("amzn.aws", "Amazon Web Services",
+          [7880, 12219, 17459, 25655, 35026, 45370, 62202, 80096, 90757, 107556, 128725]),
+    _amzn("amzn.other", "Other (to 2018 including advertising services)",
+          [1710, 2950, 4653, 10108, 1460, 1680, 2176, 4247, 4958, 5425, 5935]),
+    _amzn("amzn.op.na", "North America segment operating income (loss)",
+          [1425, 2361, 2837, 7267, 7033, 8651, 7271, -2847, 14877, 24967, 29619]),
+    _amzn("amzn.op.intl", "International segment operating income (loss)",
+          [-699, -1283, -3062, -2142, -1693, 717, -924, -7746, -2656, 3792, 4750]),
+    _amzn("amzn.op.aws", "AWS segment operating income",
+          [1507, 3108, 4331, 7296, 9201, 13531, 18532, 22841, 24631, 39834, 45606],
+          note="2018 and 2021 are segment net sales less segment operating expenses as reported."),
+)
+
+add(
+    Table("amzn.ship", "US$ billion", "Shipping costs, including sortation and delivery centers and transportation, in cost of sales",
+          "Amazon.com, Forms 10-K for 2017, 2019, 2021, 2023 and 2025", AMZN_URL, "2026-11-28",
+          {2015: 11.5, 2016: 16.2, 2017: 21.7, 2018: 27.7, 2019: 37.9, 2020: 61.1, 2021: 76.7, 2022: 83.5, 2023: 89.5,
+           2024: 95.8, 2025: 102.7}, parts=P32),
+)
