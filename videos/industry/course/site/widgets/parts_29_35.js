@@ -357,4 +357,83 @@
     });
   };
 
+  W.hotelseason = function (el) {
+    var SEASON = [0.70, 0.76, 0.90, 0.96, 1.04, 1.14, 1.24, 1.22, 1.04, 0.96, 0.76, 0.66];
+    var DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var MON = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+    var ROOMS = 200, REF = 180, BASE = 0.75, EL = 1.5, SPREAD = 0.22, VAR = 35, FIXED = 45, OTHER = 0.08, OM = 0.3;
+    var INVEST = 180e3, DEBT = 0.6, RATE_I = 0.065, RESERVE = 0.04, DIRECT = 0.03, ROY = 0.10, MEMBERS = 0.6, SHIFT = 4;
+    function ninv(p) {
+      var a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924],
+          b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857],
+          c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878],
+          d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742], q, r;
+      if (p < 0.02425) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+      if (p > 1 - 0.02425) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+      q = p - 0.5; r = q * q;
+      return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+    }
+    var Z = [];
+    for (var i = 0; i < 41; i++) Z.push(ninv((i + 0.5) / 41));
+    function month(m, rate, v) {
+      var branded = v.branded >= 0.5, lift = branded ? 1 : 1 - v.lift / 100;
+      var want = ROOMS * BASE * SEASON[m] * lift * Math.pow(rate / REF, -EL), sold = 0;
+      for (var k = 0; k < Z.length; k++) sold += Math.min(ROOMS, want * Math.exp(SPREAD * Z[k] - 0.5 * SPREAD * SPREAD)) / Z.length;
+      var ota = Math.max(0, v.ota / 100 * (1 - SHIFT * v.disc / 100));
+      var realized = rate * (1 - (1 - ota) * MEMBERS * v.disc / 100);
+      var rr = sold * DAYS[m] * realized;
+      var dist = rr * (ota * v.comm / 100 + (1 - ota) * DIRECT), fees = branded ? rr * ROY : 0;
+      var ebitda = rr + OTHER * rr * OM - dist - fees - VAR * sold * DAYS[m] - FIXED * ROOMS * DAYS[m];
+      return { occ: sold / ROOMS, rr: rr, rev: rr * (1 + OTHER), ebitda: ebitda, sold: sold * DAYS[m], fees: fees, dist: dist };
+    }
+    function year(v, base, swing) {
+      var t = { rr: 0, rev: 0, ebitda: 0, sold: 0, fees: 0, dist: 0, occ: [] };
+      for (var m = 0; m < 12; m++) {
+        var r = base * (1 + swing * (SEASON[m] - 1)), x = month(m, r, v);
+        t.rr += x.rr; t.rev += x.rev; t.ebitda += x.ebitda; t.sold += x.sold; t.fees += x.fees; t.dist += x.dist; t.occ.push(x.occ);
+      }
+      var avail = ROOMS * 365, cash = t.ebitda - RESERVE * t.rev - DEBT * INVEST * ROOMS * RATE_I;
+      t.occupancy = t.sold / avail; t.adr = t.rr / t.sold; t.revpar = t.rr / avail; t.cash = cash; t.yield = cash / ((1 - DEBT) * INVEST * ROOMS);
+      return t;
+    }
+    QB.widget(el, {
+      title: "Fill a hotel for a year",
+      sub: "You own a 200-room hotel that cost $36m, 60% borrowed. Set the rate, how far it follows the seasons, whether you fly a brand's flag (10% of room revenue) or go it alone, how many rooms the online agents sell and at what commission, and any discount for members who book direct.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "rate", label: "Your average nightly rate, $", min: 100, max: 300, step: 2, value: 180, fmt: function (x) { return "$" + x.toFixed(0); } },
+        { k: "swing", label: "How far rates follow the season (0 = one rate all year)", min: 0, max: 1.5, step: 0.05, value: 0, fmt: function (x) { return x.toFixed(2); } },
+        { k: "branded", label: "Brand on the door (1) or independent (0)", min: 0, max: 1, step: 1, value: 1, fmt: function (x) { return x >= 0.5 ? "branded" : "independent"; } },
+        { k: "lift", label: "How much less demand you'd have without the brand, %", min: 0, max: 30, step: 1, value: 15, fmt: function (x) { return x + "%"; } },
+        { k: "ota", label: "Rooms sold by online agents, %", min: 0, max: 70, step: 1, value: 25, fmt: function (x) { return x + "%"; } },
+        { k: "comm", label: "The agents' commission, %", min: 10, max: 30, step: 1, value: 17, fmt: function (x) { return x + "%"; } },
+        { k: "disc", label: "Members' discount on direct bookings, %", min: 0, max: 15, step: 0.5, value: 0, fmt: function (x) { return x.toFixed(1) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        var y = year(v, v.rate, v.swing);
+        var a = g[0].axes({ x: [-0.6, 11.6], y: [0, 100], title: "Rooms sold by month, %",
+                            xfmt: function (x) { var i = Math.round(x); return (i >= 0 && i < 12 && Math.abs(x - i) < 0.01) ? MON[i] : ""; },
+                            yfmt: function (y_) { return y_.toFixed(0) + "%"; } });
+        a.bars([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], y.occ.map(function (o) { return 100 * o; }), 0.7,
+               { color: function (i) { return y.occ[i] > 0.85 ? C.loss : C.spot; } });
+        var xs = [], ys = [], best = { r: 0, e: -1e18 };
+        for (var r = 100; r <= 300; r += 5) { var t = year(v, r, v.swing); xs.push(r); ys.push(t.ebitda / 1e6); if (t.ebitda > best.e) best = { r: r, e: t.ebitda }; }
+        var b = g[1].axes({ x: [100, 300], y: [Math.min(0, Math.min.apply(null, ys)), Math.max.apply(null, ys) * 1.15], title: "Profit before interest by rate, $m",
+                            xfmt: function (x) { return "$" + x.toFixed(0); }, yfmt: function (y_) { return y_.toFixed(1); } });
+        b.line(xs, ys, { color: C.gain, width: 2.4 });
+        b.vline(v.rate, { color: C.p, dash: [5, 4], width: 1.4 });
+        b.hline(0, { color: C.muted, width: 1 });
+        s.y = y; s.best = best;
+      },
+      readout: function (v, s) {
+        var y = s.y;
+        return [["occupancy; average rate; RevPAR", (100 * y.occupancy).toFixed(1) + "%; $" + y.adr.toFixed(0) + "; $" + y.revpar.toFixed(0)],
+                ["profit before interest; brand fees; agents and cards", "$" + (y.ebitda / 1e6).toFixed(2) + "m; $" + (y.fees / 1e6).toFixed(2) + "m; $" + (y.dist / 1e6).toFixed(2) + "m"],
+                ["your cash after interest; a year on your $14.4m", (y.cash < 0 ? "-" : "") + "$" + Math.abs(y.cash / 1e6).toFixed(2) + "m; " + (100 * y.yield).toFixed(1) + "%"],
+                ["the best average rate at this season setting", "$" + s.best.r.toFixed(0)]];
+      },
+      note: "As in the film: one rate of $180 all year sells 70% of the rooms and makes about $2.81m before interest; letting rates follow the season raises profit and fills the quiet months. Going independent (set the agents to 50%) saves the brand's 10% but, with this series' assumption of 15% less demand, leaves less. A members' discount pays only if it moves many bookings from the agents. Demand, costs and fees are assumptions, not any real hotel's figures.",
+    });
+  };
+
 })();

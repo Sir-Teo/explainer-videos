@@ -2813,7 +2813,54 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_rest": sec_rest, "fred_rest": fred_rest, "sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+TRAVEL_COMPANIES = [(1048286, "MAR", "USD"), (1585689, "HLT", "USD"), (1468174, "H", "USD"), (858446, "IHG", "USD"),
+                    (1722684, "WH", "USD"), (1046311, "CHH", "USD"), (1483994, "HTHT", "CNY"), (1853717, "ATAT", "CNY"),
+                    (1070750, "HST", "USD"), (1617406, "PK", "USD"), (1418121, "APLE", "USD"), (1040829, "RHP", "USD"),
+                    (1075531, "BKNG", "USD"), (1324424, "EXPE", "USD"), (1559720, "ABNB", "USD"), (1526520, "TRIP", "USD"),
+                    (1269238, "TCOM", "CNY"), (1495153, "MMYT", "USD"), (815097, "CCL", "USD"), (884887, "RCL", "USD"),
+                    (1513761, "NCLH", "USD"), (1300514, "LVS", "USD"), (1174922, "WYNN", "USD"), (789570, "MGM", "USD"),
+                    (1590895, "CZR", "USD"), (1883685, "DKNG", "USD"), (1635327, "FLUT", "USD"), (1564902, "PRKS", "USD"),
+                    (1999001, "FUN", "USD"), (1524358, "VAC", "USD"), (1674168, "HGV", "USD"), (1597033, "SABR", "USD")]
+
+
+def _travel_items() -> dict:
+    return dict(_ecom_items(),
+                profit=AUTO_ITEMS["profit"] + [("us-gaap", "NetIncomeLossAvailableToCommonStockholdersBasic")],
+                debt=[("us-gaap", "LongTermDebt"), ("us-gaap", "LongTermDebtNoncurrent"),
+                      ("us-gaap", "LongTermDebtAndCapitalLeaseObligations"), ("ifrs-full", "NoncurrentPortionOfNoncurrentLoansReceived")],
+                depreciation=[("us-gaap", "DepreciationDepletionAndAmortization"), ("us-gaap", "DepreciationAndAmortization"),
+                              ("us-gaap", "DepreciationAmortizationAndAccretionNet"),
+                              ("ifrs-full", "DepreciationAndAmortisationExpense")])
+
+
+def sec_travel():
+    """Annual figures of hotel brands (asset-light and Chinese), hotel REITs, online travel agents and Sabre, cruise lines,
+    casino companies and online betting, theme parks and timeshare companies, from their Forms 10-K and 20-F (SEC company
+    facts), in billions of the reporting currency (H World, Atour and Trip.com in yuan; IHG and MakeMyTrip report in
+    dollars under IFRS), with ``sec_ecom``'s items, long-term debt and depreciation (Booking tags its profit only as net income
+    available to common stockholders).  MakeMyTrip's years end in March,
+    Carnival's in November; Flutter has filed Forms 10-K since 2024 and the new Six Flags since 2024."""
+    items = _travel_items()
+    return _write("sec_travel", ["ticker", "year_end", "currency"] + list(items),
+                  _sec_table(TRAVEL_COMPANIES, items), [_sec_source(items)])
+
+
+FRED_TRAVEL = {"CUUR0000SEHB": "CPI-U: lodging away from home (December 1997 = 100, NSA; BLS)",
+               "CUUR0000SETG01": "CPI-U: airline fares (1982-84 = 100, NSA; BLS)",
+               "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+               "PCU721110721110": "PPI: hotels and motels, except casino hotels (December 2003 = 100, NSA; BLS)",
+               "CES7072100001": "All employees: accommodation (thousands, SA; BLS)",
+               "CES7071300001": "All employees: amusements, gambling and recreation (thousands, SA; BLS)",
+               "ENPLANE": "Enplanements: domestic and international, US airlines (thousands, NSA; BTS)",
+               "LOADFACTOR": "Load factor: domestic and international, US airlines (percent, NSA; BTS)",
+               "EXCHUS": "Chinese yuan to one US dollar (monthly average; Federal Reserve H.10)"}
+
+
+def fred_travel():
+    return _fred_write("fred_travel", FRED_TRAVEL)
+
+
+JOBS = {"sec_travel": sec_travel, "fred_travel": fred_travel, "sec_rest": sec_rest, "fred_rest": fred_rest, "sec_middle": sec_middle, "fred_middle": fred_middle, "sec_ecom": sec_ecom, "fred_ecom": fred_ecom, "sec_grocery": sec_grocery, "fred_grocery": fred_grocery, "sec_tel": sec_tel, "fred_tel": fred_tel, "sec_freight": sec_freight, "fred_freight": fred_freight, "sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

@@ -599,6 +599,22 @@ CALLS = [
          "any recent year; for: it calls the plan the fastest unit growth in its history and has been accelerating",
          rule="McDonald's Form 10-K for 2027: total restaurants at 31 December 2027 as reported; true if 50,000 or more",
          due="2028-02", ours=True),
+    Call(35, "Booking Holdings", "2021-02",
+         "'We expect to continue to see severely reduced new travel and restaurant reservation bookings as compared to 2019 "
+         "levels for the foreseeable future'; its goodwill test assumed that OpenTable and KAYAK 'would not return to the 2019 "
+         "level of profitability within the next five years'",
+         "Booking Holdings, Form 10-K for 2020",
+         outcome="Room nights fell from 845 million in 2019 to 355 million in 2020, then recovered to 591 million in 2021 and 896 "
+                 "million in 2022, above 2019; 1,049 million in 2023 ('up about 24% versus 2019') and 1,235 million in 2025, with "
+                 "revenue of $26.9bn against $15.1bn in 2019 (Forms 10-K for 2023 and 2025). The foreseeable future lasted "
+                 "about a year"),
+    Call(35, "Industry, Built", "2026-11-28",
+         "Booking Holdings will report at least 1,400 million room nights for 2027. Probability: 35%.",
+         "This series, Part 35, chapter 10; reasoning: room nights grew 9.1% in 2024 and 8.0% in 2025 but 6.0% in the first "
+         "nine months of 2026 (1,007 million against 951 million), which puts 2026 near 1,308 million and leaves 7.0% to grow "
+         "in 2027, faster than this year; for: flights, alternative accommodation and Asia are growing faster than the whole",
+         rule="Booking Holdings' Form 10-K for 2027: room nights for the year as reported; true if 1,400 million or more",
+         due="2028-02", ours=True),
 ]
 
 

@@ -3067,3 +3067,99 @@ def burger(w: float = 0.8) -> VGroup:
     bottom = RoundedRectangle(corner_radius=0.05 * w, width=0.96 * w, height=0.1 * w, stroke_width=0, fill_color="#C88E4A",
                               fill_opacity=1).move_to([0, 0.03 * w, 0])
     return VGroup(bottom, patty, cheese, lettuce, top, top_base, seeds)
+
+
+def hotel(w: float = 1.6, floors: int = 12, cols: int = 6, color: str = "#F6C453", seed: int = 11) -> VGroup:
+    """A hotel tower in front view: a pale slab with rows of room windows (``g.windows``, random order, so
+    ``light(g.windows, 0.69)`` shows a hotel 69% full), a lit sign on the roof (``g.sign``), a canopy over the entrance and
+    a low podium for the lobby and restaurants; sits on y = 0."""
+    pod_h = 0.22 * w
+    h = w * floors / cols * 0.62
+    podium = Rectangle(width=1.3 * w, height=pod_h, stroke_width=0, fill_color="#8B95A7", fill_opacity=1).move_to([0, pod_h / 2, 0])
+    body = Rectangle(width=w, height=h, stroke_color="#5B6B84", stroke_width=1.2, fill_color="#C9D3E0",
+                     fill_opacity=1).move_to([0, pod_h + h / 2, 0])
+    cw, ch = w / cols, h / floors
+    wins = [Rectangle(width=0.6 * cw, height=0.5 * ch, stroke_width=0, fill_color="#2A3446", fill_opacity=1).move_to(
+        [-w / 2 + (j + 0.5) * cw, pod_h + (i + 0.5) * ch, 0]) for i in range(floors) for j in range(cols)]
+    order = np.random.default_rng(seed).permutation(len(wins))
+    windows = VGroup(*[wins[k] for k in order])
+    sign = RoundedRectangle(corner_radius=0.03 * w, width=0.62 * w, height=0.13 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, pod_h + h + 0.1 * w, 0])
+    canopy = Polygon([-0.3 * w, 0.17 * w, 0], [0.3 * w, 0.17 * w, 0], [0.36 * w, 0.13 * w, 0], [-0.36 * w, 0.13 * w, 0],
+                     stroke_width=0, fill_color=color, fill_opacity=1)
+    door = Rectangle(width=0.22 * w, height=0.12 * w, stroke_width=0, fill_color=LIT, fill_opacity=0.85).move_to([0, 0.06 * w, 0])
+    g = VGroup(podium, body, windows, sign, canopy, door)
+    g.windows, g.sign = windows, sign
+    return g
+
+
+def bed(w: float = 1.0, color: str = "#7EC8F5") -> VGroup:
+    """A hotel bed in side view: headboard, mattress, pillow and duvet; sits on y = 0."""
+    frame = Rectangle(width=w, height=0.1 * w, stroke_width=0, fill_color="#8B95A7", fill_opacity=1).move_to([0, 0.13 * w, 0])
+    legs = VGroup(*[Rectangle(width=0.05 * w, height=0.08 * w, stroke_width=0, fill_color="#5B6B84", fill_opacity=1).move_to(
+        [x * w, 0.04 * w, 0]) for x in (-0.45, 0.45)])
+    head = RoundedRectangle(corner_radius=0.04 * w, width=0.08 * w, height=0.5 * w, stroke_width=0, fill_color="#5B6B84",
+                            fill_opacity=1).move_to([-0.48 * w, 0.3 * w, 0])
+    mattress = RoundedRectangle(corner_radius=0.03 * w, width=0.92 * w, height=0.1 * w, stroke_width=0, fill_color="#E8EAED",
+                                fill_opacity=1).move_to([0.02 * w, 0.23 * w, 0])
+    pillow = Ellipse(width=0.22 * w, height=0.1 * w, stroke_width=0, fill_color="#FFFFFF", fill_opacity=1).move_to([-0.3 * w, 0.32 * w, 0])
+    duvet = RoundedRectangle(corner_radius=0.03 * w, width=0.6 * w, height=0.07 * w, stroke_width=0, fill_color=color,
+                             fill_opacity=1).move_to([0.17 * w, 0.31 * w, 0])
+    return VGroup(legs, frame, head, mattress, pillow, duvet)
+
+
+def cruise_ship(w: float = 3.6, decks: int = 5, color: str = "#E8EAED", funnel: str = "#E8554E", seed: int = 5) -> VGroup:
+    """A cruise ship in side view: a dark hull, stacked white decks of cabin windows (``g.windows``, random order for
+    ``light``), a funnel and a waterline; sits on y = 0."""
+    hull_h = 0.12 * w
+    hull = Polygon([-0.5 * w, hull_h, 0], [0.52 * w, hull_h, 0], [0.44 * w, 0, 0], [-0.46 * w, 0, 0],
+                   stroke_width=0, fill_color="#1F3A5F", fill_opacity=1)
+    deck_h = 0.045 * w
+    decks_g, wins = VGroup(), []
+    for d in range(decks):
+        span = 0.94 - 0.07 * d
+        x0 = -0.47 * w + 0.03 * d * w
+        y = hull_h + (d + 0.5) * deck_h
+        decks_g.add(Rectangle(width=span * w, height=deck_h, stroke_color="#C9D3E0", stroke_width=0.6, fill_color=color,
+                              fill_opacity=1).move_to([x0 + span * w / 2, y, 0]))
+        n = int(span * 34)
+        for k in range(n):
+            wins.append(Rectangle(width=0.012 * w, height=0.018 * w, stroke_width=0, fill_color="#2A3446", fill_opacity=1).move_to(
+                [x0 + (k + 0.5) * span * w / n, y, 0]))
+    order = np.random.default_rng(seed).permutation(len(wins))
+    windows = VGroup(*[wins[k] for k in order])
+    top_y = hull_h + decks * deck_h
+    stack = Polygon([0.12 * w, top_y, 0], [0.22 * w, top_y, 0], [0.24 * w, top_y + 0.1 * w, 0], [0.15 * w, top_y + 0.1 * w, 0],
+                    stroke_width=0, fill_color=funnel, fill_opacity=1)
+    water = Line([-0.6 * w, 0.01 * w, 0], [0.62 * w, 0.01 * w, 0], stroke_color="#4F8FE6", stroke_width=3)
+    g = VGroup(hull, decks_g, windows, stack, water)
+    g.windows = windows
+    return g
+
+
+def chip_stack(w: float = 0.6, n: int = 5, color: str = "#E8554E") -> VGroup:
+    """A stack of casino chips, slightly offset, each with a white edge band; sits on y = 0."""
+    g = VGroup()
+    for k in range(n):
+        c = Ellipse(width=w, height=0.3 * w, stroke_color="#FFFFFF", stroke_width=1.5, fill_color=color, fill_opacity=1).move_to(
+            [0.02 * w * ((k % 2) * 2 - 1), 0.15 * w + 0.09 * w * k, 0])
+        g.add(c)
+    return g
+
+
+def ferris_wheel(w: float = 2.0, cars: int = 10, color: str = "#B58CFF") -> VGroup:
+    """A Ferris wheel on an A-frame with ``cars`` gondolas (``g.wheel`` rotates about ``g.hub``); sits on y = 0."""
+    r = 0.42 * w
+    hub = [0, 0.5 * w, 0]
+    rim = Circle(radius=r, stroke_color=color, stroke_width=3).move_to(hub)
+    spokes = VGroup(*[Line(hub, [hub[0] + r * np.cos(t), hub[1] + r * np.sin(t), 0], stroke_color=color, stroke_width=1.2)
+                      for t in np.linspace(0, TAU, cars, endpoint=False)])
+    gond = VGroup(*[RoundedRectangle(corner_radius=0.01 * w, width=0.07 * w, height=0.06 * w, stroke_width=0,
+                                     fill_color=["#F6C453", "#7EC8F5", "#FF8FB1", "#7BD88F"][k % 4], fill_opacity=1).move_to(
+        [hub[0] + r * np.cos(t), hub[1] + r * np.sin(t) - 0.03 * w, 0]) for k, t in enumerate(np.linspace(0, TAU, cars, endpoint=False))])
+    legs = VGroup(Line([-0.25 * w, 0, 0], hub, stroke_color="#8B95A7", stroke_width=3),
+                  Line([0.25 * w, 0, 0], hub, stroke_color="#8B95A7", stroke_width=3))
+    wheel = VGroup(rim, spokes, gond)
+    g = VGroup(legs, wheel, Dot(hub, radius=0.03 * w, color="#C9D3E0"))
+    g.wheel, g.hub = wheel, np.array(hub)
+    return g

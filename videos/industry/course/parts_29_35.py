@@ -249,4 +249,44 @@ PARTS = [
               ("The store and the franchisor", "explainer/industry/works/franchise.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=35, level="U", widget="hotelseason", prereq=(3, 5, 28, 34),
+        question="Why do the biggest hotel companies own almost no hotels?",
+        story="The part opens on Marriott's 1,779,936 rooms, of which it owns or leases 51 hotels, under one per cent; two-thirds "
+              "are franchised and almost a third managed for owners. Of its $26.2bn of revenue, $19.2bn is owners' payroll passed "
+              "through; the business is $5.4bn of fees, and operating income was $4.1bn. Marriott Corporation split in 1993 into "
+              "Host Marriott, with the buildings and debt, and Marriott International; Hilton spun off Park in 2017; the brands "
+              "earn 12-22 cents of operating income on a dollar of assets against 3-8 for the owners. The viewer fills a "
+              "200-room hotel: one rate of $180 sells 70% of rooms and makes $2.81m before interest; a rate for each month makes "
+              "$2.88m; the owner keeps about $1.1m after the brand, the agents and the bank, 7.4% on $14.4m. Brand fees on "
+              "revenue (royalties of 4-7%) against incentive fees paid by only 32% of Marriott's U.S. managed hotels; loyalty "
+              "members book 75% of its U.S. nights. Booking sold 1.24bn room nights and kept 14.5% of $186bn; Airbnb 13.4% of "
+              "$91bn; Carnival earns 35 cents a dollar on board and holds $6.8bn of deposits; the Strip's tables kept 14.9% of "
+              "chips against a 2.7% edge at roulette; Macao is 247bn patacas; Disney's parks earned $11.2bn. Booking's 2020 "
+              "warning is scored against its recovery; the series gives 35% to 1.4bn room nights in 2027.",
+        handoff="Part 36, software, opens Act VII: a product that costs almost nothing to copy.",
+        outside="Occupancy, rates and RevPAR; fixed and variable costs; Part 3's accounts; Part 5's moats; Part 28's revenue "
+                "management; Part 34's franchising; Economics, Built's revenue management and two-sided platforms.",
+        objectives={
+            "U": ["Explain the owner, the brand and the operator, and the franchise and management contracts between them.",
+                  "Explain why hotel brands own so few hotels, and what the owner buys with the brand's fee.",
+                  "Explain how online agents, cruise lines, casinos and theme parks each earn on a night away from home."],
+            "M": ["Compute occupancy, average rate and RevPAR, and a hotel's profit from its costs and fees.",
+                  "Compute a franchise and a management contract's fees, including an incentive fee after a priority return.",
+                  "Compute a casino's hold on the chips bought from the edge on each bet and the number of bets."],
+            "D": ["Read a company's own forecast against its later results, and make and state a dated, scorable forecast."],
+            "I": ["Read a hotel company's rooms by contract type, fee revenue and reimbursed costs in its filings.",
+                  "Read an online agent's gross bookings, take rate and marketing, and a cruise line's revenue split."],
+        },
+        results=[
+            ("RevPAR", r"\text{RevPAR} = \text{occupancy} \times \text{ADR}"),
+            ("A franchised hotel's profit", r"\pi = R\,(1 - f - a\,c - (1-a)\,d) - v\,N - F"),
+            ("An incentive fee", r"I = i \cdot \max(0,\ \pi - b\,R - \rho\,K)"),
+            ("A casino's hold", r"\frac{\text{win}}{\text{drop}} \approx e \cdot \frac{\text{amount bet}}{\text{chips bought}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 35", "explainer/industry/data/rows_p35.py"),
+              ("The hotel and the roulette table", "explainer/industry/works/hotel.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
